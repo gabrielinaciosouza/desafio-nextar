@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:desafio_nextar/data/image/image.dart';
+import 'package:loja_virtual/data/image/image.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/data/usecases/usecases.dart';
+import 'package:loja_virtual/data/usecases/usecases.dart';
 
-import 'package:desafio_nextar/domain/helpers/domain_error.dart';
+import 'package:loja_virtual/domain/helpers/domain_error.dart';
 
 class LocalPickImageSpy extends Mock implements LocalPickImage {
   final File file;

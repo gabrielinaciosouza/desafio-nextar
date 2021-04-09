@@ -1,9 +1,9 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/data/usecases/usecases.dart';
-import 'package:desafio_nextar/data/cache/cache.dart';
-import 'package:desafio_nextar/domain/helpers/helpers.dart';
+import 'package:loja_virtual/data/usecases/usecases.dart';
+import 'package:loja_virtual/data/cache/cache.dart';
+import 'package:loja_virtual/domain/helpers/helpers.dart';
 
 class DeleteCacheStorageSpy extends Mock implements DeleteCacheStorage {
   @override

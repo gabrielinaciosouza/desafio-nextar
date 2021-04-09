@@ -1,5 +1,5 @@
-import 'package:desafio_nextar/presentation/protocols/protocols.dart';
-import 'package:desafio_nextar/ui/helpers/helpers.dart';
+import 'package:loja_virtual/presentation/protocols/protocols.dart';
+import 'package:loja_virtual/ui/helpers/helpers.dart';
 import 'package:get/get.dart';
 
 mixin ValidateFieldManager on GetxController {

@@ -1,11 +1,11 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/data/cache/cache.dart';
-import 'package:desafio_nextar/data/usecases/usecases.dart';
+import 'package:loja_virtual/data/cache/cache.dart';
+import 'package:loja_virtual/data/usecases/usecases.dart';
 
-import 'package:desafio_nextar/domain/entities/entities.dart';
-import 'package:desafio_nextar/domain/helpers/domain_error.dart';
+import 'package:loja_virtual/domain/entities/entities.dart';
+import 'package:loja_virtual/domain/helpers/domain_error.dart';
 
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
   Future<void> fetch(String key) =>

@@ -1,6 +1,6 @@
-import 'package:desafio_nextar/data/usecases/load_current_account/load_current_account.dart';
-import 'package:desafio_nextar/domain/entities/account_entity.dart';
-import 'package:desafio_nextar/main/composites/composites.dart';
+import 'package:loja_virtual/data/usecases/load_current_account/load_current_account.dart';
+import 'package:loja_virtual/domain/entities/account_entity.dart';
+import 'package:loja_virtual/main/composites/composites.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

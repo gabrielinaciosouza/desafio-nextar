@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/data/usecases/usecases.dart';
+import 'package:loja_virtual/data/usecases/usecases.dart';
 
 import '../../../domain/usecases/usecases.dart';
 

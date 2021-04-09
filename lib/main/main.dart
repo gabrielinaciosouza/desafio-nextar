@@ -15,7 +15,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return GetMaterialApp(
-      title: 'Desafio Nextar',
+      title: 'Loja Virtual',
       theme: makeAppTheme(),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',

@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/ui/pages/login/login.dart';
+import 'package:loja_virtual/ui/pages/login/login.dart';
 import 'package:get/get.dart';
 
 import '../../domain/helpers/helpers.dart';

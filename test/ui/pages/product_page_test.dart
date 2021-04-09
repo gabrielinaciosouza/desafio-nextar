@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:desafio_nextar/ui/helpers/helpers.dart';
+import 'package:loja_virtual/ui/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 
-import 'package:desafio_nextar/ui/pages/pages.dart';
+import 'package:loja_virtual/ui/pages/pages.dart';
 
 class ProductPresenterSpy extends Mock implements ProductPresenter {
   @override

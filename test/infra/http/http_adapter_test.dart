@@ -4,8 +4,8 @@ import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/data/http/http.dart';
-import 'package:desafio_nextar/infra/http/http.dart';
+import 'package:loja_virtual/data/http/http.dart';
+import 'package:loja_virtual/infra/http/http.dart';
 
 class ClientSpy extends Mock implements Client {
   @override

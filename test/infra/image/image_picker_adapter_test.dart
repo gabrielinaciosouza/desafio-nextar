@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/infra/image/image.dart';
+import 'package:loja_virtual/infra/image/image.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerSpy extends Mock implements ImagePicker {

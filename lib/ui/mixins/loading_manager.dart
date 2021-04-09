@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/ui/pages/login/components/components.dart';
+import 'package:loja_virtual/ui/pages/login/components/components.dart';
 import 'package:flutter/material.dart';
 
 mixin LoadingManager {

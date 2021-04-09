@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/infra/cache/cache.dart';
+import 'package:loja_virtual/infra/cache/cache.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

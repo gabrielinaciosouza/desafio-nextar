@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/presentation/protocols/protocols.dart';
-import 'package:desafio_nextar/validation/validators/validators.dart';
+import 'package:loja_virtual/presentation/protocols/protocols.dart';
+import 'package:loja_virtual/validation/validators/validators.dart';
 
 void main() {
   late PasswordValidation sut;

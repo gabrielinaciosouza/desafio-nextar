@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:desafio_nextar/ui/pages/splash/splash.dart';
+import 'package:loja_virtual/ui/pages/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';

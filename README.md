@@ -1,12 +1,8 @@
-# DESAFIO NEXTAR
-
-![Desafio Nextar](./lib/ui/assets/logo2.png)
+# LOJA VIRTUAL
 
 ## Sobre o app
 
 O app é uma representação de um cadastro de produtos.
-
-- [Aqui está as definições de entrega do desafio](https://github.com/nextar/desafio-nextar-mobile)
 
 ## Casos de uso
 

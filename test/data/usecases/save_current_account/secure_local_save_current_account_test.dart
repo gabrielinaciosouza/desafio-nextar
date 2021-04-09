@@ -1,7 +1,7 @@
-import 'package:desafio_nextar/data/cache/cache.dart';
-import 'package:desafio_nextar/data/usecases/save_current_account/secure_local_save_current_account.dart';
-import 'package:desafio_nextar/domain/entities/entities.dart';
-import 'package:desafio_nextar/domain/helpers/helpers.dart';
+import 'package:loja_virtual/data/cache/cache.dart';
+import 'package:loja_virtual/data/usecases/save_current_account/secure_local_save_current_account.dart';
+import 'package:loja_virtual/domain/entities/entities.dart';
+import 'package:loja_virtual/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

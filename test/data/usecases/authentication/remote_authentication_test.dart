@@ -1,11 +1,11 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/data/http/http.dart';
-import 'package:desafio_nextar/data/usecases/usecases.dart';
+import 'package:loja_virtual/data/http/http.dart';
+import 'package:loja_virtual/data/usecases/usecases.dart';
 
-import 'package:desafio_nextar/domain/helpers/helpers.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
+import 'package:loja_virtual/domain/helpers/helpers.dart';
+import 'package:loja_virtual/domain/usecases/usecases.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {
   @override

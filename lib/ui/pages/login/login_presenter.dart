@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/ui/helpers/helpers.dart';
+import 'package:loja_virtual/ui/helpers/helpers.dart';
 
 abstract class LoginPresenter {
   Stream<UIError?>? get emailErrorStream;
