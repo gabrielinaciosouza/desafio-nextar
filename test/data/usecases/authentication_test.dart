@@ -25,11 +25,17 @@ class HttpClientSpy extends Mock implements HttpClient {
 }
 
 void main() {
-  test('Should call HttpClient with correct URL', () async {
-    final httpClient = HttpClientSpy();
-    final url = 'http://url.com/api';
-    final sut = RemoteAuthentication(httpClient: httpClient, url: url);
+  late HttpClientSpy httpClient;
+  late String url;
+  late RemoteAuthentication sut;
 
+  setUp(() {
+    url = 'http://url.com/api';
+    httpClient = HttpClientSpy();
+    sut = RemoteAuthentication(httpClient: httpClient, url: url);
+  });
+
+  test('Should call HttpClient with correct URL', () async {
     await sut.auth();
 
     verify(httpClient.request(url: url));
