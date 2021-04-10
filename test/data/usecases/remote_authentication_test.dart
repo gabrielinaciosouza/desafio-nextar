@@ -9,11 +9,11 @@ import 'package:desafio_nextar/domain/usecases/usecases.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {
   @override
-  Future<void> request(
+  Future<Map> request(
           {required String url, required String method, Map? body}) =>
       this.noSuchMethod(Invocation.method(#request, [url]),
-          returnValue: Future.value(),
-          returnValueForMissingStub: Future.value());
+          returnValue: Future.value({}),
+          returnValueForMissingStub: Future.value({}));
 }
 
 void main() {
@@ -72,5 +72,15 @@ void main() {
     final future = sut.auth(params);
 
     expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should return an Account if HttpCLient returns 200', () async {
+    final accessToken = 'any_access_token';
+    when(httpClient.request(url: url, method: 'post', body: body))
+        .thenAnswer((_) async => {'accessToken': accessToken});
+
+    final account = await sut.auth(params);
+
+    expect(account.token, accessToken);
   });
 }

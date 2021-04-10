@@ -1,1 +1,1 @@
-enum HttpError { badRequest, notFound, unauthorized, serverError }
+enum HttpError { badRequest, notFound, unauthorized, serverError, invalidData }
