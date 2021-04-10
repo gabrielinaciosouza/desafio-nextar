@@ -93,5 +93,13 @@ void main() {
 
       expect(future, throwsA(HttpError.unauthorized));
     });
+
+    test('Should throw HttpError.forbidden if post returns 403', () async {
+      mockResponse(Response('', 403));
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.forbidden));
+    });
   });
 }
