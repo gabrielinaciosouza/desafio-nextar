@@ -26,6 +26,9 @@ class HttpAdapter implements HttpClient {
     };
     final response = await client.post(Uri.parse(url),
         headers: headers, body: jsonEncode(body));
+    if (response.body.isEmpty && response.statusCode == 204) {
+      throw HttpError.noContent;
+    }
     return jsonDecode(response.body);
   }
 }
@@ -36,6 +39,17 @@ void main() {
   late String url;
   late Map<String, String> headers;
 
+  PostExpectation httpClientCall() =>
+      when(client.post(Uri.parse(url), headers: headers));
+
+  void mockResponse(Response response) {
+    httpClientCall().thenAnswer((_) async => response);
+  }
+
+  void throwHttpError(HttpError error) {
+    httpClientCall().thenThrow(error);
+  }
+
   setUp(() {
     client = ClientSpy();
     sut = HttpAdapter(client);
@@ -44,6 +58,7 @@ void main() {
       'content-type': 'application/json',
       'accept': 'application/json'
     };
+    mockResponse(Response('{"any_key":"any_value"}', 200));
   });
   group('post', () {
     test('Should call post with correct values', () async {
@@ -61,12 +76,19 @@ void main() {
     });
 
     test('Should return data if post returns 200', () async {
-      when(client.post(Uri.parse(url), headers: headers))
-          .thenAnswer((_) async => Response('{"any_key":"any_value"}', 200));
+      mockResponse(Response('{"any_key":"any_value"}', 200));
 
       final response = await sut.request(url: url, method: 'post');
 
       expect(response, {'any_key': 'any_value'});
+    });
+
+    test('Should throw HttpError.noContent if post returns 204', () async {
+      throwHttpError(HttpError.noContent);
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.noContent));
     });
   });
 }
