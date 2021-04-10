@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:desafio_nextar/data/http/http.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -13,17 +14,19 @@ class ClientSpy extends Mock implements Client {
           returnValueForMissingStub: Future.value(Response('', 200)));
 }
 
-class HttpAdapter {
+class HttpAdapter implements HttpClient {
   final Client client;
 
   HttpAdapter(this.client);
-  Future<void> request(
+  Future<Map> request(
       {required String url, required String method, Map? body}) async {
     final headers = {
       'content-type': 'application/json',
       'accept': 'application/json'
     };
-    await client.post(Uri.parse(url), headers: headers, body: jsonEncode(body));
+    final response = await client.post(Uri.parse(url),
+        headers: headers, body: jsonEncode(body));
+    return jsonDecode(response.body);
   }
 }
 
@@ -55,6 +58,15 @@ void main() {
       await sut.request(url: url, method: 'post');
 
       verify(client.post(Uri.parse(url), headers: headers));
+    });
+
+    test('Should return data if post returns 200', () async {
+      when(client.post(Uri.parse(url), headers: headers))
+          .thenAnswer((_) async => Response('{"any_key":"any_value"}', 200));
+
+      final response = await sut.request(url: url, method: 'post');
+
+      expect(response, {'any_key': 'any_value'});
     });
   });
 }
