@@ -31,6 +31,11 @@ void main() {
     body = {'email': params.email, 'password': params.password};
   });
 
+  void throwHttpError(HttpError error) {
+    when(httpClient.request(url: url, method: 'post', body: body))
+        .thenThrow(error);
+  }
+
   test('Should call HttpClient with correct URL', () async {
     await sut.auth(params);
 
@@ -38,8 +43,7 @@ void main() {
   });
 
   test('Should throw UnexpectedError if HttpClient returns 400', () async {
-    when(httpClient.request(url: url, method: 'post', body: body))
-        .thenThrow(HttpError.badRequest);
+    throwHttpError(HttpError.badRequest);
 
     final future = sut.auth(params);
 
