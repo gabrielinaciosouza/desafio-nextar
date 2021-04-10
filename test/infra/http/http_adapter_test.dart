@@ -29,6 +29,10 @@ void main() {
     httpClientCall().thenAnswer((_) async => response);
   }
 
+  void mockError() {
+    httpClientCall().thenThrow(Exception());
+  }
+
   setUp(() {
     client = ClientSpy();
     sut = HttpAdapter(client);
@@ -116,6 +120,14 @@ void main() {
       final future = sut.request(url: url, method: 'post');
 
       expect(future, throwsA(HttpError.notFound));
+    });
+
+    test('Should return ServerError if post throws', () async {
+      mockError();
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.serverError));
     });
   });
 }
