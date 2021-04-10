@@ -27,18 +27,25 @@ class HttpAdapter {
 }
 
 void main() {
+  late ClientSpy client;
+  late HttpAdapter sut;
+  late String url;
+  late Map<String, String> headers;
+
+  setUp(() {
+    client = ClientSpy();
+    sut = HttpAdapter(client);
+    url = 'http://fakeurl.com';
+    headers = {
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    };
+  });
   group('post', () {
     test('Should call post with correct values', () async {
-      final client = ClientSpy();
-      final sut = HttpAdapter(client);
-      final url = 'http://fakeurl.com';
-
       await sut.request(url: url, method: 'post');
 
-      verify(client.post(Uri.parse(url), headers: {
-        'content-type': 'application/json',
-        'accept': 'application/json'
-      }));
+      verify(client.post(Uri.parse(url), headers: headers));
     });
   });
 }
