@@ -29,10 +29,6 @@ void main() {
     httpClientCall().thenAnswer((_) async => response);
   }
 
-  void throwHttpError(HttpError error) {
-    httpClientCall().thenThrow(error);
-  }
-
   setUp(() {
     client = ClientSpy();
     sut = HttpAdapter(client);
@@ -67,7 +63,7 @@ void main() {
     });
 
     test('Should throw HttpError.noContent if post returns 204', () async {
-      throwHttpError(HttpError.noContent);
+      mockResponse(Response('', 204));
 
       final future = sut.request(url: url, method: 'post');
 
