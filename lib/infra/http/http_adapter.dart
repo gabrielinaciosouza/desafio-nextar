@@ -15,12 +15,17 @@ class HttpAdapter implements HttpClient {
     };
     final response = await client.post(Uri.parse(url),
         headers: headers, body: jsonEncode(body));
-    if (response.body.isEmpty && response.statusCode == 204) {
-      throw HttpError.noContent;
+    return _handleResponse(response);
+  }
+
+  Map _handleResponse(Response response) {
+    switch (response.statusCode) {
+      case 200:
+        return jsonDecode(response.body);
+      case 204:
+        throw HttpError.noContent;
+      default:
+        throw HttpError.invalidData;
     }
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    }
-    throw HttpError.invalidData;
   }
 }
