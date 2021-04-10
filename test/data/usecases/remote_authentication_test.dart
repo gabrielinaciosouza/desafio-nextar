@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 import 'package:desafio_nextar/data/http/http.dart';
 import 'package:desafio_nextar/data/usecases/usecases.dart';
 
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:desafio_nextar/domain/usecases/usecases.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {
@@ -19,21 +20,29 @@ void main() {
   late HttpClientSpy httpClient;
   late String url;
   late RemoteAuthentication sut;
+  late Map body;
+  late AuthenticationParams params;
 
   setUp(() {
     url = 'http://url.com/api';
     httpClient = HttpClientSpy();
     sut = RemoteAuthentication(httpClient: httpClient, url: url);
+    params = AuthenticationParams(email: 'mail@email.com', password: '123456');
+    body = {'email': params.email, 'password': params.password};
   });
 
   test('Should call HttpClient with correct URL', () async {
-    final params =
-        AuthenticationParams(email: 'mail@email.com', password: '123456');
     await sut.auth(params);
 
-    verify(httpClient.request(
-        url: url,
-        method: 'post',
-        body: {'email': params.email, 'password': params.password}));
+    verify(httpClient.request(url: url, method: 'post', body: body));
+  });
+
+  test('Should throw UnexpectedError if HttpClient returns 400', () async {
+    when(httpClient.request(url: url, method: 'post', body: body))
+        .thenThrow(HttpError.badRequest);
+
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
