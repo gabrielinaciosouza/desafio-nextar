@@ -22,6 +22,22 @@ void main() {
   late RemoteAuthentication sut;
   late Map body;
   late AuthenticationParams params;
+  late String accessToken;
+
+  PostExpectation mockHttpCall() =>
+      when(httpClient.request(url: url, method: 'post', body: body));
+
+  void throwHttpError(HttpError error) {
+    mockHttpCall().thenThrow(error);
+  }
+
+  void mockClientSuccessResponse() {
+    mockHttpCall().thenAnswer((_) async => {'accessToken': accessToken});
+  }
+
+  void mockClientInvalidResponse() {
+    mockHttpCall().thenAnswer((_) async => {'invalid_key': 'invalid_value'});
+  }
 
   setUp(() {
     url = 'http://url.com/api';
@@ -29,12 +45,9 @@ void main() {
     sut = RemoteAuthentication(httpClient: httpClient, url: url);
     params = AuthenticationParams(email: 'mail@email.com', password: '123456');
     body = {'email': params.email, 'password': params.password};
+    accessToken = 'any_access_token';
+    mockClientSuccessResponse();
   });
-
-  void throwHttpError(HttpError error) {
-    when(httpClient.request(url: url, method: 'post', body: body))
-        .thenThrow(error);
-  }
 
   test('Should call HttpClient with correct URL', () async {
     await sut.auth(params);
@@ -75,12 +88,17 @@ void main() {
   });
 
   test('Should return an Account if HttpCLient returns 200', () async {
-    final accessToken = 'any_access_token';
-    when(httpClient.request(url: url, method: 'post', body: body))
-        .thenAnswer((_) async => {'accessToken': accessToken});
-
     final account = await sut.auth(params);
 
     expect(account.token, accessToken);
+  });
+
+  test(
+      'Should throw UnexpectedError if HttpCLient returns 200 with invalid data',
+      () async {
+    mockClientInvalidResponse();
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
