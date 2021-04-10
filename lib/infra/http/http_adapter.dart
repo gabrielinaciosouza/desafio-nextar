@@ -26,6 +26,8 @@ class HttpAdapter implements HttpClient {
         throw HttpError.noContent;
       case 400:
         throw HttpError.badRequest;
+      case 500:
+        throw HttpError.serverError;
       default:
         throw HttpError.invalidData;
     }
