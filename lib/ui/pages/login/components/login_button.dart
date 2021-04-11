@@ -19,10 +19,10 @@ class LoginButton extends StatelessWidget {
                 color: Theme.of(context).primaryColorLight,
                 text: R.strings.enter,
               ),
-              onPressed: () {},
+              onPressed: null,
             )
           : ElevatedButton(
-              onPressed: () {},
+              onPressed: null,
               child: ResponsiveHeadline6(
                 color: Theme.of(context).primaryColorLight,
                 text: R.strings.enter,
