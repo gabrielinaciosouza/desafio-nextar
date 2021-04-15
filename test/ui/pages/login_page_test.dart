@@ -20,12 +20,14 @@ void main() {
   late LoginPresenter presenter = LoginPresenterSpy();
   late StreamController<UIError?> emailErrorController;
   late StreamController<UIError?> passwordErrorController;
+  late StreamController<bool?> isFormValidController;
   late String email;
   late String password;
 
   void initStreams() {
     emailErrorController = StreamController<UIError?>();
     passwordErrorController = StreamController<UIError?>();
+    isFormValidController = StreamController<bool?>();
   }
 
   void mockStreams() {
@@ -33,11 +35,14 @@ void main() {
         .thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream)
         .thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.isFormValidStream)
+        .thenAnswer((_) => isFormValidController.stream);
   }
 
   void closeStreams() {
     emailErrorController.close();
     passwordErrorController.close();
+    isFormValidController.close();
   }
 
   tearDown(() {
@@ -149,5 +154,16 @@ void main() {
     await tester.pump();
 
     expect(find.text('Campo obrigatório'), findsOneWidget);
+  });
+
+  testWidgets('Should enable button if form is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pump();
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, isNotNull);
   });
 }
