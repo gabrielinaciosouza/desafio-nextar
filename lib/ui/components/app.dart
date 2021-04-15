@@ -12,7 +12,20 @@ class App extends StatelessWidget {
       title: 'Desafio Nextar',
       theme: makeAppTheme(),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: LoginPage(LoginPresenterFake()),
     );
+  }
+}
+
+class LoginPresenterFake implements LoginPresenter {
+  //just for compile
+  @override
+  void validateEmail(String email) {
+    // TODO: implement validateEmail
+  }
+
+  @override
+  void validatePassword(String password) {
+    // TODO: implement validatePassword
   }
 }

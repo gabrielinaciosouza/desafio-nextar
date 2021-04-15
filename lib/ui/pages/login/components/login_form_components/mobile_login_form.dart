@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import '../../../../components/components.dart';
 import '../../../../helpers/helpers.dart';
 import '../../components/components.dart';
+import '../../login.dart';
 import 'login_form_fields.dart';
 
 class MobileLoginForm extends StatelessWidget {
-  const MobileLoginForm(
-      {required this.constraints,
-      required this.margin,
-      required this.borderRadius});
-
   final BoxConstraints constraints;
   final double margin;
   final BorderRadius borderRadius;
+  final LoginPresenter presenter;
+
+  const MobileLoginForm(
+      {required this.constraints,
+      required this.margin,
+      required this.borderRadius,
+      required this.presenter});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,10 @@ class MobileLoginForm extends StatelessWidget {
             SizedBox(
               height: constraints.maxHeight * .05,
             ),
-            LoginFormFields(constraints: constraints)
+            LoginFormFields(
+              constraints: constraints,
+              presenter: presenter,
+            )
           ],
         ),
       ),

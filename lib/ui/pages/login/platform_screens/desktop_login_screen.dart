@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../components/components.dart';
+import '../login.dart';
 
 class DesktopLoginScreen extends StatelessWidget {
+  final LoginPresenter presenter;
+
+  const DesktopLoginScreen({
+    required this.presenter,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -28,6 +35,7 @@ class DesktopLoginScreen extends StatelessWidget {
                           height: 490,
                           width: constraints.maxWidth,
                           child: LoginForm(
+                            presenter: presenter,
                             constraints: constraints,
                             borderRadius: BorderRadius.circular(30),
                             margin: 0.1,

@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../components/components.dart';
+import '../login.dart';
 
 class TabletLoginScreen extends StatelessWidget {
+  final LoginPresenter presenter;
+
+  const TabletLoginScreen({
+    required this.presenter,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,6 +28,7 @@ class TabletLoginScreen extends StatelessWidget {
                         spacingSize: 0.05,
                       ),
                       LoginForm(
+                        presenter: presenter,
                         constraints: constraints,
                         borderRadius: BorderRadius.circular(30),
                         margin: 0,

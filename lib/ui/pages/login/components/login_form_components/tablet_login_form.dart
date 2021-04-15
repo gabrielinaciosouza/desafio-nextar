@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../../login.dart';
 import 'login_form_fields.dart';
 
 class TabletLoginForm extends StatelessWidget {
-  const TabletLoginForm({
-    required this.constraints,
-    required this.margin,
-    required this.borderRadius,
-  });
-
   final BoxConstraints constraints;
   final double margin;
   final BorderRadius borderRadius;
+  final LoginPresenter presenter;
+
+  const TabletLoginForm(
+      {required this.constraints,
+      required this.margin,
+      required this.borderRadius,
+      required this.presenter});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,10 @@ class TabletLoginForm extends StatelessWidget {
                 image: AssetImage('lib/ui/assets/logo.png'),
               ),
             ),
-            LoginFormFields(constraints: constraints)
+            LoginFormFields(
+              constraints: constraints,
+              presenter: presenter,
+            )
           ],
         ),
       ),

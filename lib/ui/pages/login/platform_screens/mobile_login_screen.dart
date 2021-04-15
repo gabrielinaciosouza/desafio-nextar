@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../components/components.dart';
 
+import '../login.dart';
+
 class MobileLoginScreen extends StatelessWidget {
+  final LoginPresenter presenter;
+
+  const MobileLoginScreen({
+    required this.presenter,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,6 +29,7 @@ class MobileLoginScreen extends StatelessWidget {
                         spacingSize: 0.1,
                       ),
                       LoginForm(
+                        presenter: presenter,
                         margin: 0,
                         constraints: constraints,
                         borderRadius: BorderRadius.only(

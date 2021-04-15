@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:desafio_nextar/ui/pages/login/login.dart';
+import 'package:mockito/mockito.dart';
+
+import 'package:desafio_nextar/ui/pages/pages.dart';
+
+class LoginPresenterSpy extends Mock implements LoginPresenter {
+  void validateEmail(String email) =>
+      this.noSuchMethod(Invocation.method(#validateEmail, [email]),
+          returnValue: null, returnValueForMissingStub: null);
+  void validatePassword(String password) =>
+      this.noSuchMethod(Invocation.method(#validatePassword, [password]),
+          returnValue: null, returnValueForMissingStub: null);
+}
 
 void main() {
+  late LoginPresenter presenter;
+
   Future<void> loadPage(WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage());
+    presenter = LoginPresenterSpy();
+    final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
 
@@ -26,5 +40,18 @@ void main() {
 
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, null);
+  });
+
+  testWidgets('Should call validate with correct values',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final email = 'mail@test.com';
+    await tester.enterText(find.bySemanticsLabel('Email'), email);
+    verify(presenter.validateEmail(email));
+
+    final password = 'any_password';
+    await tester.enterText(find.bySemanticsLabel('Senha'), password);
+    verify(presenter.validatePassword(password));
   });
 }

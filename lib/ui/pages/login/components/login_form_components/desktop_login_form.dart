@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../../login.dart';
 import 'login_form_fields.dart';
 
 class DesktopLoginForm extends StatelessWidget {
-  const DesktopLoginForm(
-      {required this.constraints,
-      required this.margin,
-      required this.borderRadius});
-
   final BoxConstraints constraints;
   final double margin;
   final BorderRadius borderRadius;
+  final LoginPresenter presenter;
+
+  const DesktopLoginForm(
+      {required this.constraints,
+      required this.margin,
+      required this.borderRadius,
+      required this.presenter});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,10 @@ class DesktopLoginForm extends StatelessWidget {
           Expanded(
             child: Container(
                 padding: EdgeInsets.all(constraints.maxWidth * .04),
-                child: LoginFormFields(constraints: constraints)),
+                child: LoginFormFields(
+                  constraints: constraints,
+                  presenter: presenter,
+                )),
           ),
         ],
       ),
