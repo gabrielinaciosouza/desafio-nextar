@@ -14,6 +14,9 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
   void validatePassword(String password) =>
       this.noSuchMethod(Invocation.method(#validatePassword, [password]),
           returnValue: null, returnValueForMissingStub: null);
+
+  Future<void> auth() => this.noSuchMethod(Invocation.method(#auth, []),
+      returnValue: Future.value(), returnValueForMissingStub: Future.value());
 }
 
 void main() {
@@ -176,5 +179,22 @@ void main() {
 
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, null);
+  });
+
+  testWidgets('Should call authentication on form submit',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pumpAndSettle();
+    ElevatedButton elevatedButton = find
+        .widgetWithText(ElevatedButton, 'Entrar')
+        .evaluate()
+        .first
+        .widget as ElevatedButton;
+    elevatedButton.onPressed!();
+    await tester.pump();
+
+    verify(presenter.auth()).called(1);
   });
 }

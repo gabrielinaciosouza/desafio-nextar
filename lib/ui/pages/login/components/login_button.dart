@@ -28,9 +28,13 @@ class LoginButton extends StatelessWidget {
                       color: Theme.of(context).primaryColorLight,
                       text: R.strings.enter,
                     ),
-                    onPressed: snapshot.data == true ? () {} : null)
+                    onPressed: snapshot.data == true
+                        ? () async => presenter.auth()
+                        : null)
                 : ElevatedButton(
-                    onPressed: snapshot.data == true ? () {} : null,
+                    onPressed: snapshot.data == true
+                        ? () async => presenter.auth()
+                        : null,
                     child: ResponsiveHeadline6(
                       color: Theme.of(context).primaryColorLight,
                       text: R.strings.enter,

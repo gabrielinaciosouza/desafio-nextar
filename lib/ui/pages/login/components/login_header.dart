@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../helpers/helpers.dart';
-
-import '../../../components/components.dart';
 
 class LoginHeader extends StatelessWidget {
   final BoxConstraints constraints;

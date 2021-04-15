@@ -41,4 +41,10 @@ class LoginPresenterFake implements LoginPresenter {
   @override
   // TODO: implement isFormValidStream
   Stream<bool?>? get isFormValidStream => throw UnimplementedError();
+
+  @override
+  Future<void> auth() {
+    // TODO: implement auth
+    throw UnimplementedError();
+  }
 }
