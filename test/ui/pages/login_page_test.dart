@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:desafio_nextar/ui/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -14,12 +17,36 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
 }
 
 void main() {
-  late LoginPresenter presenter;
+  late LoginPresenter presenter = LoginPresenterSpy();
+  late StreamController<UIError?> emailErrorController;
+  late String email;
+  late String password;
+
+  void initStreams() {
+    emailErrorController = StreamController<UIError?>();
+  }
+
+  void mockStreams() {
+    when(presenter.emailErrorStream)
+        .thenAnswer((_) => emailErrorController.stream);
+  }
+
+  void closeStreams() {
+    emailErrorController.close();
+  }
+
+  tearDown(() {
+    closeStreams();
+  });
 
   Future<void> loadPage(WidgetTester tester) async {
-    presenter = LoginPresenterSpy();
+    initStreams();
+    mockStreams();
+
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
+    email = 'mail@test.com';
+    password = 'any_password';
   }
 
   testWidgets('Should load with correct initial state',
@@ -46,12 +73,20 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    final email = 'mail@test.com';
     await tester.enterText(find.bySemanticsLabel('Email'), email);
     verify(presenter.validateEmail(email));
 
-    final password = 'any_password';
     await tester.enterText(find.bySemanticsLabel('Senha'), password);
     verify(presenter.validatePassword(password));
+  });
+
+  testWidgets('Should present error if email is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add(UIError.invalidField);
+    await tester.pump();
+
+    expect(find.text('Campo inválido'), findsOneWidget);
   });
 }
