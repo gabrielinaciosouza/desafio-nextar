@@ -19,20 +19,25 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {
 void main() {
   late LoginPresenter presenter = LoginPresenterSpy();
   late StreamController<UIError?> emailErrorController;
+  late StreamController<UIError?> passwordErrorController;
   late String email;
   late String password;
 
   void initStreams() {
     emailErrorController = StreamController<UIError?>();
+    passwordErrorController = StreamController<UIError?>();
   }
 
   void mockStreams() {
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
+    when(presenter.passwordErrorStream)
+        .thenAnswer((_) => passwordErrorController.stream);
   }
 
   void closeStreams() {
     emailErrorController.close();
+    passwordErrorController.close();
   }
 
   tearDown(() {
@@ -111,5 +116,15 @@ void main() {
     await tester.pump();
 
     expect(find.text('Campo obrigatório'), findsOneWidget);
+  });
+
+  testWidgets('Should present error if password is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add(UIError.invalidField);
+    await tester.pump();
+
+    expect(find.text('Campo inválido'), findsOneWidget);
   });
 }

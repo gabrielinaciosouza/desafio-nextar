@@ -33,4 +33,8 @@ class LoginPresenterFake implements LoginPresenter {
   @override
   // TODO: implement emailErrorStream
   Stream<UIError?>? get emailErrorStream => throw UnimplementedError();
+
+  @override
+  // TODO: implement passwordErrorStream
+  Stream<UIError?>? get passwordErrorStream => throw UnimplementedError();
 }
