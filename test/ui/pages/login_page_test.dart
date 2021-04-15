@@ -102,4 +102,14 @@ void main() {
             of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
         findsOneWidget);
   });
+
+  testWidgets('Should present error if email is empty',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
+  });
 }
