@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../components/components.dart';
 import '../../pages/login/login.dart';
-import 'components/spinner_dialog.dart';
+import 'components/components.dart';
 import 'platform_screens/platform_screens.dart';
+import '../../helpers/helpers.dart';
 
 class LoginPage extends StatelessWidget {
   final LoginPresenter presenter;
@@ -25,6 +26,14 @@ class LoginPage extends StatelessWidget {
               showLoading(context);
             } else {
               hideLoading(context);
+            }
+          },
+        );
+
+        presenter.mainErrorStream!.listen(
+          (error) {
+            if (error != UIError.none) {
+              showErrorMessage(context, error!.description!);
             }
           },
         );

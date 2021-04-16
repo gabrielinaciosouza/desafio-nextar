@@ -51,4 +51,8 @@ class LoginPresenterFake implements LoginPresenter {
   @override
   // TODO: implement isLoadingStream
   Stream<bool?>? get isLoadingStream => throw UnimplementedError();
+
+  @override
+  // TODO: implement mainErrorStream
+  Stream<UIError?>? get mainErrorStream => throw UnimplementedError();
 }
