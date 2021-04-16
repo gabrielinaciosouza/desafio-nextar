@@ -24,6 +24,7 @@ void main() {
   late StreamController<UIError?> emailErrorController;
   late StreamController<UIError?> passwordErrorController;
   late StreamController<bool?> isFormValidController;
+  late StreamController<bool?> isLoadingController;
   late String email;
   late String password;
 
@@ -31,6 +32,7 @@ void main() {
     emailErrorController = StreamController<UIError?>();
     passwordErrorController = StreamController<UIError?>();
     isFormValidController = StreamController<bool?>();
+    isLoadingController = StreamController<bool?>();
   }
 
   void mockStreams() {
@@ -40,12 +42,15 @@ void main() {
         .thenAnswer((_) => passwordErrorController.stream);
     when(presenter.isFormValidStream)
         .thenAnswer((_) => isFormValidController.stream);
+    when(presenter.isLoadingStream)
+        .thenAnswer((_) => isLoadingController.stream);
   }
 
   void closeStreams() {
     emailErrorController.close();
     passwordErrorController.close();
     isFormValidController.close();
+    isLoadingController.close();
   }
 
   tearDown(() {
@@ -196,5 +201,14 @@ void main() {
     await tester.pump();
 
     verify(presenter.auth()).called(1);
+  });
+
+  testWidgets('Should present loading', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isLoadingController.add(true);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }

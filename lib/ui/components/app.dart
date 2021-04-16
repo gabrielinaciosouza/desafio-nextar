@@ -47,4 +47,8 @@ class LoginPresenterFake implements LoginPresenter {
     // TODO: implement auth
     throw UnimplementedError();
   }
+
+  @override
+  // TODO: implement isLoadingStream
+  Stream<bool?>? get isLoadingStream => throw UnimplementedError();
 }
