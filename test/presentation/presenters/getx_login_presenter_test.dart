@@ -25,10 +25,16 @@ class ValidationSpy extends Mock implements Validation {
 }
 
 void main() {
+  late GetxLoginPresenter sut;
+  late ValidationSpy validation;
+  late String email;
+
+  setUp(() {
+    validation = ValidationSpy();
+    sut = GetxLoginPresenter(validation: validation);
+    email = 'any_email@mail.com';
+  });
   test('Should call Validation with correct email', () {
-    final validation = ValidationSpy();
-    final sut = GetxLoginPresenter(validation: validation);
-    final email = 'any_email@mail.com';
     sut.validateEmail(email);
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
