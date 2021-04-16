@@ -10,6 +10,7 @@ abstract class Validation {
 class GetxLoginPresenter extends GetxController {
   final Validation validation;
 
+  String? _email;
   var _emailError = Rx<UIError>(UIError.none);
   var _isFormValid = false.obs;
 
@@ -23,7 +24,7 @@ class GetxLoginPresenter extends GetxController {
   }
 
   void _validateForm() {
-    _isFormValid.value = _emailError.value == UIError.none;
+    _isFormValid.value = _emailError.value == UIError.none && _email != null;
   }
 
   UIError _validateField({String? field, String? value}) {
@@ -98,6 +99,16 @@ void main() {
 
     sut.emailErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
+    sut.validateEmail(email);
+  });
+
+  test('Should emit empty if validation succeeds', () {
+    sut.emailErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.none)));
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
