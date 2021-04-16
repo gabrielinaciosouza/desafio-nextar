@@ -89,4 +89,19 @@ void main() {
     sut.validateEmail(email);
     sut.validateEmail(email);
   });
+
+  test(
+      'Should emit email error if validation return ValidationError.requiredField',
+      () {
+    mockValidation(
+        field: 'email', value: email, error: ValidationError.requiredField);
+
+    sut.emailErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
+    sut.validateEmail(email);
+  });
 }
