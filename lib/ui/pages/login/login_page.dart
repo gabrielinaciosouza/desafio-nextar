@@ -6,15 +6,17 @@ import 'platform_screens/platform_screens.dart';
 import '../../mixins/mixins.dart';
 
 class LoginPage extends StatelessWidget
-    with KeyboardManager, LoadingManager, UIErrorManager {
+    with KeyboardManager, LoadingManager, UIErrorManager, NavigationManager {
   final LoginPresenter presenter;
   LoginPage(this.presenter);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Builder(builder: (context) {
         handleLoading(context, presenter.isLoadingStream);
         handleMainError(context, presenter.mainErrorStream);
+        handleNavigation(presenter.navigateToStream!, clear: true);
         return GestureDetector(
           onTap: () => hideKeyboard(context),
           child: BaseWidget(

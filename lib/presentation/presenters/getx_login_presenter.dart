@@ -8,7 +8,7 @@ import '../../ui/helpers/helpers.dart';
 import '../protocols/protocols.dart';
 
 class GetxLoginPresenter extends GetxController
-    with LoadingManager, FormManager, UIErrorManager
+    with LoadingManager, FormManager, UIErrorManager, NavigationManager
     implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
@@ -68,6 +68,7 @@ class GetxLoginPresenter extends GetxController
       final account = await authentication
           .auth(AuthenticationParams(email: _email, password: _password));
       await saveCurrentAccount.save(account);
+      navigateTo = '/home';
     } on DomainError catch (error) {
       switch (error) {
         case DomainError.invalidCredentials:
@@ -75,8 +76,8 @@ class GetxLoginPresenter extends GetxController
           break;
         default:
           mainError = UIError.unexpected;
-          isLoading = false;
       }
+      isLoading = false;
     }
   }
 }

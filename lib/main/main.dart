@@ -25,6 +25,14 @@ class App extends StatelessWidget {
               name: '/login',
               page: makeLoginPage,
               transition: Transition.fadeIn),
+          GetPage(
+              name: '/home',
+              page: () => Scaffold(
+                    body: Center(
+                      child: Text('Home page'),
+                    ),
+                  ),
+              transition: Transition.fadeIn),
         ],
         home: LoginPage(makeGetxLoginPresenter()));
   }

@@ -6,6 +6,7 @@ abstract class LoginPresenter {
   Stream<UIError?>? get mainErrorStream;
   Stream<bool?>? get isFormValidStream;
   Stream<bool?>? get isLoadingStream;
+  Stream<String?>? get navigateToStream;
 
   void validateEmail(String email);
   void validatePassword(String password);
