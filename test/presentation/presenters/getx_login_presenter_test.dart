@@ -66,6 +66,7 @@ class GetxLoginPresenter extends GetxController {
 
   Future<void> auth() async {
     try {
+      _mainError.value = UIError.none;
       _isLoading.value = true;
       await authentication
           .auth(AuthenticationParams(email: _email, password: _password));
@@ -283,8 +284,8 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream!.listen(expectAsync1(
-        (error) => expect(error!.description, 'Credenciais inválidas.')));
+    expectLater(sut.mainErrorStream,
+        emitsInOrder([UIError.none, UIError.invalidCredentials]));
 
     await sut.auth();
   });
@@ -296,9 +297,8 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream!.listen(expectAsync1((error) => expect(
-        error!.description,
-        'Algo errado aconteceu. Tente novamente em breve.')));
+    expectLater(
+        sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
 
     await sut.auth();
   });
