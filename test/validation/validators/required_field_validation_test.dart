@@ -32,4 +32,8 @@ void main() {
   test('Should return ValidationError.requiredField if value is empty', () {
     expect(sut.validate(''), ValidationError.requiredField);
   });
+
+  test('Should return ValidationError.requiredField if value is null', () {
+    expect(sut.validate(null), ValidationError.requiredField);
+  });
 }
