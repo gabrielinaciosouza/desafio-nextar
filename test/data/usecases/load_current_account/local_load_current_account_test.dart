@@ -1,26 +1,9 @@
+import 'package:desafio_nextar/data/cache/cache.dart';
+import 'package:desafio_nextar/data/usecases/load_current_account/load_current_account.dart';
 import 'package:desafio_nextar/domain/entities/entities.dart';
 import 'package:desafio_nextar/domain/helpers/helpers.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-
-class LocalLoadCurrentAccount implements LoadCurrentAccount {
-  FetchSecureCacheStorage fetchSecureCacheStorage;
-
-  LocalLoadCurrentAccount({required this.fetchSecureCacheStorage});
-  Future<AccountEntity> load() async {
-    try {
-      final token = await fetchSecureCacheStorage.fetchSecure('token');
-      return AccountEntity(token: token);
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
-}
-
-abstract class FetchSecureCacheStorage {
-  Future<String> fetchSecure(String key);
-}
 
 class FetchSecureCacheStorageSpy extends Mock
     implements FetchSecureCacheStorage {
