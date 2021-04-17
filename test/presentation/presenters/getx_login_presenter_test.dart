@@ -25,6 +25,14 @@ class AuthenticationSpy extends Mock implements Authentication {
           returnValueForMissingStub: Future.value(response));
 }
 
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {
+  @override
+  Future<void> save(AccountEntity account) =>
+      super.noSuchMethod(Invocation.method(#save, []),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
+}
+
 void main() {
   late GetxLoginPresenter sut;
   late ValidationSpy validation;
@@ -32,6 +40,7 @@ void main() {
   late String email;
   late String password;
   late String token;
+  late SaveCurrentAccountSpy saveCurrentAccount;
 
   void mockValidation({
     required String value,
@@ -48,11 +57,14 @@ void main() {
   }
 
   setUp(() {
+    saveCurrentAccount = SaveCurrentAccountSpy();
     token = 'any_token';
     validation = ValidationSpy();
     authentication = AuthenticationSpy(response: AccountEntity(token: token));
     sut = GetxLoginPresenter(
-        validation: validation, authentication: authentication);
+        validation: validation,
+        authentication: authentication,
+        saveCurrentAccount: saveCurrentAccount);
     email = 'any_email@mail.com';
     password = 'any_password';
   });
@@ -223,5 +235,14 @@ void main() {
         sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
 
     await sut.auth();
+  });
+
+  test('Should call SaveCurrentAccount with correct values', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(saveCurrentAccount.save(AccountEntity(token: token))).called(1);
   });
 }
