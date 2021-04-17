@@ -4,6 +4,8 @@ import 'package:test/test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {
+  final String fetchedValue;
+  FlutterSecureStorageSpy({required this.fetchedValue});
   @override
   Future<void> write({
     required String key,
@@ -15,6 +17,16 @@ class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {
       this.noSuchMethod(Invocation.method(#write, []),
           returnValue: Future.value(),
           returnValueForMissingStub: Future.value());
+  @override
+  Future<String?> read({
+    required String key,
+    IOSOptions? iOptions = IOSOptions.defaultOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) =>
+      this.noSuchMethod(Invocation.method(#write, []),
+          returnValue: Future.value(fetchedValue),
+          returnValueForMissingStub: Future.value(fetchedValue));
 }
 
 void main() {
@@ -31,23 +43,33 @@ void main() {
   }
 
   setUp(() {
-    secureStorage = FlutterSecureStorageSpy();
-    sut = LocalStorageAdapter(secureStorage: secureStorage);
     key = 'any_key';
     value = 'any_value';
+    secureStorage = FlutterSecureStorageSpy(fetchedValue: value);
+    sut = LocalStorageAdapter(secureStorage: secureStorage);
   });
 
-  test('Should call save secure with correct values', () async {
-    await sut.saveSecure(key: key, value: value);
+  group('saveSecure', () {
+    test('Should call save secure with correct values', () async {
+      await sut.saveSecure(key: key, value: value);
 
-    verify(secureStorage.write(key: key, value: value));
+      verify(secureStorage.write(key: key, value: value));
+    });
+
+    test('Should throw if SaveSecure throws', () async {
+      throwSaveError();
+
+      final future = sut.saveSecure(key: key, value: value);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
+    });
   });
 
-  test('Should throw if SaveSecure throws', () async {
-    throwSaveError();
+  group('fetchSecure', () {
+    test('Should call fetch secure with correct value', () async {
+      await sut.fetchSecure(key);
 
-    final future = sut.saveSecure(key: key, value: value);
-
-    expect(future, throwsA(TypeMatcher<Exception>()));
+      verify(secureStorage.read(key: key));
+    });
   });
 }
