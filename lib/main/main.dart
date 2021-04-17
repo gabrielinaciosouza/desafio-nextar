@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 
 import './factories/pages/pages.dart';
 
-import '../ui/pages/pages.dart';
 import '../ui/components/components.dart';
+import 'factories/pages/splash/splash.dart';
 
 void main() {
   runApp(App());
@@ -16,25 +16,26 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return GetMaterialApp(
-        title: 'Desafio Nextar',
-        theme: makeAppTheme(),
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/login',
-        getPages: [
-          GetPage(
-              name: '/login', page: makeLoginPage, transition: Transition.fade),
-          GetPage(
-              name: '/home',
-              page: () => Scaffold(
-                    body: Center(
-                      child: Text(
-                        'Home page',
-                        style: TextStyle(color: Colors.white),
-                      ),
+      title: 'Desafio Nextar',
+      theme: makeAppTheme(),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: makeSplashPage, transition: Transition.fade),
+        GetPage(
+            name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
+        GetPage(
+            name: '/home',
+            page: () => Scaffold(
+                  body: Center(
+                    child: Text(
+                      'Home page',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
-              transition: Transition.fadeIn),
-        ],
-        home: LoginPage(makeGetxLoginPresenter()));
+                ),
+            transition: Transition.fadeIn),
+      ],
+    );
   }
 }
