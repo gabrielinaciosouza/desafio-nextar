@@ -8,7 +8,13 @@ class EmailValidation implements FieldValidation {
   );
 
   ValidationError? validate(String? value) {
-    return ValidationError.none;
+    if (value!.isEmpty) {
+      return ValidationError.requiredField;
+    }
+    final regex = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    final isValid = value.isNotEmpty != true || regex.hasMatch(value);
+    return isValid ? ValidationError.none : ValidationError.invalidField;
   }
 }
 
@@ -19,13 +25,14 @@ void main() {
     sut = EmailValidation('any_field');
   });
   test('Should return ValidationError.none if email is empty', () {
-    expect(sut.validate(''), ValidationError.none);
-  });
-  test('Should return null if email is empty', () {
-    expect(sut.validate(null), ValidationError.none);
+    expect(sut.validate(''), ValidationError.requiredField);
   });
 
   test('Should return ValidationError.none if email is valid', () {
     expect(sut.validate('gabriel@gabriel.com'), ValidationError.none);
+  });
+
+  test('Should return error if email is invalid', () {
+    expect(sut.validate('gabriel@gabriel'), ValidationError.invalidField);
   });
 }
