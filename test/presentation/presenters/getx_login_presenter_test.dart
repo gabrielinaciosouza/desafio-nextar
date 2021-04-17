@@ -18,7 +18,7 @@ class GetxLoginPresenter extends GetxController {
   var _isFormValid = false.obs;
 
   Stream<UIError?>? get emailErrorStream => _emailError.stream;
-  Stream<UIError?>? get passwordErrorStream => _emailError.stream;
+  Stream<UIError?>? get passwordErrorStream => _passwordError.stream;
   Stream<bool?>? get isFormValidStream => _isFormValid.stream;
 
   GetxLoginPresenter({required this.validation});
@@ -134,5 +134,39 @@ void main() {
     sut.validatePassword(password);
 
     verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+
+  test(
+      'Should emit password error if validation returns ValidationError.invalidField',
+      () {
+    mockValidation(
+        field: 'password',
+        value: password,
+        error: ValidationError.invalidField);
+
+    sut.passwordErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+  test(
+      'Should emit password error if validation returns ValidationError.requiredField',
+      () {
+    mockValidation(
+        field: 'password',
+        value: password,
+        error: ValidationError.requiredField);
+
+    sut.passwordErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
   });
 }
