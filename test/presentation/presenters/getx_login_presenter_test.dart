@@ -11,10 +11,14 @@ class GetxLoginPresenter extends GetxController {
   final Validation validation;
 
   String? _email;
+  String? _password;
+
   var _emailError = Rx<UIError>(UIError.none);
+  var _passwordError = Rx<UIError>(UIError.none);
   var _isFormValid = false.obs;
 
   Stream<UIError?>? get emailErrorStream => _emailError.stream;
+  Stream<UIError?>? get passwordErrorStream => _emailError.stream;
   Stream<bool?>? get isFormValidStream => _isFormValid.stream;
 
   GetxLoginPresenter({required this.validation});
@@ -23,8 +27,16 @@ class GetxLoginPresenter extends GetxController {
     _validateForm();
   }
 
+  void validatePassword(String password) {
+    _passwordError.value = _validateField(field: 'password', value: password);
+    _validateForm();
+  }
+
   void _validateForm() {
-    _isFormValid.value = _emailError.value == UIError.none && _email != null;
+    _isFormValid.value = _emailError.value == UIError.none &&
+        _passwordError.value == UIError.none &&
+        _email != null &&
+        _password != null;
   }
 
   UIError _validateField({String? field, String? value}) {
@@ -57,6 +69,7 @@ void main() {
   late GetxLoginPresenter sut;
   late ValidationSpy validation;
   late String email;
+  late String password;
 
   void mockValidation({
     required String value,
@@ -70,6 +83,7 @@ void main() {
     validation = ValidationSpy();
     sut = GetxLoginPresenter(validation: validation);
     email = 'any_email@mail.com';
+    password = 'any_password';
   });
   test('Should call Validation with correct email', () {
     sut.validateEmail(email);
@@ -114,5 +128,11 @@ void main() {
 
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('Should call Validation with correct password', () {
+    sut.validatePassword(password);
+
+    verify(validation.validate(field: 'password', value: password)).called(1);
   });
 }
