@@ -21,10 +21,12 @@ class GetxLoginPresenter extends GetxController {
   var _emailError = Rx<UIError>(UIError.none);
   var _passwordError = Rx<UIError>(UIError.none);
   var _isFormValid = false.obs;
+  var _isLoading = false.obs;
 
   Stream<UIError?>? get emailErrorStream => _emailError.stream;
   Stream<UIError?>? get passwordErrorStream => _passwordError.stream;
   Stream<bool?>? get isFormValidStream => _isFormValid.stream;
+  Stream<bool?>? get isLoadingStream => _isLoading.stream;
 
   void validateEmail(String email) {
     _email = email;
@@ -47,7 +49,6 @@ class GetxLoginPresenter extends GetxController {
 
   UIError _validateField({String? field, String? value}) {
     final error = validation.validate(field: field, value: value);
-    print(error.toString());
     switch (error) {
       case ValidationError.invalidField:
         return UIError.invalidField;
@@ -61,8 +62,10 @@ class GetxLoginPresenter extends GetxController {
   }
 
   Future<void> auth() async {
+    _isLoading.value = true;
     await authentication
         .auth(AuthenticationParams(email: _email, password: _password));
+    _isLoading.value = false;
   }
 }
 
@@ -243,5 +246,14 @@ void main() {
     verify(authentication
             .auth(AuthenticationParams(email: email, password: password)))
         .called(1);
+  });
+
+  test('Should emit correct events on Authentication success', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emits(true));
+
+    await sut.auth();
   });
 }

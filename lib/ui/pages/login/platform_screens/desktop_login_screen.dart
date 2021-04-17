@@ -18,7 +18,6 @@ class DesktopLoginScreen extends StatelessWidget {
         children: [
           Expanded(child: LayoutBuilder(
             builder: (context, constraints) {
-              print(constraints.biggest.aspectRatio);
               return SingleChildScrollView(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
