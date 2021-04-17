@@ -23,6 +23,13 @@ void main() {
   late String key;
   late String value;
 
+  PostExpectation secureStorageWriteCall() =>
+      when(secureStorage.write(key: key, value: value));
+
+  void throwSaveError() {
+    secureStorageWriteCall().thenThrow(Exception());
+  }
+
   setUp(() {
     secureStorage = FlutterSecureStorageSpy();
     sut = LocalStorageAdapter(secureStorage: secureStorage);
@@ -34,5 +41,13 @@ void main() {
     await sut.saveSecure(key: key, value: value);
 
     verify(secureStorage.write(key: key, value: value));
+  });
+
+  test('Should throw if SaveSecure throws', () async {
+    throwSaveError();
+
+    final future = sut.saveSecure(key: key, value: value);
+
+    expect(future, throwsA(TypeMatcher<Exception>()));
   });
 }
