@@ -1,5 +1,6 @@
 import 'package:desafio_nextar/ui/mixins/mixins.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import 'splash_presenter.dart';
 
@@ -13,13 +14,25 @@ class SplashPage extends StatelessWidget with NavigationManager {
     presenter.checkAccount();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Splash'),
-      ),
       body: Builder(builder: (context) {
         handleNavigation(presenter.navigateToStream, clear: true);
-        return Center(
-          child: CircularProgressIndicator(),
+        return Container(
+          alignment: Alignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                  height: 300,
+                  width: 300,
+                  child: Lottie.asset('lib/ui/assets/splash_animation.json')),
+              SizedBox(height: 20),
+              CircularProgressIndicator(
+                valueColor:
+                    new AlwaysStoppedAnimation<Color>(Colors.transparent),
+              )
+            ],
+          ),
         );
       }),
     );

@@ -12,7 +12,8 @@ class GetxSplashPresenter extends GetxController
   GetxSplashPresenter({required this.loadCurrentAccount});
 
   @override
-  Future<void> checkAccount() async {
+  Future<void> checkAccount({int durationInSeconds = 3}) async {
+    await Future.delayed(Duration(seconds: durationInSeconds));
     try {
       final account = await loadCurrentAccount.load();
       navigateTo = account.token.isEmpty ? '/login' : '/home';

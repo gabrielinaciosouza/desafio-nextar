@@ -17,6 +17,7 @@ dependencies:
   get:
   equatable:
   flutter_secure_storage:
+  lottie:
 
 dev_dependencies:
   flutter_test:
