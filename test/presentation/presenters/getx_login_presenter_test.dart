@@ -179,4 +179,19 @@ void main() {
     sut.validatePassword(password);
     sut.validatePassword(password);
   });
+
+  test('Should emit isFormValid false if email validavalidation fails', () {
+    mockValidation(
+        field: 'email', value: email, error: ValidationError.invalidField);
+
+    sut.emailErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.passwordErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.none)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+  });
 }
