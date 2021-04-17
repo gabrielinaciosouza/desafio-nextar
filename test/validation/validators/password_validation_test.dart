@@ -1,22 +1,7 @@
-import 'package:desafio_nextar/presentation/protocols/protocols.dart';
-import 'package:desafio_nextar/validation/validators/validators.dart';
 import 'package:test/test.dart';
 
-class PasswordValidation implements FieldValidation {
-  final String field;
-  PasswordValidation(
-    this.field,
-  );
-
-  ValidationError? validate(String? value) {
-    if (value!.isEmpty) {
-      return ValidationError.requiredField;
-    }
-
-    final isValid = value.length >= 6;
-    return isValid ? ValidationError.none : ValidationError.invalidField;
-  }
-}
+import 'package:desafio_nextar/presentation/protocols/protocols.dart';
+import 'package:desafio_nextar/validation/validators/validators.dart';
 
 void main() {
   late PasswordValidation sut;
