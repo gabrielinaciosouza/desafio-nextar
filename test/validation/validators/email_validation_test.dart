@@ -24,4 +24,8 @@ void main() {
   test('Should return null if email is empty', () {
     expect(sut.validate(null), ValidationError.none);
   });
+
+  test('Should return ValidationError.none if email is valid', () {
+    expect(sut.validate('gabriel@gabriel.com'), ValidationError.none);
+  });
 }
