@@ -35,6 +35,7 @@ Para rodar o app, favor assegurar de:
 
 - Estar com a versão 2.0.4 do Flutter
 - Estar com a versão 2.12.2 do Dart SDK
+- Em ambiente android, versão mínima do SDK deve ser maior que 18
 - Habilitar o null-safaty
 - Rodar o comando "flutter pub get" no terminal
 - O app está pronto para rodar nas plataformas web, android e IOS.
