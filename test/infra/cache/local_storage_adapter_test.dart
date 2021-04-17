@@ -30,12 +30,19 @@ class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {
 }
 
 void main() {
-  test('Should call save secure with correct values', () async {
-    final secureStorage = FlutterSecureStorageSpy();
-    final sut = LocalStorageAdapter(secureStorage: secureStorage);
-    final key = 'any_key';
-    final value = 'any_value';
+  late FlutterSecureStorageSpy secureStorage;
+  late LocalStorageAdapter sut;
+  late String key;
+  late String value;
 
+  setUp(() {
+    secureStorage = FlutterSecureStorageSpy();
+    sut = LocalStorageAdapter(secureStorage: secureStorage);
+    key = 'any_key';
+    value = 'any_value';
+  });
+
+  test('Should call save secure with correct values', () async {
     await sut.saveSecure(key: key, value: value);
 
     verify(secureStorage.write(key: key, value: value));
