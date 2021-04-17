@@ -1,6 +1,6 @@
 import 'package:desafio_nextar/domain/entities/entities.dart';
 import 'package:desafio_nextar/domain/usecases/usecases.dart';
-import 'package:desafio_nextar/presentation/presenters/getx_splash_presenter.dart';
+import 'package:desafio_nextar/presentation/presenters/presenters.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
