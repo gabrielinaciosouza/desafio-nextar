@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.desafio_nextar">
    <application
-        android:label="desafio_nextar"
+        android:label="Dasafio Nextar"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
