@@ -24,8 +24,8 @@ Conforme o desenvolvimento do app, serão criados os checklists referentes a imp
 - [Checklist: POST](./requirements/checklists/http/post.md)
 - [Checklist: Página de login](./requirements/checklists/pages/login/login_page.md)
 - [Checklist: Login Presenter](./requirements/checklists/pages/login/login_presenter.md)
-- [Checklist: Login Presenter](./requirements/checklists/pages/splash/splash_presenter.md)
-- [Checklist: Login Presenter](./requirements/checklists/pages/splash/splash_page.md)
+- [Checklist: Página Splash](./requirements/checklists/pages/splash/splash_presenter.md)
+- [Checklist: Splash Presenter](./requirements/checklists/pages/splash/splash_page.md)
 
 ## Especificações
 
