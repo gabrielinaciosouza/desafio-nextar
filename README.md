@@ -15,6 +15,7 @@ Conforme o desenvolvimento do app, serão criados os casos de uso referentes a i
 - [Caso de uso: Login](./requirements/use_cases/authentication.md)
 - [Caso de uso: Salvar Usuário Authenticado](./requirements/use_cases/local_save_current_account.md)
 - [Caso de uso: Carregar Usuário Authenticado](./requirements/use_cases/local_load_current_account.md)
+- [Caso de uso: Produtos](./requirements/use_cases/local_load_products.md)
 
 ## Checklists
 
@@ -26,12 +27,15 @@ Conforme o desenvolvimento do app, serão criados os checklists referentes a imp
 - [Checklist: Login Presenter](./requirements/checklists/pages/login/login_presenter.md)
 - [Checklist: Página Splash](./requirements/checklists/pages/splash/splash_presenter.md)
 - [Checklist: Splash Presenter](./requirements/checklists/pages/splash/splash_page.md)
+- [Checklist: Página Home](./requirements/checklists/pages/home/home_presenter.md)
+- [Checklist: Home Presenter](./requirements/checklists/pages/home/home_page.md)
 
 ## Especificações
 
 Conforme o desenvolvimento do app, serão criados os especificações referentes a implementação em curso.
 
 - [Visão de cliente: Login](./requirements/bdd_specs/login.md)
+- [Visão de cliente: Login](./requirements/bdd_specs/home.md)
 
 ## Versões e instruções
 
