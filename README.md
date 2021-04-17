@@ -28,3 +28,14 @@ Conforme o desenvolvimento do app, serão criados os checklists referentes a imp
 Conforme o desenvolvimento do app, serão criados os especificações referentes a implementação em curso.
 
 - [Visão de cliente: Login](./requirements/bdd_specs/login.md)
+
+## Versões e instruções
+
+Para rodar o app, favor assegurar de:
+
+- Estar com a versão 2.0.4 do Flutter
+- Estar com a versão 2.12.2 do Dart SDK
+- Habilitar o null-safaty
+- Rodar o comando "flutter pub get" no terminal
+- O app está pronto para rodar nas plataformas web, android e IOS.
+- Para testes de responsividade, rodar em ambiente web.
