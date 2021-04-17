@@ -13,7 +13,6 @@ class LoginPage extends StatelessWidget
   Widget build(BuildContext context) {
     return Scaffold(
       body: Builder(builder: (context) {
-        print('build');
         handleLoading(context, presenter.isLoadingStream);
         handleMainError(context, presenter.mainErrorStream);
         return GestureDetector(
