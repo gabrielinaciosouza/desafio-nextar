@@ -23,9 +23,8 @@ class TabletLoginScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      LoginHeader(
-                        constraints: constraints,
-                        spacingSize: 0.05,
+                      SizedBox(
+                        height: constraints.maxHeight * .15,
                       ),
                       LoginForm(
                         presenter: presenter,
@@ -33,8 +32,8 @@ class TabletLoginScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                         margin: 0,
                       ),
-                      Container(
-                        height: constraints.maxHeight * .05,
+                      SizedBox(
+                        height: constraints.maxHeight * .15,
                       ),
                     ],
                   ),

@@ -13,15 +13,15 @@ class LoginHeader extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: constraints.maxHeight * .1,
+          height: constraints.maxHeight * .17,
         ),
         ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: AspectRatio(
-            aspectRatio: 4,
+            aspectRatio: 6,
             child: Image(
-              fit: BoxFit.cover,
-              image: AssetImage('lib/ui/assets/logo.png'),
+              fit: BoxFit.contain,
+              image: AssetImage('lib/ui/assets/logo2.png'),
             ),
           ),
         ),

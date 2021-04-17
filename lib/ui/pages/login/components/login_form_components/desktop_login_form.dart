@@ -18,6 +18,7 @@ class DesktopLoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(4),
       margin: EdgeInsets.symmetric(
         horizontal: constraints.maxWidth * .12,
       ),
