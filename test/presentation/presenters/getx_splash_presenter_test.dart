@@ -1,29 +1,8 @@
 import 'package:desafio_nextar/domain/entities/entities.dart';
 import 'package:desafio_nextar/domain/usecases/usecases.dart';
-import 'package:desafio_nextar/ui/pages/splash/splash.dart';
-import 'package:get/get.dart';
+import 'package:desafio_nextar/presentation/presenters/getx_splash_presenter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-
-class GetxSplashPresenter implements SplashPresenter {
-  final LoadCurrentAccount loadCurrentAccount;
-
-  GetxSplashPresenter({required this.loadCurrentAccount});
-  var _navigateTo = RxString('');
-
-  @override
-  Stream<String?>? get navigateToStream => _navigateTo.stream;
-
-  @override
-  Future<void> checkAccount() async {
-    try {
-      final account = await loadCurrentAccount.load();
-      _navigateTo.value = account.token.isEmpty ? '/login' : '/home';
-    } catch (error) {
-      _navigateTo.value = '/login';
-    }
-  }
-}
 
 class LoadCurrentAccountSpy extends Mock implements LoadCurrentAccount {
   @override
