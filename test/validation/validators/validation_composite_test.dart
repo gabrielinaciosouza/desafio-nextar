@@ -1,21 +1,8 @@
 import 'package:desafio_nextar/presentation/protocols/protocols.dart';
+import 'package:desafio_nextar/validation/validators/validators.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-
-class ValidationComposite implements Validation {
-  final List<FieldValidation> validations;
-
-  ValidationComposite(this.validations);
-
-  ValidationError validate({required String? field, required String? value}) {
-    ValidationError? error;
-    for (final validation in validations.where((v) => v.field == field)) {
-      error = validation.validate(value);
-    }
-    return error ?? ValidationError.none;
-  }
-}
 
 class FieldValidationSpy extends Mock implements FieldValidation {
   @override
