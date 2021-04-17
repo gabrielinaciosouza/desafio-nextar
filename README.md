@@ -38,5 +38,6 @@ Para rodar o app, favor assegurar de:
 - Em ambiente android, versão mínima do SDK deve ser maior que 18
 - Habilitar o null-safaty
 - Rodar o comando "flutter pub get" no terminal
-- O app está pronto para rodar nas plataformas web, android e IOS.
-- Para testes de responsividade, rodar em ambiente web.
+- O app está pronto para rodar nas plataformas web, android e IOS
+- Para testes de responsividade, rodar em ambiente web
+- Para rodar os testes unitários, pode ser feito pela IDE ou pelo comando "flutter test"
