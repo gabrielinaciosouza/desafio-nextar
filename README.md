@@ -13,6 +13,8 @@ O app é uma representação de um cadastro de produtos.
 Conforme o desenvolvimento do app, serão criados os casos de uso referentes a implementação em curso.
 
 - [Caso de uso: Login](./requirements/use_cases/authentication.md)
+- [Caso de uso: Salvar Usuário Authenticado](./requirements/use_cases/local_save_current_account.md)
+- [Caso de uso: Carregar Usuário Authenticado](./requirements/use_cases/local_load_current_account.md)
 
 ## Checklists
 
@@ -22,6 +24,8 @@ Conforme o desenvolvimento do app, serão criados os checklists referentes a imp
 - [Checklist: POST](./requirements/checklists/http/post.md)
 - [Checklist: Página de login](./requirements/checklists/pages/login/login_page.md)
 - [Checklist: Login Presenter](./requirements/checklists/pages/login/login_presenter.md)
+- [Checklist: Login Presenter](./requirements/checklists/pages/splash/splash_presenter.md)
+- [Checklist: Login Presenter](./requirements/checklists/pages/splash/splash_page.md)
 
 ## Especificações
 
