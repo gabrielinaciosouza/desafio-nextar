@@ -16,8 +16,8 @@ class GetxSplashPresenter implements SplashPresenter {
 
   @override
   Future<void> checkAccount() async {
-    await loadCurrentAccount.load();
-    _navigateTo.value = '/home';
+    final account = await loadCurrentAccount.load();
+    _navigateTo.value = account.token.isEmpty ? '/login' : '/home';
   }
 }
 
@@ -38,6 +38,11 @@ void main() {
     loadCurrentAccount = LoadCurrentAccountSpy();
     sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
   });
+
+  void mockLoadCurrentAccount({required AccountEntity account}) {
+    when(loadCurrentAccount.load()).thenAnswer((_) async => account);
+  }
+
   test('Should call LoadCurrentAccount', () async {
     await sut.checkAccount();
 
@@ -46,6 +51,15 @@ void main() {
 
   test('Should go to home page on success', () async {
     sut.navigateToStream!.listen(expectAsync1((page) => expect(page, '/home')));
+
+    await sut.checkAccount();
+  });
+
+  test('Should go to login page on empty result', () async {
+    mockLoadCurrentAccount(account: AccountEntity(token: ''));
+
+    sut.navigateToStream!
+        .listen(expectAsync1((page) => expect(page, '/login')));
 
     await sut.checkAccount();
   });
