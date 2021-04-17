@@ -25,5 +25,10 @@ class ValidationBuilder {
     return this;
   }
 
+  ValidationBuilder password() {
+    validations.add(PasswordValidation(fieldName));
+    return this;
+  }
+
   List<FieldValidation> build() => validations;
 }
