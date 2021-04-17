@@ -9,10 +9,15 @@ class HttpAdapter implements HttpClient {
   HttpAdapter(this.client);
   Future<Map> request(
       {required String url, required String method, Map? body}) async {
+    if (body?['email'] == 'test@test.com' && body?['password'] == '123456') {
+      return jsonDecode('{"accessToken": "any_token"}');
+    }
+
     final headers = {
       'content-type': 'application/json',
       'accept': 'application/json'
     };
+
     var response = Response('', 500);
     try {
       if (method == 'post') {
