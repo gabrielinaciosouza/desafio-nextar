@@ -61,4 +61,11 @@ void main() {
     expect(Get.currentRoute, '/any_route');
     expect(find.text('fake page'), findsOneWidget);
   });
+
+  testWidgets('Should call loadCurrentAccount on page load',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    verify(presenter.checkAccount()).called(1);
+  });
 }
