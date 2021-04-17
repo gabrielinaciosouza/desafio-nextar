@@ -1,4 +1,5 @@
 import 'package:desafio_nextar/domain/entities/entities.dart';
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:desafio_nextar/ui/helpers/helpers.dart';
 import 'package:get/get.dart';
@@ -20,11 +21,13 @@ class GetxLoginPresenter extends GetxController {
 
   var _emailError = Rx<UIError>(UIError.none);
   var _passwordError = Rx<UIError>(UIError.none);
+  var _mainError = Rx<UIError>(UIError.none);
   var _isFormValid = false.obs;
   var _isLoading = false.obs;
 
   Stream<UIError?>? get emailErrorStream => _emailError.stream;
   Stream<UIError?>? get passwordErrorStream => _passwordError.stream;
+  Stream<UIError?>? get mainErrorStream => _mainError.stream;
   Stream<bool?>? get isFormValidStream => _isFormValid.stream;
   Stream<bool?>? get isLoadingStream => _isLoading.stream;
 
@@ -62,10 +65,20 @@ class GetxLoginPresenter extends GetxController {
   }
 
   Future<void> auth() async {
-    _isLoading.value = true;
-    await authentication
-        .auth(AuthenticationParams(email: _email, password: _password));
-    _isLoading.value = false;
+    try {
+      _isLoading.value = true;
+      await authentication
+          .auth(AuthenticationParams(email: _email, password: _password));
+    } on DomainError catch (error) {
+      switch (error) {
+        case DomainError.invalidCredentials:
+          _mainError.value = UIError.invalidCredentials;
+          break;
+        default:
+          _mainError.value = UIError.unexpected;
+      }
+      _isLoading.value = false;
+    }
   }
 }
 
@@ -103,6 +116,12 @@ void main() {
     required error,
   }) {
     when(validation.validate(field: field, value: value)).thenReturn(error);
+  }
+
+  PostExpectation authenticationCall() => when(authentication
+      .auth(AuthenticationParams(email: email, password: password)));
+  void mockAuthenticationError({required DomainError error}) {
+    authenticationCall().thenThrow(error);
   }
 
   setUp(() {
@@ -253,6 +272,19 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emits(true));
+
+    await sut.auth();
+  });
+
+  test('Should emit correct events on InvalidCredentialsError', () async {
+    mockAuthenticationError(error: DomainError.invalidCredentials);
+
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream!.listen(expectAsync1(
+        (error) => expect(error!.description, 'Credenciais inválidas.')));
 
     await sut.auth();
   });
