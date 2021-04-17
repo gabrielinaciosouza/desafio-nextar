@@ -1,3 +1,5 @@
+import 'package:desafio_nextar/domain/entities/entities.dart';
+import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:desafio_nextar/ui/helpers/helpers.dart';
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
@@ -9,6 +11,9 @@ abstract class Validation {
 
 class GetxLoginPresenter extends GetxController {
   final Validation validation;
+  final Authentication authentication;
+
+  GetxLoginPresenter({required this.validation, required this.authentication});
 
   String? _email;
   String? _password;
@@ -21,13 +26,14 @@ class GetxLoginPresenter extends GetxController {
   Stream<UIError?>? get passwordErrorStream => _passwordError.stream;
   Stream<bool?>? get isFormValidStream => _isFormValid.stream;
 
-  GetxLoginPresenter({required this.validation});
   void validateEmail(String email) {
+    _email = email;
     _emailError.value = _validateField(field: 'email', value: email);
     _validateForm();
   }
 
   void validatePassword(String password) {
+    _password = password;
     _passwordError.value = _validateField(field: 'password', value: password);
     _validateForm();
   }
@@ -53,6 +59,11 @@ class GetxLoginPresenter extends GetxController {
         return UIError.none;
     }
   }
+
+  Future<void> auth() async {
+    await authentication
+        .auth(AuthenticationParams(email: _email, password: _password));
+  }
 }
 
 enum ValidationError { requiredField, invalidField, none }
@@ -65,11 +76,23 @@ class ValidationSpy extends Mock implements Validation {
           returnValueForMissingStub: ValidationError.none);
 }
 
+class AuthenticationSpy extends Mock implements Authentication {
+  final AccountEntity response;
+  AuthenticationSpy({required this.response});
+  @override
+  Future<AccountEntity> auth(AuthenticationParams params) =>
+      super.noSuchMethod(Invocation.method(#auth, [params]),
+          returnValue: Future.value(response),
+          returnValueForMissingStub: Future.value(response));
+}
+
 void main() {
   late GetxLoginPresenter sut;
   late ValidationSpy validation;
+  late AuthenticationSpy authentication;
   late String email;
   late String password;
+  late String token;
 
   void mockValidation({
     required String value,
@@ -80,8 +103,11 @@ void main() {
   }
 
   setUp(() {
+    token = 'any_token';
     validation = ValidationSpy();
-    sut = GetxLoginPresenter(validation: validation);
+    authentication = AuthenticationSpy(response: AccountEntity(token: token));
+    sut = GetxLoginPresenter(
+        validation: validation, authentication: authentication);
     email = 'any_email@mail.com';
     password = 'any_password';
   });
@@ -206,5 +232,16 @@ void main() {
     sut.validateEmail(email);
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
+  });
+
+  test('Should call Authentication with correct values', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(authentication
+            .auth(AuthenticationParams(email: email, password: password)))
+        .called(1);
   });
 }

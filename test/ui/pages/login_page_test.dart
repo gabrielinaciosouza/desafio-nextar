@@ -55,6 +55,7 @@ void main() {
     passwordErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
+    mainErrorController.close();
   }
 
   tearDown(() {
