@@ -75,8 +75,8 @@ class GetxLoginPresenter extends GetxController
           break;
         default:
           mainError = UIError.unexpected;
+          isLoading = false;
       }
-      isLoading = false;
     }
   }
 }
