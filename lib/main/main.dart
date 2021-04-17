@@ -22,14 +22,15 @@ class App extends StatelessWidget {
         initialRoute: '/login',
         getPages: [
           GetPage(
-              name: '/login',
-              page: makeLoginPage,
-              transition: Transition.fadeIn),
+              name: '/login', page: makeLoginPage, transition: Transition.fade),
           GetPage(
               name: '/home',
               page: () => Scaffold(
                     body: Center(
-                      child: Text('Home page'),
+                      child: Text(
+                        'Home page',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
               transition: Transition.fadeIn),
