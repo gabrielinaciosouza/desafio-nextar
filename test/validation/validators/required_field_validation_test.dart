@@ -1,5 +1,5 @@
 import 'package:desafio_nextar/presentation/protocols/protocols.dart';
-import 'package:desafio_nextar/validation/validators/required_field_validation.dart';
+import 'package:desafio_nextar/validation/validators/validators.dart';
 import 'package:test/test.dart';
 
 void main() {
