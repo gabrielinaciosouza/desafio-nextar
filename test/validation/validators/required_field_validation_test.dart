@@ -1,22 +1,6 @@
 import 'package:desafio_nextar/presentation/protocols/protocols.dart';
+import 'package:desafio_nextar/validation/validators/required_field_validation.dart';
 import 'package:test/test.dart';
-
-abstract class FieldValidation {
-  String get field;
-  ValidationError? validate(String? value);
-}
-
-class RequiredFieldValidation implements FieldValidation {
-  final String field;
-
-  RequiredFieldValidation(this.field);
-
-  ValidationError? validate(String? value) {
-    return value?.isNotEmpty == true
-        ? ValidationError.none
-        : ValidationError.requiredField;
-  }
-}
 
 void main() {
   late RequiredFieldValidation sut;
