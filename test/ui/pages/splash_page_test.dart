@@ -68,4 +68,13 @@ void main() {
 
     verify(presenter.checkAccount()).called(1);
   });
+
+  testWidgets('Should not change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('');
+    await tester.pump();
+
+    expect(Get.currentRoute, '/');
+  });
 }
