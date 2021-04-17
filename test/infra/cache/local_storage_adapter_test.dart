@@ -38,8 +38,18 @@ void main() {
   PostExpectation secureStorageWriteCall() =>
       when(secureStorage.write(key: key, value: value));
 
+  PostExpectation secureStorageReadCall() => when(secureStorage.read(key: key));
+
   void throwSaveError() {
     secureStorageWriteCall().thenThrow(Exception());
+  }
+
+  void throwFetchError() {
+    secureStorageReadCall().thenThrow(Exception());
+  }
+
+  void mockFetchedValue() {
+    secureStorageReadCall().thenAnswer((_) async => value);
   }
 
   setUp(() {
@@ -47,6 +57,7 @@ void main() {
     value = 'any_value';
     secureStorage = FlutterSecureStorageSpy(fetchedValue: value);
     sut = LocalStorageAdapter(secureStorage: secureStorage);
+    mockFetchedValue();
   });
 
   group('saveSecure', () {
@@ -76,6 +87,14 @@ void main() {
       final fetchedValue = await sut.fetchSecure(key);
 
       expect(fetchedValue, value);
+    });
+
+    test('Should throw if FetchSecure throws', () async {
+      throwFetchError();
+
+      final future = sut.fetchSecure(key);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }
