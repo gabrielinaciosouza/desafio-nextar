@@ -1,39 +1,10 @@
 import 'dart:async';
 
+import 'package:desafio_nextar/ui/pages/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
-
-abstract class SplashPresenter {
-  Future<void> checkAccount();
-  Stream<String> get navigateToStream;
-}
-
-class SplashPage extends StatelessWidget {
-  final SplashPresenter presenter;
-
-  SplashPage({required this.presenter});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Splash'),
-      ),
-      body: Builder(builder: (context) {
-        presenter.navigateToStream.listen((page) {
-          if (page.isNotEmpty) {
-            Get.offAllNamed(page);
-          }
-        });
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }),
-    );
-  }
-}
 
 class SplashPresenterSpy extends Mock implements SplashPresenter {
   final Stream<String> response;
