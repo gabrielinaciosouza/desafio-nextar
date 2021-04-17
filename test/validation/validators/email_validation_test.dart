@@ -19,4 +19,10 @@ void main() {
     final error = sut.validate('');
     expect(error, ValidationError.none);
   });
+  test('Should return null if email is empty', () {
+    final sut = EmailValidation('any_field');
+
+    final error = sut.validate(null);
+    expect(error, ValidationError.none);
+  });
 }
