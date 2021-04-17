@@ -31,8 +31,4 @@ void main() {
   test('Should return ValidationError.none if password is valid', () {
     expect(sut.validate('123456'), ValidationError.none);
   });
-
-  test('Should return error if password is invalid', () {
-    expect(sut.validate('12345'), ValidationError.invalidField);
-  });
 }
