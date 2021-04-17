@@ -1,4 +1,5 @@
 import 'package:desafio_nextar/domain/entities/entities.dart';
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -8,8 +9,12 @@ class LocalLoadCurrentAccount implements LoadCurrentAccount {
 
   LocalLoadCurrentAccount({required this.fetchSecureCacheStorage});
   Future<AccountEntity> load() async {
-    final token = await fetchSecureCacheStorage.fetchSecure('token');
-    return AccountEntity(token: token);
+    try {
+      final token = await fetchSecureCacheStorage.fetchSecure('token');
+      return AccountEntity(token: token);
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -34,12 +39,25 @@ void main() {
   late LocalLoadCurrentAccount sut;
   late String token;
 
+  PostExpectation fetchSecureStorageCall() =>
+      when(fetchSecureCacheStorage.fetchSecure('token'));
+
+  void mockResponse() {
+    fetchSecureStorageCall().thenAnswer((_) async => token);
+  }
+
+  void throwError() {
+    fetchSecureStorageCall().thenThrow(Exception());
+  }
+
   setUp(() {
     token = 'any_token';
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy(response: token);
     sut = LocalLoadCurrentAccount(
         fetchSecureCacheStorage: fetchSecureCacheStorage);
+    mockResponse();
   });
+
   test('Should call FetchSecureCacheStorage with correct value', () async {
     await sut.load();
 
@@ -50,5 +68,14 @@ void main() {
     final account = await sut.load();
 
     expect(account, AccountEntity(token: token));
+  });
+
+  test('Should throw unexpected error if fetch secure cache storage throws',
+      () async {
+    throwError();
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
