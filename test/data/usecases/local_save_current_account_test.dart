@@ -1,4 +1,5 @@
 import 'package:desafio_nextar/domain/entities/entities.dart';
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -11,7 +12,12 @@ class LocalSaveCurrentAccount implements SaveCurrentAccount {
 
   @override
   Future<void> save(AccountEntity account) async {
-    await saveSecureCacheStorage.saveSecure(key: 'token', value: account.token);
+    try {
+      await saveSecureCacheStorage.saveSecure(
+          key: 'token', value: account.token);
+    } catch (e) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -33,7 +39,7 @@ class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {
 }
 
 void main() {
-  test('Should call SaveCacheStorage with correct values', () async {
+  test('Should call SaveSecureCacheStorage with correct values', () async {
     final saveSecureCacheStorage = SaveSecureCacheStorageSpy();
     final sut =
         LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
@@ -43,5 +49,20 @@ void main() {
 
     verify(
         saveSecureCacheStorage.saveSecure(key: 'token', value: account.token));
+  });
+
+  test('Should throw unexpected error if SaveSecureCacheStorage thorws',
+      () async {
+    final saveSecureCacheStorage = SaveSecureCacheStorageSpy();
+    final sut =
+        LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
+    final account = AccountEntity(token: 'any_token');
+
+    when(saveSecureCacheStorage.saveSecure(key: 'token', value: account.token))
+        .thenThrow(Exception());
+
+    final future = sut.save(account);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
