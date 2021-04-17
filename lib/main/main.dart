@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import './factories/pages/pages.dart';
 
 import '../ui/pages/pages.dart';
-import '../ui/components/app_theme.dart';
+import '../ui/components/components.dart';
 
 void main() {
   runApp(App());
