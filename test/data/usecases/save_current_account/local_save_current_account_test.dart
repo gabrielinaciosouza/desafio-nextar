@@ -1,29 +1,9 @@
+import 'package:desafio_nextar/data/cache/cache.dart';
+import 'package:desafio_nextar/data/usecases/save_current_account/local_save_current_account.dart';
 import 'package:desafio_nextar/domain/entities/entities.dart';
 import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
-
-class LocalSaveCurrentAccount implements SaveCurrentAccount {
-  final SaveSecureCacheStorageSpy saveSecureCacheStorage;
-
-  LocalSaveCurrentAccount({required this.saveSecureCacheStorage});
-
-  @override
-  Future<void> save(AccountEntity account) async {
-    try {
-      await saveSecureCacheStorage.saveSecure(
-          key: 'token', value: account.token);
-    } catch (e) {
-      throw DomainError.unexpected;
-    }
-  }
-}
-
-abstract class SaveSecureCacheStorage {
-  Future<void> saveSecure({required String key, required String value});
-}
 
 class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {
   @override
