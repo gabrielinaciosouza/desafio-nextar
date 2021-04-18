@@ -1,11 +1,11 @@
+import 'package:desafio_nextar/utils/platform/platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../helpers/helpers.dart';
-
 void showLoading(BuildContext context) {
-  final RunningPlatform runningPlatform = RunningPlatform.check();
-  runningPlatform.isIOS
+  final CheckPlatform runningPlatform = CheckPlatform.check();
+
+  runningPlatform.currentPlatform == CurrentPlatform.isIOS
       ? showCupertinoDialog(
           context: context,
           barrierDismissible: false,

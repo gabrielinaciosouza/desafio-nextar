@@ -1,4 +1,5 @@
 import 'package:desafio_nextar/infra/cache/cache.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -29,8 +30,11 @@ class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {
           returnValueForMissingStub: Future.value(fetchedValue));
 }
 
+class LocalStorageSpy extends Mock implements LocalStorage {}
+
 void main() {
   late FlutterSecureStorageSpy secureStorage;
+  late LocalStorage localStorage;
   late LocalStorageAdapter sut;
   late String key;
   late String value;
@@ -56,7 +60,9 @@ void main() {
     key = 'any_key';
     value = 'any_value';
     secureStorage = FlutterSecureStorageSpy(fetchedValue: value);
-    sut = LocalStorageAdapter(secureStorage: secureStorage);
+    localStorage = LocalStorageSpy();
+    sut = LocalStorageAdapter(
+        secureStorage: secureStorage, localStorage: localStorage);
     mockFetchedValue();
   });
 

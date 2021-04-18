@@ -1,3 +1,4 @@
+import 'package:desafio_nextar/utils/platform/platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,9 +9,10 @@ import '../../../helpers/helpers.dart';
 import '../login_presenter.dart';
 
 class LoginButton extends StatelessWidget {
-  final RunningPlatform runningPlatform = RunningPlatform.check();
   @override
   Widget build(BuildContext context) {
+    final CheckPlatform runningPlatform = CheckPlatform.check();
+
     final presenter = Provider.of<LoginPresenter>(context);
 
     return StreamBuilder<bool?>(
@@ -19,7 +21,7 @@ class LoginButton extends StatelessWidget {
           return SizedBox(
             height: MediaQuery.of(context).size.height > 800 ? 60 : 50,
             width: double.infinity,
-            child: runningPlatform.isIOS
+            child: runningPlatform.currentPlatform == CurrentPlatform.isIOS
                 ? CupertinoButton(
                     disabledColor:
                         Theme.of(context).primaryColor.withAlpha(150),

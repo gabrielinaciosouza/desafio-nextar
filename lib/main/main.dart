@@ -20,7 +20,7 @@ class App extends StatelessWidget {
       title: 'Desafio Nextar',
       theme: makeAppTheme(),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: makeSplashPage, transition: Transition.fade),
         GetPage(
