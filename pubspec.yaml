@@ -18,6 +18,7 @@ dependencies:
   equatable:
   flutter_secure_storage:
   lottie:
+  localstorage:
 
 dev_dependencies:
   flutter_test:

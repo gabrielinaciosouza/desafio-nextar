@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 class ResponsiveHeadline6 extends StatelessWidget {
   final String text;
   final Color color;
+  final FontWeight fontWeight;
 
-  const ResponsiveHeadline6({required this.text, required this.color});
+  const ResponsiveHeadline6(
+      {required this.text,
+      required this.color,
+      this.fontWeight = FontWeight.bold});
 
   double fontSize({required double maxWidth, required BuildContext context}) {
     if (maxWidth < 265) {
@@ -30,7 +34,7 @@ class ResponsiveHeadline6 extends StatelessWidget {
       textAlign: TextAlign.start,
       style: TextStyle(
           fontSize: fontSize(maxWidth: screenWidth, context: context),
-          fontWeight: FontWeight.bold,
+          fontWeight: fontWeight,
           color: color),
     );
   }

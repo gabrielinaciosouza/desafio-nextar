@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import './factories/pages/pages.dart';
 
 import '../ui/components/components.dart';
+import 'factories/pages/home/home.dart';
 import 'factories/pages/splash/splash.dart';
 
 void main() {
@@ -19,22 +20,13 @@ class App extends StatelessWidget {
       title: 'Desafio Nextar',
       theme: makeAppTheme(),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/home',
       getPages: [
         GetPage(name: '/', page: makeSplashPage, transition: Transition.fade),
         GetPage(
             name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
         GetPage(
-            name: '/home',
-            page: () => Scaffold(
-                  body: Center(
-                    child: Text(
-                      'Home page',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-            transition: Transition.fadeIn),
+            name: '/home', page: makeHomePage, transition: Transition.fadeIn),
       ],
     );
   }
