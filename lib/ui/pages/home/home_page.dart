@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'home_presenter.dart';
 import '../../pages/home/components/components.dart';
 
 class HomePage extends StatelessWidget {
+  final HomePresenter presenter;
+
+  HomePage({required this.presenter});
   @override
   Widget build(BuildContext context) {
+    presenter.loadProducts();
     return Scaffold(
       body: SingleChildScrollView(
         child: Align(
