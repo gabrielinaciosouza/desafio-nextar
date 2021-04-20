@@ -33,4 +33,7 @@ class PtBr implements Translations {
 
   @override
   String get unexpected => 'Algo errado aconteceu. Tente novamente em breve.';
+
+  @override
+  String get explore => 'Explore';
 }

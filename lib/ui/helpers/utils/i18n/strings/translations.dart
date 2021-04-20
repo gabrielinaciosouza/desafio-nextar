@@ -11,4 +11,5 @@ abstract class Translations {
   String get welcome;
   String get email;
   String get password;
+  String get explore;
 }
