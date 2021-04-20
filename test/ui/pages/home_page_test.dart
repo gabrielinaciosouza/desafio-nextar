@@ -11,14 +11,19 @@ class HomePresenterSpy extends Mock implements HomePresenter {
 }
 
 void main() {
-  testWidgets('Should call loadProducts on page load',
-      (WidgetTester tester) async {
-    final presenter = HomePresenterSpy();
+  late HomePresenterSpy presenter;
+
+  Future<void> loadPage(WidgetTester tester) async {
+    presenter = HomePresenterSpy();
     final homePage = GetMaterialApp(initialRoute: '/home', getPages: [
       GetPage(name: '/home', page: () => HomePage(presenter: presenter))
     ]);
     await tester.pumpWidget(homePage);
+  }
 
+  testWidgets('Should call loadProducts on page load',
+      (WidgetTester tester) async {
+    await loadPage(tester);
     verify(presenter.loadProducts()).called(1);
   });
 }
