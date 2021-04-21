@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:desafio_nextar/ui/helpers/helpers.dart';
 import 'package:desafio_nextar/ui/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,18 +17,23 @@ class HomePresenterSpy extends Mock implements HomePresenter {
 void main() {
   late HomePresenterSpy presenter;
   late StreamController<bool> isLoadingController;
+  late StreamController<List<ProductViewModel>> loadProductsController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
+    loadProductsController = StreamController<List<ProductViewModel>>();
   }
 
   void mockStreams() {
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
+    when(presenter.loadProductsStream)
+        .thenAnswer((_) => loadProductsController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
+    loadProductsController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -62,5 +68,18 @@ void main() {
     await tester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('Should present error if loadProductStream fails',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadProductsController.addError(UIError.unexpected.description!);
+    await tester.pump();
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
+        findsOneWidget);
+    expect(find.text('Recarregar'), findsOneWidget);
+    expect(find.text('Product 1'), findsNothing);
   });
 }

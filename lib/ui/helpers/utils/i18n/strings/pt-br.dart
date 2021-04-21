@@ -36,4 +36,7 @@ class PtBr implements Translations {
 
   @override
   String get explore => 'Explore';
+
+  @override
+  String get reload => 'Recarregar';
 }
