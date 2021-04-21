@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget with LoadingManager {
                   children: [
                     Text(snapshot.error.toString()),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: presenter.loadProducts,
                       child: Text(
                         R.strings.reload,
                       ),

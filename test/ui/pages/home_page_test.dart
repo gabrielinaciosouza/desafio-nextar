@@ -113,4 +113,15 @@ void main() {
     expect(find.text('R\$ ${30.toStringAsFixed(2)}'), findsOneWidget);
     expect(find.text('R\$ ${20.toStringAsFixed(2)}'), findsOneWidget);
   });
+
+  testWidgets('Should call loadProducts on reload button click',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadProductsController.addError(UIError.unexpected.description!);
+    await tester.pump();
+    await tester.tap(find.text('Recarregar'));
+
+    verify(presenter.loadProducts()).called(2);
+  });
 }
