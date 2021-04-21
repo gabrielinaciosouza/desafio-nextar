@@ -121,4 +121,16 @@ void main() {
 
     expect(future, throwsA(DomainError.unexpected));
   });
+
+  test('Should throw UnexpectedError if cache is incomplete', () async {
+    mockFetch([
+      {
+        'price': '20',
+        'stock': '10',
+      }
+    ]);
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }

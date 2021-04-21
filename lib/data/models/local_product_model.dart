@@ -15,6 +15,9 @@ class LocalProductModel {
       required this.stock});
 
   factory LocalProductModel.fromJson(Map json) {
+    if (!json.keys.toSet().containsAll(['name', 'creationDate', 'code'])) {
+      throw Exception();
+    }
     return LocalProductModel(
         name: json['name'],
         code: json['code'],
