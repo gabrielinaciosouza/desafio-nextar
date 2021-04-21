@@ -110,5 +110,7 @@ void main() {
     expect(find.text('Recarregar'), findsNothing);
     expect(find.text('Product 1'), findsOneWidget);
     expect(find.text('Product 2'), findsOneWidget);
+    expect(find.text('R\$ ${30.toStringAsFixed(2)}'), findsOneWidget);
+    expect(find.text('R\$ ${20.toStringAsFixed(2)}'), findsOneWidget);
   });
 }
