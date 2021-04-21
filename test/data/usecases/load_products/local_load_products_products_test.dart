@@ -57,10 +57,14 @@ void main() {
         }
       ];
 
+  PostExpectation mockFetchCall() => when(fetchCacheStorage.fetch('products'));
+
   void mockFetch(List<Map>? list) {
     data = list;
-    when(fetchCacheStorage.fetch('products')).thenAnswer((_) async => list);
+    mockFetchCall().thenAnswer((_) async => list);
   }
+
+  void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
   setUp(() {
     fetchCacheStorage = FetchCacheStorageSpy();
@@ -129,6 +133,14 @@ void main() {
         'stock': '10',
       }
     ]);
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if cache throws', () async {
+    mockFetchError();
+
     final future = sut.load();
 
     expect(future, throwsA(DomainError.unexpected));
