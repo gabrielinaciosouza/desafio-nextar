@@ -24,9 +24,11 @@ void main() {
   late HomePresenterSpy presenter;
   late StreamController<bool> isLoadingController;
   late StreamController<List<ProductViewModel>> productsController;
+  late StreamController<String> navigateToController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
+    navigateToController = StreamController<String>();
     productsController = StreamController<List<ProductViewModel>>();
   }
 
@@ -34,11 +36,14 @@ void main() {
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
     when(presenter.productsStream).thenAnswer((_) => productsController.stream);
+    when(presenter.navigateToStream)
+        .thenAnswer((_) => navigateToController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
     productsController.close();
+    navigateToController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -46,7 +51,16 @@ void main() {
     initStreams();
     mockStreams();
     final homePage = GetMaterialApp(initialRoute: '/home', getPages: [
-      GetPage(name: '/home', page: () => HomePage(presenter: presenter))
+      GetPage(
+        name: '/home',
+        page: () => HomePage(presenter: presenter),
+      ),
+      GetPage(
+        name: '/any_route',
+        page: () => Scaffold(
+          body: Text('fake page'),
+        ),
+      ),
     ]);
     await tester.pumpWidget(homePage);
   }
@@ -150,5 +164,28 @@ void main() {
     await tester.tap(find.text('Sair'));
 
     verify(presenter.logoff()).called(1);
+  });
+
+  testWidgets('Should call goToEditProduct on product click',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final productList = makeProducts();
+
+    productsController.add(productList);
+    await tester.pump();
+    await tester.tap(find.text('Product 1'));
+
+    verify(presenter.goToEditProduct(productList[0].code)).called(1);
+  });
+
+  testWidgets('Should change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_route');
+    expect(find.text('fake page'), findsOneWidget);
   });
 }

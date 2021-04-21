@@ -9,4 +9,5 @@ abstract class HomePresenter {
   Future<void> loadProducts();
   Future<void> deleteProduct(String code);
   Future<void> logoff();
+  void goToEditProduct(String productCode);
 }

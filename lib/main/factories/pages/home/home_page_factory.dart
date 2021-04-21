@@ -38,4 +38,7 @@ class FakePresenter implements HomePresenter {
 
   @override
   Stream<UIError?>? get mainErrorStream => throw UnimplementedError();
+
+  @override
+  void goToEditProduct(String productCode) {}
 }

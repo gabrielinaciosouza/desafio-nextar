@@ -24,6 +24,7 @@ class HomeProductList extends StatelessWidget {
         return GestureDetector(
           onLongPress: () =>
               presenter.deleteProduct(productViewModel![index].code),
+          onTap: () => presenter.goToEditProduct(productViewModel![index].code),
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),

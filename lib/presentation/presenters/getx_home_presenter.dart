@@ -73,4 +73,9 @@ class GetxHomePresenter extends GetxController
       isLoading = false;
     }
   }
+
+  @override
+  void goToEditProduct(String productCode) {
+    navigateTo = '/product/$productCode/edit';
+  }
 }

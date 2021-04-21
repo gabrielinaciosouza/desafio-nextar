@@ -6,7 +6,7 @@ import 'home_presenter.dart';
 import '../../mixins/mixins.dart';
 import '../../pages/home/components/components.dart';
 
-class HomePage extends StatelessWidget with LoadingManager {
+class HomePage extends StatelessWidget with LoadingManager, NavigationManager {
   final HomePresenter presenter;
 
   HomePage({required this.presenter});
@@ -17,6 +17,7 @@ class HomePage extends StatelessWidget with LoadingManager {
       body: Builder(
         builder: (context) {
           handleLoading(context, presenter.isLoadingStream);
+          handleNavigation(presenter.navigateToStream);
           return StreamBuilder<List<dynamic>?>(
             stream: presenter.productsStream,
             builder: (context, snapshot) {
