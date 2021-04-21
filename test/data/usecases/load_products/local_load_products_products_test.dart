@@ -9,14 +9,18 @@ class LocalLoadProducts {
 
   LocalLoadProducts({required this.fetchCacheStorage});
   Future<List<ProductEntity>> load() async {
-    final data = await fetchCacheStorage.fetch('products');
-    if (data?.isEmpty != false) {
+    try {
+      final data = await fetchCacheStorage.fetch('products');
+      if (data?.isEmpty != false) {
+        throw Exception();
+      }
+      return data
+          .map<ProductEntity>(
+              (json) => LocalProductModel.fromJson(json).toEntity())
+          .toList();
+    } catch (error) {
       throw DomainError.unexpected;
     }
-    return data
-        .map<ProductEntity>(
-            (json) => LocalProductModel.fromJson(json).toEntity())
-        .toList();
   }
 }
 
@@ -98,6 +102,21 @@ void main() {
 
   test('Should throw UnexpectedError if cache is null', () async {
     mockFetch(null);
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if cache is invalid', () async {
+    mockFetch([
+      {
+        'name': 'any_name',
+        'price': 'invalid_price',
+        'stock': 'invalid_stock',
+        'code': 'any_code',
+        'creationDate': 'invalid_date',
+      }
+    ]);
     final future = sut.load();
 
     expect(future, throwsA(DomainError.unexpected));
