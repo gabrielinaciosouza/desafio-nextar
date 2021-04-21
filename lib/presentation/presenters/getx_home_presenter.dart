@@ -10,8 +10,11 @@ import '../../ui/pages/pages.dart';
 class GetxHomePresenter extends GetxController implements HomePresenter {
   final LoadProducts loadProductsData;
   final DeleteProduct deleteProductByCode;
+  final Logoff logoffSession;
   GetxHomePresenter(
-      {required this.loadProductsData, required this.deleteProductByCode});
+      {required this.loadProductsData,
+      required this.deleteProductByCode,
+      required this.logoffSession});
 
   final _isLoading = true.obs;
   final _products = Rx([]);
@@ -58,7 +61,7 @@ class GetxHomePresenter extends GetxController implements HomePresenter {
   }
 
   @override
-  Future<void> logoff() {
-    throw UnimplementedError();
+  Future<void> logoff() async {
+    await logoffSession.logoff();
   }
 }

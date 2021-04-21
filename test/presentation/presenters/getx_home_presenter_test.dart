@@ -23,9 +23,15 @@ class DeleteProductSpy extends Mock implements DeleteProduct {
           returnValueForMissingStub: Future.value());
 }
 
+class LogoffSpy extends Mock implements Logoff {
+  Future<void> logoff() => this.noSuchMethod(Invocation.method(#logoff, []),
+      returnValue: Future.value(), returnValueForMissingStub: Future.value());
+}
+
 void main() {
   late LoadProductsSpy loadProducts;
   late DeleteProductSpy deleteProducts;
+  late LogoffSpy logoff;
   late GetxHomePresenter sut;
   late List<ProductEntity> productList;
   late String code;
@@ -59,9 +65,12 @@ void main() {
   setUp(() {
     loadProducts = LoadProductsSpy();
     deleteProducts = DeleteProductSpy();
+    logoff = LogoffSpy();
     code = 'any_code';
     sut = GetxHomePresenter(
-        loadProductsData: loadProducts, deleteProductByCode: deleteProducts);
+        loadProductsData: loadProducts,
+        deleteProductByCode: deleteProducts,
+        logoffSession: logoff);
     mockLoadProducts();
   });
 
@@ -120,5 +129,10 @@ void main() {
         emitsInOrder([UIError.none, UIError.unexpected]));
 
     await sut.deleteProduct(code);
+  });
+
+  test('Should call Logoff with correct values', () async {
+    await sut.logoff();
+    verify(logoff.logoff()).called(1);
   });
 }
