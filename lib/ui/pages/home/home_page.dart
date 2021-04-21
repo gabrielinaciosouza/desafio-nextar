@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget with LoadingManager {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .02,
                             ),
-                            HomeAvatar(),
+                            HomeAvatar(presenter: presenter),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .1,
                             ),

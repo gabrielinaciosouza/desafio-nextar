@@ -26,4 +26,9 @@ class FakePresenter implements HomePresenter {
   deleteProduct(String code) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> logoff() {
+    throw UnimplementedError();
+  }
 }

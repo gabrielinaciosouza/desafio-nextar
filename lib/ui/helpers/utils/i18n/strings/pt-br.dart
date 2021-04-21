@@ -39,4 +39,7 @@ class PtBr implements Translations {
 
   @override
   String get reload => 'Recarregar';
+
+  @override
+  String get logoff => 'Sair';
 }
