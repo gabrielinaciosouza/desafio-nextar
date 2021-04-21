@@ -14,9 +14,10 @@ class HomePage extends StatelessWidget with LoadingManager {
   Widget build(BuildContext context) {
     presenter.loadProducts();
     return Scaffold(
-      body: Builder(builder: (context) {
-        handleLoading(context, presenter.isLoadingStream);
-        return StreamBuilder<List<ProductViewModel>>(
+      body: Builder(
+        builder: (context) {
+          handleLoading(context, presenter.isLoadingStream);
+          return StreamBuilder<List<ProductViewModel>>(
             stream: presenter.loadProductsStream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -32,35 +33,40 @@ class HomePage extends StatelessWidget with LoadingManager {
                   ],
                 );
               }
-              return SingleChildScrollView(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 1200),
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .02,
-                          ),
-                          HomeAvatar(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .1,
-                          ),
-                          HomeTitle(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .08,
-                          ),
-                          HomeProductList()
-                        ],
+              if (snapshot.hasData) {
+                return SingleChildScrollView(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 1200),
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .02,
+                            ),
+                            HomeAvatar(),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .1,
+                            ),
+                            HomeTitle(),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .08,
+                            ),
+                            HomeProductList(productViewModel: snapshot.data)
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            });
-      }),
+                );
+              }
+              return Container();
+            },
+          );
+        },
+      ),
     );
   }
 }

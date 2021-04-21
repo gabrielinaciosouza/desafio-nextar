@@ -46,6 +46,21 @@ void main() {
     await tester.pumpWidget(homePage);
   }
 
+  List<ProductViewModel> makeProducts() => [
+        ProductViewModel(
+            name: 'Product 1',
+            price: 30,
+            stock: 10,
+            code: 'any_code',
+            creationDate: 'any_date'),
+        ProductViewModel(
+            name: 'Product 2',
+            price: 20,
+            stock: 15,
+            code: 'any_code2',
+            creationDate: 'any_date2'),
+      ];
+
   tearDown(() {
     closeStreams();
   });
@@ -81,5 +96,19 @@ void main() {
         findsOneWidget);
     expect(find.text('Recarregar'), findsOneWidget);
     expect(find.text('Product 1'), findsNothing);
+  });
+
+  testWidgets('Should present list if loadProductStream succeeds',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadProductsController.add(makeProducts());
+    await tester.pump();
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
+        findsNothing);
+    expect(find.text('Recarregar'), findsNothing);
+    expect(find.text('Product 1'), findsOneWidget);
+    expect(find.text('Product 2'), findsOneWidget);
   });
 }

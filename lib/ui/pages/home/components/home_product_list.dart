@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/components.dart';
+import '../home.dart';
 
 class HomeProductList extends StatelessWidget {
+  final List<ProductViewModel>? productViewModel;
+
+  HomeProductList({required this.productViewModel});
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: 20,
+      itemCount: productViewModel!.length,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 300,
           childAspectRatio: 0.6,
@@ -53,12 +58,14 @@ class HomeProductList extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ResponsiveHeadline6(
-                          text: 'Iphone 11 Pro',
+                          text: productViewModel![index].name,
                           color: Colors.black,
                           fontWeight: FontWeight.normal,
                         ),
                         ResponsiveHeadline6(
-                          text: 'R\$ 20,00',
+                          text: productViewModel![index].price == null
+                              ? 'Produto sem preço!'
+                              : 'R\$ ${productViewModel![index].price!.toStringAsFixed(2)}',
                           color: Theme.of(context).primaryColor,
                         ),
                       ],
