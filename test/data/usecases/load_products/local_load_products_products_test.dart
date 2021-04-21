@@ -22,10 +22,15 @@ class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
 }
 
 void main() {
-  test('Should call FetchCacheStorage with correct key', () async {
-    final fetchCacheStorage = FetchCacheStorageSpy();
-    final sut = LocalLoadProducts(fetchCacheStorage: fetchCacheStorage);
+  late FetchCacheStorageSpy fetchCacheStorage;
+  late LocalLoadProducts sut;
 
+  setUp(() {
+    fetchCacheStorage = FetchCacheStorageSpy();
+    sut = LocalLoadProducts(fetchCacheStorage: fetchCacheStorage);
+  });
+
+  test('Should call FetchCacheStorage with correct key', () async {
     await sut.load();
 
     verify(fetchCacheStorage.fetch('products')).called(1);
