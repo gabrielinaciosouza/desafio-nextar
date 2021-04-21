@@ -19,7 +19,7 @@ class FakePresenter implements HomePresenter {
   Stream<bool?>? get isLoadingStream => throw UnimplementedError();
 
   @override
-  Stream<List<ProductViewModel>>? get loadProductsStream =>
+  Stream<List<ProductViewModel>>? get productsStream =>
       throw UnimplementedError();
 
   @override

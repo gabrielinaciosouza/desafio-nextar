@@ -23,23 +23,22 @@ class HomePresenterSpy extends Mock implements HomePresenter {
 void main() {
   late HomePresenterSpy presenter;
   late StreamController<bool> isLoadingController;
-  late StreamController<List<ProductViewModel>> loadProductsController;
+  late StreamController<List<ProductViewModel>> productsController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
-    loadProductsController = StreamController<List<ProductViewModel>>();
+    productsController = StreamController<List<ProductViewModel>>();
   }
 
   void mockStreams() {
     when(presenter.isLoadingStream)
         .thenAnswer((_) => isLoadingController.stream);
-    when(presenter.loadProductsStream)
-        .thenAnswer((_) => loadProductsController.stream);
+    when(presenter.productsStream).thenAnswer((_) => productsController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
-    loadProductsController.close();
+    productsController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -95,7 +94,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadProductsController.addError(UIError.unexpected.description!);
+    productsController.addError(UIError.unexpected.description!);
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
@@ -108,7 +107,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadProductsController.add(makeProducts());
+    productsController.add(makeProducts());
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
@@ -124,7 +123,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadProductsController.addError(UIError.unexpected.description!);
+    productsController.addError(UIError.unexpected.description!);
     await tester.pump();
     await tester.tap(find.text('Recarregar'));
 
@@ -135,7 +134,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadProductsController.add(makeProducts());
+    productsController.add(makeProducts());
     await tester.pump();
     await tester.longPress(find.text('Product 1'));
 
@@ -146,7 +145,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadProductsController.add(makeProducts());
+    productsController.add(makeProducts());
     await tester.pump();
     await tester.tap(find.text('Sair'));
 

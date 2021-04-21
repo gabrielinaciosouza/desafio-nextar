@@ -19,6 +19,7 @@ dependencies:
   flutter_secure_storage:
   lottie:
   localstorage:
+  intl:
 
 dev_dependencies:
   flutter_test:

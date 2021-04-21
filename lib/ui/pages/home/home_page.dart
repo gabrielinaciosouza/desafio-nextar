@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget with LoadingManager {
         builder: (context) {
           handleLoading(context, presenter.isLoadingStream);
           return StreamBuilder<List<ProductViewModel>>(
-            stream: presenter.loadProductsStream,
+            stream: presenter.productsStream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Column(
