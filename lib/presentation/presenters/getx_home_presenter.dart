@@ -20,10 +20,10 @@ class GetxHomePresenter extends GetxController
       required this.logoffSession});
 
   final _products = Rx([]);
-  final _deleteProductError = Rx(UIError.none);
+  final _error = Rx(UIError.none);
 
   Stream<List<dynamic>?>? get productsStream => _products.stream;
-  Stream<UIError?>? get deleteProductErrorStream => _deleteProductError.stream;
+  Stream<UIError?>? get errorStream => _error.stream;
 
   Future<void> loadProducts() async {
     try {
@@ -52,10 +52,10 @@ class GetxHomePresenter extends GetxController
   Future<void> deleteProduct(String code) async {
     try {
       isLoading = true;
-      _deleteProductError.value = UIError.none;
+      _error.value = UIError.none;
       await deleteProductByCode.delete(code);
     } on DomainError {
-      _deleteProductError.value = UIError.unexpected;
+      _error.value = UIError.unexpected;
     } finally {
       isLoading = false;
     }
@@ -63,9 +63,16 @@ class GetxHomePresenter extends GetxController
 
   @override
   Future<void> logoff() async {
-    isLoading = true;
-    await logoffSession.logoff();
-    isLoading = false;
-    navigateTo = '/login';
+    try {
+      isLoading = true;
+      _error.value = UIError.none;
+      await logoffSession.logoff();
+      isLoading = false;
+      navigateTo = '/login';
+    } on DomainError {
+      _error.value = UIError.unexpected;
+    } finally {
+      isLoading = false;
+    }
   }
 }

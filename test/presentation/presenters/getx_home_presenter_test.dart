@@ -51,6 +51,8 @@ void main() {
 
   PostExpectation mockDeleteProductCall() => when(deleteProducts.delete(code));
 
+  PostExpectation mockLogoffCall() => when(logoff.logoff());
+
   void mockLoadProducts() {
     productList = mockValidProducts();
     mockLoadProductsCall().thenAnswer((_) async => productList);
@@ -61,6 +63,8 @@ void main() {
 
   void mockDeleteProductError() =>
       mockDeleteProductCall().thenThrow(DomainError.unexpected);
+
+  void mockLogoffError() => mockLogoffCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     loadProducts = LoadProductsSpy();
@@ -117,7 +121,7 @@ void main() {
 
   test('Should emit correct events on deleteProduct success', () async {
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    expectLater(sut.deleteProductErrorStream, emits(UIError.none));
+    expectLater(sut.errorStream, emits(UIError.none));
 
     await sut.deleteProduct(code);
   });
@@ -125,8 +129,8 @@ void main() {
   test('Should emit correct events on deleteProduct fails', () async {
     mockDeleteProductError();
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    expectLater(sut.deleteProductErrorStream,
-        emitsInOrder([UIError.none, UIError.unexpected]));
+    expectLater(
+        sut.errorStream, emitsInOrder([UIError.none, UIError.unexpected]));
 
     await sut.deleteProduct(code);
   });
@@ -141,6 +145,16 @@ void main() {
 
     sut.navigateToStream!
         .listen(expectAsync1((page) => expect(page, '/login')));
+
+    await sut.logoff();
+  });
+
+  test('Should emit correct events on logoff success', () async {
+    mockLogoffError();
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(
+        sut.errorStream, emitsInOrder([UIError.none, UIError.unexpected]));
 
     await sut.logoff();
   });
