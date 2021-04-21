@@ -10,7 +10,7 @@ class LocalLoadProducts {
   LocalLoadProducts({required this.fetchCacheStorage});
   Future<List<ProductEntity>> load() async {
     final data = await fetchCacheStorage.fetch('products');
-    if (data.isEmpty) {
+    if (data?.isEmpty != false) {
       throw DomainError.unexpected;
     }
     return data
@@ -34,7 +34,7 @@ class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
 void main() {
   late FetchCacheStorageSpy fetchCacheStorage;
   late LocalLoadProducts sut;
-  late List<Map> data;
+  List<Map>? data;
 
   List<Map> mockValidData() => [
         {
@@ -53,7 +53,7 @@ void main() {
         }
       ];
 
-  void mockFetch(List<Map> list) {
+  void mockFetch(List<Map>? list) {
     data = list;
     when(fetchCacheStorage.fetch('products')).thenAnswer((_) async => list);
   }
@@ -75,22 +75,29 @@ void main() {
 
     expect(products, [
       ProductEntity(
-          name: data[0]['name'] ?? '',
-          code: data[0]['code'] ?? '',
-          creationDate: DateTime.parse(data[0]['creationDate']!),
-          price: num.parse(data[0]['price']!),
-          stock: num.parse(data[0]['stock']!)),
+          name: data![0]['name'],
+          code: data![0]['code'],
+          creationDate: DateTime.parse(data![0]['creationDate']!),
+          price: num.parse(data![0]['price']!),
+          stock: num.parse(data![0]['stock']!)),
       ProductEntity(
-          name: data[1]['name'] ?? '',
-          code: data[1]['code'] ?? '',
-          creationDate: DateTime.parse(data[1]['creationDate']!),
-          price: num.parse(data[1]['price']!),
-          stock: num.parse(data[1]['stock']!))
+          name: data![1]['name'],
+          code: data![1]['code'],
+          creationDate: DateTime.parse(data![1]['creationDate']!),
+          price: num.parse(data![1]['price']!),
+          stock: num.parse(data![1]['stock']!))
     ]);
   });
 
   test('Should throw UnexpectedError if cache is empty', () async {
     mockFetch([]);
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if cache is null', () async {
+    mockFetch(null);
     final future = sut.load();
 
     expect(future, throwsA(DomainError.unexpected));
