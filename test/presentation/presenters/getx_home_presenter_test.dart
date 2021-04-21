@@ -43,6 +43,8 @@ void main() {
 
   PostExpectation mockLoadProductsCall() => when(loadProducts.load());
 
+  PostExpectation mockDeleteProductCall() => when(deleteProducts.delete(code));
+
   void mockLoadProducts() {
     productList = mockValidProducts();
     mockLoadProductsCall().thenAnswer((_) async => productList);
@@ -50,6 +52,9 @@ void main() {
 
   void mockLoadProductsError() =>
       mockLoadProductsCall().thenThrow(DomainError.unexpected);
+
+  void mockDeleteProductError() =>
+      mockDeleteProductCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     loadProducts = LoadProductsSpy();
@@ -103,7 +108,16 @@ void main() {
 
   test('Should emit correct events on deleteProduct success', () async {
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    expectLater(sut.deleteProductStream, emits(UIError.none));
+    expectLater(sut.deleteProductErrorStream, emits(UIError.none));
+
+    await sut.deleteProduct(code);
+  });
+
+  test('Should emit correct events on deleteProduct fails', () async {
+    mockDeleteProductError();
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.deleteProductErrorStream,
+        emitsInOrder([UIError.none, UIError.unexpected]));
 
     await sut.deleteProduct(code);
   });

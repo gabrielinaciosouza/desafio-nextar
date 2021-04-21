@@ -34,5 +34,5 @@ class FakePresenter implements HomePresenter {
   }
 
   @override
-  Stream<UIError?>? get deleteProductStream => throw UnimplementedError();
+  Stream<UIError?>? get deleteProductErrorStream => throw UnimplementedError();
 }
