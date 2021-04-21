@@ -1,5 +1,6 @@
 import 'package:desafio_nextar/data/models/models.dart';
 import 'package:desafio_nextar/domain/entities/entities.dart';
+import 'package:desafio_nextar/domain/helpers/domain_error.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -9,6 +10,9 @@ class LocalLoadProducts {
   LocalLoadProducts({required this.fetchCacheStorage});
   Future<List<ProductEntity>> load() async {
     final data = await fetchCacheStorage.fetch('products');
+    if (data.isEmpty) {
+      throw DomainError.unexpected;
+    }
     return data
         .map<ProductEntity>(
             (json) => LocalProductModel.fromJson(json).toEntity())
@@ -83,5 +87,12 @@ void main() {
           price: num.parse(data[1]['price']!),
           stock: num.parse(data[1]['stock']!))
     ]);
+  });
+
+  test('Should throw UnexpectedError if cache is empty', () async {
+    mockFetch([]);
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
