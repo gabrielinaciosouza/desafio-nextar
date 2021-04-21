@@ -1,47 +1,12 @@
-import 'package:desafio_nextar/domain/helpers/helpers.dart';
-import 'package:desafio_nextar/ui/helpers/helpers.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
+import 'package:desafio_nextar/presentation/presenters/presenters.dart';
+import 'package:desafio_nextar/ui/helpers/helpers.dart';
 import 'package:desafio_nextar/domain/entities/entities.dart';
 import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:desafio_nextar/ui/pages/pages.dart';
-
-class GetxHomePresenter extends GetxController {
-  final LoadProducts loadProductsData;
-  GetxHomePresenter({required this.loadProductsData});
-
-  final _isLoading = true.obs;
-  final _products = Rx([]);
-
-  Stream<bool?> get isLoadingStream => _isLoading.stream;
-  Stream<List<dynamic>?>? get productsStream => _products.stream;
-
-  Future<void> loadProducts() async {
-    try {
-      _isLoading.value = true;
-      final products = await loadProductsData.load();
-      _products.value = products
-          .map(
-            (product) => ProductViewModel(
-              name: product.name,
-              price: product.price,
-              stock: product.stock,
-              code: product.code,
-              creationDate:
-                  DateFormat('dd-MM-yyyy').format(product.creationDate),
-            ),
-          )
-          .toList();
-    } on DomainError {
-      _products.subject.addError(UIError.unexpected.description!);
-    } finally {
-      _isLoading.value = false;
-    }
-  }
-}
 
 class LoadProductsSpy extends Mock implements LoadProducts {
   List<ProductEntity> _list = [];
