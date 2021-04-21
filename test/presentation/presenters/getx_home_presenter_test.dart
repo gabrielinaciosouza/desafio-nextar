@@ -121,7 +121,7 @@ void main() {
 
   test('Should emit correct events on deleteProduct success', () async {
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    expectLater(sut.errorStream, emits(UIError.none));
+    expectLater(sut.mainErrorStream, emits(UIError.none));
 
     await sut.deleteProduct(code);
   });
@@ -130,7 +130,7 @@ void main() {
     mockDeleteProductError();
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     expectLater(
-        sut.errorStream, emitsInOrder([UIError.none, UIError.unexpected]));
+        sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
 
     await sut.deleteProduct(code);
   });
@@ -154,7 +154,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     expectLater(
-        sut.errorStream, emitsInOrder([UIError.none, UIError.unexpected]));
+        sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
 
     await sut.logoff();
   });

@@ -9,7 +9,7 @@ import '../../ui/helpers/helpers.dart';
 import '../../ui/pages/pages.dart';
 
 class GetxHomePresenter extends GetxController
-    with NavigationManager, LoadingManager
+    with NavigationManager, LoadingManager, UIErrorManager
     implements HomePresenter {
   final LoadProducts loadProductsData;
   final DeleteProduct deleteProductByCode;
@@ -20,10 +20,8 @@ class GetxHomePresenter extends GetxController
       required this.logoffSession});
 
   final _products = Rx([]);
-  final _error = Rx(UIError.none);
 
   Stream<List<dynamic>?>? get productsStream => _products.stream;
-  Stream<UIError?>? get errorStream => _error.stream;
 
   Future<void> loadProducts() async {
     try {
@@ -52,10 +50,10 @@ class GetxHomePresenter extends GetxController
   Future<void> deleteProduct(String code) async {
     try {
       isLoading = true;
-      _error.value = UIError.none;
+      mainError = UIError.none;
       await deleteProductByCode.delete(code);
     } on DomainError {
-      _error.value = UIError.unexpected;
+      mainError = UIError.unexpected;
     } finally {
       isLoading = false;
     }
@@ -65,12 +63,12 @@ class GetxHomePresenter extends GetxController
   Future<void> logoff() async {
     try {
       isLoading = true;
-      _error.value = UIError.none;
+      mainError = UIError.none;
       await logoffSession.logoff();
       isLoading = false;
       navigateTo = '/login';
     } on DomainError {
-      _error.value = UIError.unexpected;
+      mainError = UIError.unexpected;
     } finally {
       isLoading = false;
     }
