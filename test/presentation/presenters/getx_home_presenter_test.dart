@@ -16,10 +16,19 @@ class LoadProductsSpy extends Mock implements LoadProducts {
           returnValueForMissingStub: Future.value(_list));
 }
 
+class DeleteProductSpy extends Mock implements DeleteProduct {
+  Future<void> delete(String code) =>
+      this.noSuchMethod(Invocation.method(#delete, []),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
+}
+
 void main() {
   late LoadProductsSpy loadProducts;
+  late DeleteProductSpy deleteProducts;
   late GetxHomePresenter sut;
   late List<ProductEntity> productList;
+  late String code;
 
   List<ProductEntity> mockValidProducts() => [
         ProductEntity(
@@ -44,7 +53,10 @@ void main() {
 
   setUp(() {
     loadProducts = LoadProductsSpy();
-    sut = GetxHomePresenter(loadProductsData: loadProducts);
+    deleteProducts = DeleteProductSpy();
+    code = 'any_code';
+    sut = GetxHomePresenter(
+        loadProductsData: loadProducts, deleteProductByCode: deleteProducts);
     mockLoadProducts();
   });
 
@@ -81,5 +93,11 @@ void main() {
             (error) => expect(error, UIError.unexpected.description)));
 
     await sut.loadProducts();
+  });
+
+  test('Should call DeleteProduct on deleteProduct with correct values',
+      () async {
+    await sut.deleteProduct(code);
+    verify(deleteProducts.delete(code));
   });
 }

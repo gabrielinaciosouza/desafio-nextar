@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget with LoadingManager {
       body: Builder(
         builder: (context) {
           handleLoading(context, presenter.isLoadingStream);
-          return StreamBuilder<List<ProductViewModel>>(
+          return StreamBuilder<List<dynamic>?>(
             stream: presenter.productsStream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -55,7 +55,8 @@ class HomePage extends StatelessWidget with LoadingManager {
                               height: MediaQuery.of(context).size.height * .08,
                             ),
                             HomeProductList(
-                              productViewModel: snapshot.data,
+                              productViewModel:
+                                  snapshot.data as List<ProductViewModel>,
                               presenter: presenter,
                             )
                           ],

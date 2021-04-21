@@ -7,9 +7,11 @@ import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/helpers.dart';
 import '../../ui/pages/pages.dart';
 
-class GetxHomePresenter extends GetxController {
+class GetxHomePresenter extends GetxController implements HomePresenter {
   final LoadProducts loadProductsData;
-  GetxHomePresenter({required this.loadProductsData});
+  final DeleteProduct deleteProductByCode;
+  GetxHomePresenter(
+      {required this.loadProductsData, required this.deleteProductByCode});
 
   final _isLoading = true.obs;
   final _products = Rx([]);
@@ -38,5 +40,15 @@ class GetxHomePresenter extends GetxController {
     } finally {
       _isLoading.value = false;
     }
+  }
+
+  @override
+  Future<void> deleteProduct(String code) async {
+    await deleteProductByCode.delete(code);
+  }
+
+  @override
+  Future<void> logoff() {
+    throw UnimplementedError();
   }
 }
