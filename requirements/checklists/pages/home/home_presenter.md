@@ -19,4 +19,4 @@
 13. ✅ Notificar o errorStream com um UIError.none caso o Logoff retorne void
 14. ✅ Levar o usuário pra tela de Login em caso de sucesso
 
-15. Levar o usuário pra tela de Edição de Produto ao clicar em algum produto
+15. ✅ Levar o usuário pra tela de Edição de Produto ao clicar em algum produto

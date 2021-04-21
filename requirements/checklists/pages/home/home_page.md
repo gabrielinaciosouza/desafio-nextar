@@ -11,5 +11,5 @@
 7. ✅ Chamar o método de listar produtos ao clicar no botão de recarregar
 8. ✅ Chamar o método de Deletar Produto ao clicar no botão de deletar
 9. ✅ Chamar o método de Logoff ao clicar no botão de logoff
-10. Ir para a tela de edição de produto ao clicar em algum produto
-11. Ir para tela de Login e limpar a navegação ao clicar em logoff
+10. ✅ Ir para a tela de edição de produto ao clicar em algum produto
+11. ✅ Ir para tela de Login e limpar a navegação ao clicar em logoff
