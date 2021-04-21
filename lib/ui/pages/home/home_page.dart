@@ -54,7 +54,10 @@ class HomePage extends StatelessWidget with LoadingManager {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .08,
                             ),
-                            HomeProductList(productViewModel: snapshot.data)
+                            HomeProductList(
+                              productViewModel: snapshot.data,
+                              presenter: presenter,
+                            )
                           ],
                         ),
                       ),

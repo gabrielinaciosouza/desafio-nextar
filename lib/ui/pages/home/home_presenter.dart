@@ -5,4 +5,5 @@ abstract class HomePresenter {
   Stream<List<ProductViewModel>>? get loadProductsStream;
 
   Future<void> loadProducts();
+  Future<void> deleteProduct(String code);
 }

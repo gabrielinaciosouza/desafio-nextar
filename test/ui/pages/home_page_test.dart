@@ -12,6 +12,10 @@ class HomePresenterSpy extends Mock implements HomePresenter {
       this.noSuchMethod(Invocation.method(#loadProducts, []),
           returnValue: Future.value(),
           returnValueForMissingStub: Future.value());
+  Future<void> deleteProduct(String code) =>
+      this.noSuchMethod(Invocation.method(#loadProducts, [code]),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
 }
 
 void main() {
@@ -123,5 +127,16 @@ void main() {
     await tester.tap(find.text('Recarregar'));
 
     verify(presenter.loadProducts()).called(2);
+  });
+
+  testWidgets('Should call deleteProduct on longPress card click',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    loadProductsController.add(makeProducts());
+    await tester.pump();
+    await tester.longPress(find.text('Product 1'));
+
+    verify(presenter.deleteProduct('any_code')).called(1);
   });
 }

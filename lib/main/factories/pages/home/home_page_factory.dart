@@ -21,4 +21,9 @@ class FakePresenter implements HomePresenter {
   @override
   Stream<List<ProductViewModel>>? get loadProductsStream =>
       throw UnimplementedError();
+
+  @override
+  deleteProduct(String code) {
+    throw UnimplementedError();
+  }
 }
