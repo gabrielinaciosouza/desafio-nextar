@@ -100,4 +100,11 @@ void main() {
     await sut.deleteProduct(code);
     verify(deleteProducts.delete(code));
   });
+
+  test('Should emit correct events on deleteProduct success', () async {
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.deleteProductStream, emits(UIError.none));
+
+    await sut.deleteProduct(code);
+  });
 }

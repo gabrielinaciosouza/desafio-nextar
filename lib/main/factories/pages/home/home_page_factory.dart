@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../ui/helpers/helpers.dart';
 import '../../../../ui/pages/home/home.dart';
 
 Widget makeHomePage() {
@@ -31,4 +32,7 @@ class FakePresenter implements HomePresenter {
   Future<void> logoff() {
     throw UnimplementedError();
   }
+
+  @override
+  Stream<UIError?>? get deleteProductStream => throw UnimplementedError();
 }

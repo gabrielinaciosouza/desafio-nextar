@@ -15,9 +15,11 @@ class GetxHomePresenter extends GetxController implements HomePresenter {
 
   final _isLoading = true.obs;
   final _products = Rx([]);
+  final _deleteProduct = Rx(UIError.none);
 
   Stream<bool?> get isLoadingStream => _isLoading.stream;
   Stream<List<dynamic>?>? get productsStream => _products.stream;
+  Stream<UIError?>? get deleteProductStream => _deleteProduct.stream;
 
   Future<void> loadProducts() async {
     try {
@@ -44,7 +46,10 @@ class GetxHomePresenter extends GetxController implements HomePresenter {
 
   @override
   Future<void> deleteProduct(String code) async {
+    _isLoading.value = true;
+    _deleteProduct.value = UIError.none;
     await deleteProductByCode.delete(code);
+    _isLoading.value = false;
   }
 
   @override
