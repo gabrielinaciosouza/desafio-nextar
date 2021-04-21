@@ -14,4 +14,7 @@ class FakePresenter implements HomePresenter {
   Future<void> loadProducts() {
     throw UnimplementedError();
   }
+
+  @override
+  Stream<bool?>? get isLoadingStream => throw UnimplementedError();
 }
