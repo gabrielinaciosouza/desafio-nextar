@@ -7,7 +7,7 @@
 3. ✅ Esconder loading ao receber evento de isLoading do presenter como false
 4. ✅ Exibir mensagem de erro e esconder a lista ao receber evento de productsData com erro
 5. ✅ Esconder mensagem de erro e exibir a lista ao receber evento de productsData com dados
-6. Mostrar dados do produto
+6. ✅ Mostrar dados do produto
 7. Chamar o método de listar produtos ao clicar no botão de recarregar
 8. Chamar o método de Deletar Produto ao clicar no botão de deletar
 9. Ir para a tela de edição de produto ao clicar em algum produto
