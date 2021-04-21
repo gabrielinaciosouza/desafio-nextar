@@ -135,4 +135,13 @@ void main() {
     await sut.logoff();
     verify(logoff.logoff()).called(1);
   });
+
+  test('Should emit correct events on logoff success', () async {
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    sut.navigateToStream!
+        .listen(expectAsync1((page) => expect(page, '/login')));
+
+    await sut.logoff();
+  });
 }
