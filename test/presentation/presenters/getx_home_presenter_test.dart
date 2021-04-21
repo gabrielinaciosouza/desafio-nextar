@@ -20,9 +20,15 @@ class LoadProductsSpy extends Mock implements LoadProducts {
 }
 
 void main() {
+  late LoadProductsSpy loadProducts;
+  late GetxHomePresenter sut;
+
+  setUp(() {
+    loadProducts = LoadProductsSpy();
+    sut = GetxHomePresenter(loadProductsData: loadProducts);
+  });
+
   test('Should call LoadProducts on loadProducts', () async {
-    final loadProducts = LoadProductsSpy();
-    final sut = GetxHomePresenter(loadProductsData: loadProducts);
     await sut.loadProducts();
     verify(loadProducts.load()).called(1);
   });
