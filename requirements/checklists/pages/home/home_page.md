@@ -9,6 +9,6 @@
 5. ✅ Esconder mensagem de erro e exibir a lista ao receber evento de productsData com dados
 6. ✅ Mostrar dados do produto
 7. ✅ Chamar o método de listar produtos ao clicar no botão de recarregar
-8. Chamar o método de Deletar Produto ao clicar no botão de deletar
+8. ✅ Chamar o método de Deletar Produto ao clicar no botão de deletar
 9. Ir para a tela de edição de produto ao clicar em algum produto
 10. Ir para tela de Login e limpar a navegação ao clicar em logoff
