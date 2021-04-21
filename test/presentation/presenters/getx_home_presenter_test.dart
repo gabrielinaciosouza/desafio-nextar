@@ -1,3 +1,5 @@
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
+import 'package:desafio_nextar/ui/helpers/helpers.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mockito/mockito.dart';
@@ -18,20 +20,26 @@ class GetxHomePresenter extends GetxController {
   Stream<List<dynamic>?>? get productsStream => _products.stream;
 
   Future<void> loadProducts() async {
-    _isLoading.value = true;
-    final products = await loadProductsData.load();
-    _products.value = products
-        .map(
-          (product) => ProductViewModel(
-            name: product.name,
-            price: product.price,
-            stock: product.stock,
-            code: product.code,
-            creationDate: DateFormat('dd-MM-yyyy').format(product.creationDate),
-          ),
-        )
-        .toList();
-    _isLoading.value = false;
+    try {
+      _isLoading.value = true;
+      final products = await loadProductsData.load();
+      _products.value = products
+          .map(
+            (product) => ProductViewModel(
+              name: product.name,
+              price: product.price,
+              stock: product.stock,
+              code: product.code,
+              creationDate:
+                  DateFormat('dd-MM-yyyy').format(product.creationDate),
+            ),
+          )
+          .toList();
+    } on DomainError {
+      _products.subject.addError(UIError.unexpected.description!);
+    } finally {
+      _isLoading.value = false;
+    }
   }
 }
 
@@ -59,10 +67,15 @@ void main() {
             creationDate: DateTime(2021, 4, 20))
       ];
 
+  PostExpectation mockLoadProductsCall() => when(loadProducts.load());
+
   void mockLoadProducts() {
     productList = mockValidProducts();
-    when(loadProducts.load()).thenAnswer((_) async => productList);
+    mockLoadProductsCall().thenAnswer((_) async => productList);
   }
+
+  void mockLoadProductsError() =>
+      mockLoadProductsCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     loadProducts = LoadProductsSpy();
@@ -91,6 +104,16 @@ void main() {
               code: productList[1].code,
               creationDate: '20-04-2021')
         ])));
+
+    await sut.loadProducts();
+  });
+
+  test('Should emit correct events on failure', () async {
+    mockLoadProductsError();
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.productsStream!.listen(null,
+        onError: expectAsync1(
+            (error) => expect(error, UIError.unexpected.description)));
 
     await sut.loadProducts();
   });
