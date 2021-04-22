@@ -7,7 +7,7 @@ class LocalStorageAdapter implements FetchCacheStorage {
 
   LocalStorageAdapter({required this.storage});
   @override
-  Future<dynamic> fetch(String key) {
-    return storage.getItem(key);
+  Future<dynamic> fetch(String key) async {
+    return await storage.getItem(key);
   }
 }

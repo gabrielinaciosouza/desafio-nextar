@@ -19,10 +19,14 @@ void main() {
   late String key;
   late String value;
 
-  PostExpectation secureStorageReadCall() => when(storage.getItem(key));
+  PostExpectation localStorageGetItemCall() => when(storage.getItem(key));
+
+  void throwFetchError() {
+    localStorageGetItemCall().thenThrow(Exception());
+  }
 
   void mockFetchedValue() {
-    secureStorageReadCall().thenAnswer((_) async => value);
+    localStorageGetItemCall().thenAnswer((_) async => value);
   }
 
   setUp(() {
@@ -44,6 +48,14 @@ void main() {
       final fetchedValue = await sut.fetch(key);
 
       expect(fetchedValue, value);
+    });
+
+    test('Should throw if Fetch throws', () async {
+      throwFetchError();
+
+      final future = sut.fetch(key);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }
