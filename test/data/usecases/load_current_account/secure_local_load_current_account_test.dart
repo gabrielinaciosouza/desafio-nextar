@@ -5,43 +5,46 @@ import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
+class FetchSecureCacheStorageSpy extends Mock
+    implements FetchSecureCacheStorage {
   final String response;
-  FetchCacheStorageSpy({required this.response});
+  FetchSecureCacheStorageSpy({required this.response});
   @override
-  Future<String> fetch(String key) => this.noSuchMethod(
-        Invocation.method(#fetch, [key]),
+  Future<String> fetchSecure(String key) => this.noSuchMethod(
+        Invocation.method(#fetchSecure, [key]),
         returnValue: Future.value(response),
         returnValueForMissingStub: Future.value(response),
       );
 }
 
 void main() {
-  late FetchCacheStorageSpy fetchCacheStorage;
-  late LocalLoadCurrentAccount sut;
+  late FetchSecureCacheStorageSpy fetchSecureCacheStorage;
+  late SecureLocalLoadCurrentAccount sut;
   late String token;
 
-  PostExpectation fetchStorageCall() => when(fetchCacheStorage.fetch('token'));
+  PostExpectation fetchSecureStorageCall() =>
+      when(fetchSecureCacheStorage.fetchSecure('token'));
 
   void mockResponse(String response) {
-    fetchStorageCall().thenAnswer((_) async => response);
+    fetchSecureStorageCall().thenAnswer((_) async => response);
   }
 
   void throwError() {
-    fetchStorageCall().thenThrow(Exception());
+    fetchSecureStorageCall().thenThrow(Exception());
   }
 
   setUp(() {
     token = 'any_token';
-    fetchCacheStorage = FetchCacheStorageSpy(response: token);
-    sut = LocalLoadCurrentAccount(fetchCacheStorage: fetchCacheStorage);
+    fetchSecureCacheStorage = FetchSecureCacheStorageSpy(response: token);
+    sut = SecureLocalLoadCurrentAccount(
+        fetchSecureCacheStorage: fetchSecureCacheStorage);
     mockResponse(token);
   });
 
-  test('Should call FetchCacheStorage with correct value', () async {
+  test('Should call FetchSecureCacheStorage with correct value', () async {
     await sut.load();
 
-    verify(fetchCacheStorage.fetch('token'));
+    verify(fetchSecureCacheStorage.fetchSecure('token'));
   });
 
   test('Should throw unexpected error if token is invalid', () async {
@@ -58,7 +61,8 @@ void main() {
     expect(account, AccountEntity(token: token));
   });
 
-  test('Should throw unexpected error if fetch cache storage throws', () async {
+  test('Should throw unexpected error if fetch secure cache storage throws',
+      () async {
     throwError();
 
     final future = sut.load();
