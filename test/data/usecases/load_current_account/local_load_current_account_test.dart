@@ -25,8 +25,8 @@ void main() {
   PostExpectation fetchSecureStorageCall() =>
       when(fetchSecureCacheStorage.fetchSecure('token'));
 
-  void mockResponse() {
-    fetchSecureStorageCall().thenAnswer((_) async => token);
+  void mockResponse(String response) {
+    fetchSecureStorageCall().thenAnswer((_) async => response);
   }
 
   void throwError() {
@@ -38,13 +38,21 @@ void main() {
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy(response: token);
     sut = SecureLocalLoadCurrentAccount(
         fetchSecureCacheStorage: fetchSecureCacheStorage);
-    mockResponse();
+    mockResponse(token);
   });
 
   test('Should call FetchSecureCacheStorage with correct value', () async {
     await sut.load();
 
     verify(fetchSecureCacheStorage.fetchSecure('token'));
+  });
+
+  test('Should throw unexpected error if token is invalid', () async {
+    mockResponse('');
+
+    final error = sut.load();
+
+    expect(error, throwsA(DomainError.unexpected));
   });
 
   test('Should return an AccountEntity', () async {
