@@ -64,4 +64,10 @@ void main() {
 
     verify(local.load()).called(1);
   });
+
+  test('Should return an account os secure success', () async {
+    final account = await sut.load();
+
+    expect(account, AccountEntity(token: 'any'));
+  });
 }
