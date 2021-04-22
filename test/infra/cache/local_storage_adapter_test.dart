@@ -39,5 +39,11 @@ void main() {
 
       verify(storage.getItem(key));
     });
+
+    test('Should return correct value on success', () async {
+      final fetchedValue = await sut.fetch(key);
+
+      expect(fetchedValue, value);
+    });
   });
 }
