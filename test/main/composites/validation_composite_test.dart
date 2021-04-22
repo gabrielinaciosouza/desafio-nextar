@@ -1,6 +1,5 @@
 import 'package:desafio_nextar/presentation/protocols/protocols.dart';
 import 'package:desafio_nextar/validation/validators/validators.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -14,7 +13,6 @@ class FieldValidationSpy extends Mock implements FieldValidation {
       returnValue: 'any_field', returnValueForMissingStub: 'any_field');
 }
 
-@GenerateMocks([FieldValidationSpy])
 void main() {
   late ValidationComposite sut;
   late FieldValidation validation1;
