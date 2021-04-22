@@ -30,7 +30,11 @@ class SaveCurrentAccountComposite implements SaveCurrentAccount {
   SaveCurrentAccountComposite({required this.secure, required this.local});
   @override
   Future<void> save(AccountEntity account) async {
-    return await secure.save(account);
+    try {
+      return await secure.save(account);
+    } catch (error) {
+      return await local.save(account);
+    }
   }
 }
 
@@ -47,9 +51,20 @@ void main() {
     accountEntity = AccountEntity(token: 'any_token');
   });
 
+  void throwSecureError() {
+    when(secure.save(accountEntity)).thenThrow(Exception());
+  }
+
   test('Should call secure save', () async {
     await sut.save(accountEntity);
 
     verify(secure.save(accountEntity));
+  });
+
+  test('Should call local save if secure fails', () async {
+    throwSecureError();
+    await sut.save(accountEntity);
+
+    verify(local.save(accountEntity)).called(1);
   });
 }
