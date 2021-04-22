@@ -1,11 +1,11 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:localstorage/localstorage.dart';
 
-import '../../../infra/cache/local_storage_adapter.dart';
+import '../../../infra/cache/secure_local_storage_adapter.dart';
 
-LocalStorageAdapter makeLocalStorageAdapter() {
+SecureLocalStorageAdapter makeLocalStorageAdapter() {
   final secureStorage = FlutterSecureStorage();
   final localStorage = LocalStorage('desafio_nextar');
-  return LocalStorageAdapter(
+  return SecureLocalStorageAdapter(
       secureStorage: secureStorage, localStorage: localStorage);
 }

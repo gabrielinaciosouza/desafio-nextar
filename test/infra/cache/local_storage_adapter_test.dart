@@ -35,7 +35,7 @@ class LocalStorageSpy extends Mock implements LocalStorage {}
 void main() {
   late FlutterSecureStorageSpy secureStorage;
   late LocalStorage localStorage;
-  late LocalStorageAdapter sut;
+  late SecureLocalStorageAdapter sut;
   late String key;
   late String value;
 
@@ -61,7 +61,7 @@ void main() {
     value = 'any_value';
     secureStorage = FlutterSecureStorageSpy(fetchedValue: value);
     localStorage = LocalStorageSpy();
-    sut = LocalStorageAdapter(
+    sut = SecureLocalStorageAdapter(
         secureStorage: secureStorage, localStorage: localStorage);
     mockFetchedValue();
   });

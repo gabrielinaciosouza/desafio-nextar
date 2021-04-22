@@ -1,6 +1,7 @@
-import 'package:desafio_nextar/utils/platform/platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../../helpers/helpers.dart';
 
 void showLoading(BuildContext context) {
   final CheckPlatform runningPlatform = CheckPlatform.check();
