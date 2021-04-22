@@ -1,7 +1,7 @@
 import 'package:desafio_nextar/data/usecases/save_current_account/save_current_account.dart';
 import 'package:desafio_nextar/data/usecases/usecases.dart';
 import 'package:desafio_nextar/domain/entities/account_entity.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
+import 'package:desafio_nextar/main/composites/composites.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -21,21 +21,6 @@ class LocalSaveCurrentAccountSpy extends Mock
       this.noSuchMethod(Invocation.method(#save, []),
           returnValue: Future.value(),
           returnValueForMissingStub: Future.value());
-}
-
-class SaveCurrentAccountComposite implements SaveCurrentAccount {
-  final SecureLocalSaveCurrentAccount secure;
-  final LocalSaveCurrentAccount local;
-
-  SaveCurrentAccountComposite({required this.secure, required this.local});
-  @override
-  Future<void> save(AccountEntity account) async {
-    try {
-      return await secure.save(account);
-    } catch (error) {
-      return await local.save(account);
-    }
-  }
 }
 
 void main() {
