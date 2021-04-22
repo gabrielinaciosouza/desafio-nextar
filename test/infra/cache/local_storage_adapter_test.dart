@@ -30,11 +30,8 @@ class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {
           returnValueForMissingStub: Future.value(fetchedValue));
 }
 
-class LocalStorageSpy extends Mock implements LocalStorage {}
-
 void main() {
   late FlutterSecureStorageSpy secureStorage;
-  late LocalStorage localStorage;
   late SecureLocalStorageAdapter sut;
   late String key;
   late String value;
@@ -60,9 +57,7 @@ void main() {
     key = 'any_key';
     value = 'any_value';
     secureStorage = FlutterSecureStorageSpy(fetchedValue: value);
-    localStorage = LocalStorageSpy();
-    sut = SecureLocalStorageAdapter(
-        secureStorage: secureStorage, localStorage: localStorage);
+    sut = SecureLocalStorageAdapter(secureStorage: secureStorage);
     mockFetchedValue();
   });
 

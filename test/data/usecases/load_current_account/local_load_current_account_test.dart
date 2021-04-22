@@ -19,7 +19,7 @@ class FetchSecureCacheStorageSpy extends Mock
 
 void main() {
   late FetchSecureCacheStorageSpy fetchSecureCacheStorage;
-  late LocalLoadCurrentAccount sut;
+  late SecureLocalLoadCurrentAccount sut;
   late String token;
 
   PostExpectation fetchSecureStorageCall() =>
@@ -36,7 +36,7 @@ void main() {
   setUp(() {
     token = 'any_token';
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy(response: token);
-    sut = LocalLoadCurrentAccount(
+    sut = SecureLocalLoadCurrentAccount(
         fetchSecureCacheStorage: fetchSecureCacheStorage);
     mockResponse();
   });
