@@ -56,6 +56,10 @@ void main() {
     when(secure.load()).thenThrow(Exception());
   }
 
+  void throwLocalError() {
+    when(local.load()).thenThrow(Exception());
+  }
+
   test('Should call secure load', () async {
     await sut.load();
 
@@ -80,5 +84,13 @@ void main() {
     final account = await sut.load();
 
     expect(account, AccountEntity(token: 'any'));
+  });
+
+  test('Should throw if local throws', () async {
+    throwSecureError();
+    throwLocalError();
+    final future = sut.load();
+
+    expect(future, throwsA(TypeMatcher<Exception>()));
   });
 }
