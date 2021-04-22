@@ -12,7 +12,7 @@ class LocalStorageAdapter implements FetchCacheStorage, SaveCacheStorage {
   }
 
   @override
-  Future<void> save({required String key, required String value}) {
-    throw UnimplementedError();
+  Future<void> save({required String key, required String value}) async {
+    return await storage.setItem(key, value);
   }
 }
