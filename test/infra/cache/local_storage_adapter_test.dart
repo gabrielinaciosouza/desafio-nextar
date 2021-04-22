@@ -39,6 +39,10 @@ void main() {
     localStorageGetItemCall().thenAnswer((_) async => value);
   }
 
+  void throwSaveError() {
+    when(storage.setItem(key, value)).thenThrow(Exception());
+  }
+
   setUp(() {
     key = 'any_key';
     value = 'any_value';
@@ -74,6 +78,14 @@ void main() {
       await sut.save(key: key, value: value);
 
       verify(storage.setItem(key, value));
+    });
+
+    test('Should throw if SaveSecure throws', () async {
+      throwSaveError();
+
+      final future = sut.save(key: key, value: value);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }
