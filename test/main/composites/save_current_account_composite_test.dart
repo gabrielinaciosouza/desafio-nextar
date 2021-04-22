@@ -55,6 +55,10 @@ void main() {
     when(secure.save(accountEntity)).thenThrow(Exception());
   }
 
+  void throwLocalError() {
+    when(local.save(accountEntity)).thenThrow(Exception());
+  }
+
   test('Should call secure save', () async {
     await sut.save(accountEntity);
 
@@ -66,5 +70,13 @@ void main() {
     await sut.save(accountEntity);
 
     verify(local.save(accountEntity)).called(1);
+  });
+
+  test('Should throw if local throws', () async {
+    throwSecureError();
+    throwLocalError();
+    final future = sut.save(accountEntity);
+
+    expect(future, throwsA(TypeMatcher<Exception>()));
   });
 }
