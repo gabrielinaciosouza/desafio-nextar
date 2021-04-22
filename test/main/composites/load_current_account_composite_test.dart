@@ -52,6 +52,10 @@ void main() {
     sut = LoadCurrentAccountComposite(secure: secure, local: local);
   });
 
+  void throwSecureError() {
+    when(secure.load()).thenThrow(Exception());
+  }
+
   test('Should call secure load', () async {
     await sut.load();
 
@@ -59,13 +63,20 @@ void main() {
   });
 
   test('Should call local load if secure fails', () async {
-    when(secure.load()).thenThrow(Exception());
+    throwSecureError();
     await sut.load();
 
     verify(local.load()).called(1);
   });
 
   test('Should return an account os secure success', () async {
+    final account = await sut.load();
+
+    expect(account, AccountEntity(token: 'any'));
+  });
+
+  test('Should return an account os secure fails', () async {
+    throwSecureError();
     final account = await sut.load();
 
     expect(account, AccountEntity(token: 'any'));
