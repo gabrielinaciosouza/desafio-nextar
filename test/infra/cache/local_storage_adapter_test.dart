@@ -2,52 +2,24 @@ import 'package:desafio_nextar/infra/cache/cache.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {
+class LocalStorageSpy extends Mock implements LocalStorage {
   final String fetchedValue;
-  FlutterSecureStorageSpy({required this.fetchedValue});
+  LocalStorageSpy({required this.fetchedValue});
   @override
-  Future<void> write({
-    required String key,
-    required String? value,
-    IOSOptions? iOptions = IOSOptions.defaultOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-  }) =>
-      this.noSuchMethod(Invocation.method(#write, []),
-          returnValue: Future.value(),
-          returnValueForMissingStub: Future.value());
-  @override
-  Future<String?> read({
-    required String key,
-    IOSOptions? iOptions = IOSOptions.defaultOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-  }) =>
-      this.noSuchMethod(Invocation.method(#write, []),
+  dynamic getItem(String key) =>
+      this.noSuchMethod(Invocation.method(#getItem, [key]),
           returnValue: Future.value(fetchedValue),
           returnValueForMissingStub: Future.value(fetchedValue));
 }
 
 void main() {
-  late FlutterSecureStorageSpy secureStorage;
-  late SecureLocalStorageAdapter sut;
+  late LocalStorageSpy storage;
+  late LocalStorageAdapter sut;
   late String key;
   late String value;
 
-  PostExpectation secureStorageWriteCall() =>
-      when(secureStorage.write(key: key, value: value));
-
-  PostExpectation secureStorageReadCall() => when(secureStorage.read(key: key));
-
-  void throwSaveError() {
-    secureStorageWriteCall().thenThrow(Exception());
-  }
-
-  void throwFetchError() {
-    secureStorageReadCall().thenThrow(Exception());
-  }
+  PostExpectation secureStorageReadCall() => when(storage.getItem(key));
 
   void mockFetchedValue() {
     secureStorageReadCall().thenAnswer((_) async => value);
@@ -56,46 +28,16 @@ void main() {
   setUp(() {
     key = 'any_key';
     value = 'any_value';
-    secureStorage = FlutterSecureStorageSpy(fetchedValue: value);
-    sut = SecureLocalStorageAdapter(secureStorage: secureStorage);
+    storage = LocalStorageSpy(fetchedValue: value);
+    sut = LocalStorageAdapter(storage: storage);
     mockFetchedValue();
   });
 
-  group('saveSecure', () {
-    test('Should call save secure with correct values', () async {
-      await sut.saveSecure(key: key, value: value);
+  group('fetch', () {
+    test('Should call fetch with correct value', () async {
+      await sut.fetch(key);
 
-      verify(secureStorage.write(key: key, value: value));
-    });
-
-    test('Should throw if SaveSecure throws', () async {
-      throwSaveError();
-
-      final future = sut.saveSecure(key: key, value: value);
-
-      expect(future, throwsA(TypeMatcher<Exception>()));
-    });
-  });
-
-  group('fetchSecure', () {
-    test('Should call fetch secure with correct value', () async {
-      await sut.fetchSecure(key);
-
-      verify(secureStorage.read(key: key));
-    });
-
-    test('Should return correct value on success', () async {
-      final fetchedValue = await sut.fetchSecure(key);
-
-      expect(fetchedValue, value);
-    });
-
-    test('Should throw if FetchSecure throws', () async {
-      throwFetchError();
-
-      final future = sut.fetchSecure(key);
-
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      verify(storage.getItem(key));
     });
   });
 }
