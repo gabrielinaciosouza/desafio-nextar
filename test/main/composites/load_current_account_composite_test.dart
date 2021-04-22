@@ -1,6 +1,6 @@
 import 'package:desafio_nextar/data/usecases/load_current_account/load_current_account.dart';
 import 'package:desafio_nextar/domain/entities/account_entity.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
+import 'package:desafio_nextar/main/composites/composites.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -20,25 +20,6 @@ class LocalLoadCurrentAccountSpy extends Mock
       this.noSuchMethod(Invocation.method(#load, []),
           returnValue: Future.value(AccountEntity(token: 'any')),
           returnValueForMissingStub: Future.value(AccountEntity(token: 'any')));
-}
-
-class LoadCurrentAccountComposite implements LoadCurrentAccount {
-  final SecureLocalLoadCurrentAccount secure;
-  final LocalLoadCurrentAccount local;
-
-  LoadCurrentAccountComposite({
-    required this.secure,
-    required this.local,
-  });
-
-  @override
-  Future<AccountEntity> load() async {
-    try {
-      return await secure.load();
-    } catch (error) {
-      return await local.load();
-    }
-  }
 }
 
 void main() {
