@@ -14,7 +14,13 @@ class SecureLoadCurrentAccountSpy extends Mock
 }
 
 class LocalLoadCurrentAccountSpy extends Mock
-    implements LocalLoadCurrentAccount {}
+    implements LocalLoadCurrentAccount {
+  @override
+  Future<AccountEntity> load() =>
+      this.noSuchMethod(Invocation.method(#load, []),
+          returnValue: Future.value(AccountEntity(token: 'any')),
+          returnValueForMissingStub: Future.value(AccountEntity(token: 'any')));
+}
 
 class LoadCurrentAccountComposite implements LoadCurrentAccount {
   final SecureLocalLoadCurrentAccount secure;
@@ -27,7 +33,11 @@ class LoadCurrentAccountComposite implements LoadCurrentAccount {
 
   @override
   Future<AccountEntity> load() async {
-    return await secure.load();
+    try {
+      return await secure.load();
+    } catch (error) {
+      return await local.load();
+    }
   }
 }
 
@@ -46,5 +56,12 @@ void main() {
     await sut.load();
 
     verify(secure.load()).called(1);
+  });
+
+  test('Should call local load if secure fails', () async {
+    when(secure.load()).thenThrow(Exception());
+    await sut.load();
+
+    verify(local.load()).called(1);
   });
 }
