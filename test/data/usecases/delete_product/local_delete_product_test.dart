@@ -1,11 +1,8 @@
-import 'dart:convert';
-import 'package:desafio_nextar/domain/usecases/delete_product.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:desafio_nextar/domain/usecases/delete_product.dart';
 import 'package:desafio_nextar/data/cache/cache.dart';
-import 'package:desafio_nextar/data/usecases/usecases.dart';
-import 'package:desafio_nextar/domain/entities/entities.dart';
 import 'package:desafio_nextar/domain/helpers/helpers.dart';
 
 class DeleteCacheStorageSpy extends Mock implements DeleteCacheStorage {
@@ -27,7 +24,11 @@ class LocalDeleteProduct implements DeleteProduct {
 
   @override
   Future<void> delete(String code) async {
-    return await deleteCacheStorage.delete(key: code);
+    try {
+      return await deleteCacheStorage.delete(key: code);
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -35,6 +36,13 @@ void main() {
   late DeleteCacheStorageSpy deleteCacheStorage;
   late LocalDeleteProduct sut;
   late String key;
+
+  PostExpectation mockSaveSecureCacheStorageCall() =>
+      when(deleteCacheStorage.delete(key: key));
+
+  mockError() {
+    mockSaveSecureCacheStorageCall().thenThrow(Exception());
+  }
 
   setUp(() {
     deleteCacheStorage = DeleteCacheStorageSpy();
@@ -45,5 +53,13 @@ void main() {
     await sut.delete(key);
 
     verify(deleteCacheStorage.delete(key: key));
+  });
+
+  test('Should throw unexpected error if DeleteCacheStorage thorws', () async {
+    mockError();
+
+    final future = sut.delete(key);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
