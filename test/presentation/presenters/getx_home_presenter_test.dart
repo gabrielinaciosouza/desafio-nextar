@@ -164,4 +164,9 @@ void main() {
         .listen((page) => expect(page, '/product/any_code/edit'));
     sut.goToEditProduct('any_code');
   });
+
+  test('Should go to ProductPage on new product click', () async {
+    sut.navigateToStream!.listen((page) => expect(page, '/new/product'));
+    sut.goToNewProduct();
+  });
 }

@@ -80,5 +80,7 @@ class GetxHomePresenter extends GetxController
   }
 
   @override
-  void goToNewProduct() {}
+  void goToNewProduct() {
+    navigateTo = '/new/product';
+  }
 }
