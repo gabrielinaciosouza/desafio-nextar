@@ -16,9 +16,9 @@ class LoadProductsSpy extends Mock implements LoadProducts {
           returnValueForMissingStub: Future.value(_list));
 }
 
-class DeleteProductSpy extends Mock implements DeleteProduct {
-  Future<void> delete(String code) =>
-      this.noSuchMethod(Invocation.method(#delete, []),
+class SaveProductsSpy extends Mock implements SaveProducts {
+  Future<void> save(List<ProductEntity> product) =>
+      this.noSuchMethod(Invocation.method(#save, [product]),
           returnValue: Future.value(),
           returnValueForMissingStub: Future.value());
 }
@@ -30,7 +30,7 @@ class LogoffSpy extends Mock implements Logoff {
 
 void main() {
   late LoadProductsSpy loadProducts;
-  late DeleteProductSpy deleteProducts;
+  late SaveProductsSpy saveProducts;
   late LogoffSpy logoff;
   late GetxHomePresenter sut;
   late List<ProductEntity> productList;
@@ -49,7 +49,7 @@ void main() {
 
   PostExpectation mockLoadProductsCall() => when(loadProducts.load());
 
-  PostExpectation mockDeleteProductCall() => when(deleteProducts.delete(code));
+  PostExpectation mockDeleteProductCall() => when(saveProducts.save([]));
 
   PostExpectation mockLogoffCall() => when(logoff.logoff());
 
@@ -68,12 +68,12 @@ void main() {
 
   setUp(() {
     loadProducts = LoadProductsSpy();
-    deleteProducts = DeleteProductSpy();
+    saveProducts = SaveProductsSpy();
     logoff = LogoffSpy();
     code = 'any_code';
     sut = GetxHomePresenter(
         loadProductsData: loadProducts,
-        deleteProductByCode: deleteProducts,
+        saveProducts: saveProducts,
         logoffSession: logoff);
     mockLoadProducts();
   });
@@ -113,10 +113,10 @@ void main() {
     await sut.loadProducts();
   });
 
-  test('Should call DeleteProduct on deleteProduct with correct values',
+  test('Should call SaveProducts on deleteProduct with correct values',
       () async {
     await sut.deleteProduct(code);
-    verify(deleteProducts.delete(code));
+    verify(saveProducts.save([]));
   });
 
   test('Should emit correct events on deleteProduct success', () async {
