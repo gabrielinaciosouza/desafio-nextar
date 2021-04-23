@@ -1,11 +1,11 @@
 import 'dart:convert';
-
-import 'package:desafio_nextar/data/cache/cache.dart';
-import 'package:desafio_nextar/domain/entities/entities.dart';
-import 'package:desafio_nextar/domain/helpers/helpers.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+
+import 'package:desafio_nextar/data/cache/cache.dart';
+import 'package:desafio_nextar/data/usecases/usecases.dart';
+import 'package:desafio_nextar/domain/entities/entities.dart';
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
 
 class SaveCacheStorageSpy extends Mock implements SaveCacheStorage {
   @override
@@ -17,32 +17,6 @@ class SaveCacheStorageSpy extends Mock implements SaveCacheStorage {
         ),
         returnValue: Future.value(),
         returnValueForMissingStub: Future.value());
-  }
-}
-
-class LocalSaveProduct implements SaveProduct {
-  final SaveCacheStorage saveCacheStorage;
-
-  LocalSaveProduct({required this.saveCacheStorage});
-  @override
-  Future<void> save(ProductEntity product) async {
-    try {
-      await saveCacheStorage.save(
-          key: product.code, value: json.encode(toJson(product)));
-    } catch (error) {
-      print(error.toString());
-      throw DomainError.unexpected;
-    }
-  }
-
-  Map<String, String> toJson(ProductEntity product) {
-    final Map<String, String> data = new Map<String, String>();
-    data['name'] = product.name;
-    data['code'] = product.code;
-    data['creationDate'] = product.creationDate.toIso8601String();
-    data['price'] = product.price.toString();
-    data['stock'] = product.stock.toString();
-    return data;
   }
 }
 
