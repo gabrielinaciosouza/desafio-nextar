@@ -48,10 +48,17 @@ void main() {
   PostExpectation secureStorageWriteCall() =>
       when(secureStorage.write(key: key, value: value));
 
+  PostExpectation secureStorageDeleteCall() =>
+      when(secureStorage.delete(key: key));
+
   PostExpectation secureStorageReadCall() => when(secureStorage.read(key: key));
 
   void throwSaveError() {
     secureStorageWriteCall().thenThrow(Exception());
+  }
+
+  void throwDeleteError() {
+    secureStorageDeleteCall().thenThrow(Exception());
   }
 
   void throwFetchError() {
@@ -113,6 +120,14 @@ void main() {
       await sut.deleteSecure(key: key);
 
       verify(secureStorage.delete(key: key));
+    });
+
+    test('Should throw if deleteSecure throws', () async {
+      throwDeleteError();
+
+      final future = sut.deleteSecure(key: key);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }
