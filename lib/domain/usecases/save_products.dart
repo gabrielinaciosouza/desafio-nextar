@@ -1,5 +1,5 @@
 import '../entities/entities.dart';
 
-abstract class SaveProducts {
-  Future<void> save(List<ProductEntity> productList);
+abstract class SaveProduct {
+  Future<void> save(ProductEntity product);
 }

@@ -1,5 +1,3 @@
-import 'package:desafio_nextar/domain/entities/entities.dart';
-import 'package:desafio_nextar/domain/usecases/save_products.dart';
 import 'package:desafio_nextar/presentation/mixins/mixins.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -14,14 +12,14 @@ class GetxHomePresenter extends GetxController
     with NavigationManager, LoadingManager, UIErrorManager
     implements HomePresenter {
   final LoadProducts loadProductsData;
-  final SaveProducts saveProducts;
+  final DeleteProduct deleteProductByCode;
   final Logoff logoffSession;
   GetxHomePresenter(
       {required this.loadProductsData,
-      required this.logoffSession,
-      required this.saveProducts});
+      required this.deleteProductByCode,
+      required this.logoffSession});
 
-  final _products = Rx<List<ProductViewModel>>([]);
+  final _products = Rx([]);
 
   Stream<List<dynamic>?>? get productsStream => _products.stream;
 
@@ -53,22 +51,7 @@ class GetxHomePresenter extends GetxController
     try {
       isLoading = true;
       mainError = UIError.none;
-      _products.value = [];
-
-      _products.value.removeWhere((element) => element.code == code);
-      final products = _products.value
-          .map(
-            (product) => ProductEntity(
-              name: product.name,
-              price: product.price,
-              stock: product.stock,
-              code: product.code,
-              creationDate:
-                  DateFormat('dd-MM-yyyy').parse(product.creationDate),
-            ),
-          )
-          .toList();
-      await saveProducts.save(products);
+      await deleteProductByCode.delete(code);
     } on DomainError {
       mainError = UIError.unexpected;
     } finally {
@@ -95,4 +78,7 @@ class GetxHomePresenter extends GetxController
   void goToEditProduct(String productCode) {
     navigateTo = '/product/$productCode/edit';
   }
+
+  @override
+  void goToNewProduct() {}
 }

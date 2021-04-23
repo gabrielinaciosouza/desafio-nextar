@@ -41,4 +41,7 @@ class FakePresenter implements HomePresenter {
 
   @override
   void goToEditProduct(String productCode) {}
+
+  @override
+  void goToNewProduct() {}
 }

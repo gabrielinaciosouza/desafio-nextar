@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:desafio_nextar/data/cache/cache.dart';
 import 'package:desafio_nextar/domain/entities/entities.dart';
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -19,58 +20,49 @@ class SaveCacheStorageSpy extends Mock implements SaveCacheStorage {
   }
 }
 
-class LocalSaveProducts implements SaveProducts {
+class LocalSaveProduct implements SaveProduct {
   final SaveCacheStorage saveCacheStorage;
 
-  LocalSaveProducts({required this.saveCacheStorage});
+  LocalSaveProduct({required this.saveCacheStorage});
   @override
-  Future<void> save(List<ProductEntity> productList) async {
-    List<Map<String, String>> map = toMap(productList);
-
-    map.forEach((map) async {
-      await saveCacheStorage.save(key: map['code']!, value: jsonEncode(map));
-    });
+  Future<void> save(ProductEntity product) async {
+    try {
+      await saveCacheStorage.save(
+          key: product.code, value: json.encode(toJson(product)));
+    } catch (error) {
+      print(error.toString());
+      throw DomainError.unexpected;
+    }
   }
 
-  List<Map<String, String>> toMap(List<ProductEntity> productList) =>
-      productList.map((product) {
-        Map<String, String> map = Map<String, String>();
-        map['code'] = product.code;
-        map['name'] = product.name;
-        map['stock'] = product.stock.toString();
-        map['price'] = product.price.toString();
-        map['creationDate'] = product.creationDate.toIso8601String();
-        return map;
-      }).toList();
+  Map<String, String> toJson(ProductEntity product) {
+    final Map<String, String> data = new Map<String, String>();
+    data['name'] = product.name;
+    data['code'] = product.code;
+    data['creationDate'] = product.creationDate.toIso8601String();
+    data['price'] = product.price.toString();
+    data['stock'] = product.stock.toString();
+    return data;
+  }
 }
 
 void main() {
   late SaveCacheStorageSpy saveCacheStorage;
-  late LocalSaveProducts sut;
-  late List<ProductEntity> productList;
+  late LocalSaveProduct sut;
+  late ProductEntity product;
 
-  List<ProductEntity> mockValidProducts() => [
-        ProductEntity(
-            name: 'Product 1',
-            code: 'any_code',
-            creationDate: DateTime(2021, 4, 21)),
-        ProductEntity(
-            name: 'Product 2',
-            code: 'any_code2',
-            creationDate: DateTime(2021, 4, 20))
-      ];
+  ProductEntity mockValidProduct() => ProductEntity(
+      name: 'Product 1', code: 'any_code', creationDate: DateTime(2021, 4, 21));
 
   setUp(() {
     saveCacheStorage = SaveCacheStorageSpy();
-    sut = LocalSaveProducts(saveCacheStorage: saveCacheStorage);
-    productList = mockValidProducts();
+    sut = LocalSaveProduct(saveCacheStorage: saveCacheStorage);
+    product = mockValidProduct();
   });
   test('Should call SaveCacheStorage with correct values', () async {
-    await sut.save(productList);
+    await sut.save(product);
 
     verify(saveCacheStorage.save(
-        key: 'any_code', value: jsonEncode(sut.toMap(productList).first)));
-    verify(saveCacheStorage.save(
-        key: 'any_code2', value: jsonEncode(sut.toMap(productList)[1])));
+        key: product.code, value: json.encode(sut.toJson(product))));
   });
 }
