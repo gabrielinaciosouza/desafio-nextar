@@ -34,7 +34,7 @@ void main() {
   setUp(() {
     token = 'any_token';
     saveCacheStorage = SaveCacheStorageSpy();
-    sut = LocalSaveCurrentAccount(saveSecureCacheStorage: saveCacheStorage);
+    sut = LocalSaveCurrentAccount(saveCacheStorage: saveCacheStorage);
     account = AccountEntity(token: token);
   });
   test('Should call SaveCacheStorage with correct values', () async {
