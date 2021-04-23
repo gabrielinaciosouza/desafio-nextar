@@ -1,6 +1,4 @@
 import 'package:desafio_nextar/data/cache/cache.dart';
-import 'package:desafio_nextar/data/usecases/save_current_account/secure_local_save_current_account.dart';
-import 'package:desafio_nextar/domain/entities/entities.dart';
 import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
@@ -26,7 +24,11 @@ class LocalSecureDeleteProduct implements DeleteProduct {
 
   @override
   Future<void> delete(String code) async {
-    return await deleteSecureCacheStorage.deleteSecure(key: code);
+    try {
+      return await deleteSecureCacheStorage.deleteSecure(key: code);
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -34,6 +36,13 @@ void main() {
   late LogoffSecureCacheStorageSpy logoffSecureCacheStorage;
   late LocalSecureDeleteProduct sut;
   late String key;
+
+  PostExpectation mockSaveSecureCacheStorageCall() =>
+      when(logoffSecureCacheStorage.deleteSecure(key: key));
+
+  mockError() {
+    mockSaveSecureCacheStorageCall().thenThrow(Exception());
+  }
 
   setUp(() {
     key = 'token';
@@ -46,5 +55,13 @@ void main() {
     await sut.delete(key);
 
     verify(logoffSecureCacheStorage.deleteSecure(key: key));
+  });
+
+  test('Should throw unexpected error if DeleteCacheStorage thorws', () async {
+    mockError();
+
+    final future = sut.delete(key);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
