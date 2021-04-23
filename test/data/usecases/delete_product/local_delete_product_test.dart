@@ -1,7 +1,7 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/domain/usecases/delete_product.dart';
+import 'package:desafio_nextar/data/usecases/usecases.dart';
 import 'package:desafio_nextar/data/cache/cache.dart';
 import 'package:desafio_nextar/domain/helpers/helpers.dart';
 
@@ -15,20 +15,6 @@ class DeleteCacheStorageSpy extends Mock implements DeleteCacheStorage {
         ),
         returnValue: Future.value(),
         returnValueForMissingStub: Future.value());
-  }
-}
-
-class LocalDeleteProduct implements DeleteProduct {
-  final DeleteCacheStorage deleteCacheStorage;
-  LocalDeleteProduct({required this.deleteCacheStorage});
-
-  @override
-  Future<void> delete(String code) async {
-    try {
-      return await deleteCacheStorage.delete(key: code);
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
   }
 }
 
