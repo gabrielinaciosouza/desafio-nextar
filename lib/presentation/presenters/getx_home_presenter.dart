@@ -1,3 +1,5 @@
+import 'package:desafio_nextar/domain/entities/entities.dart';
+import 'package:desafio_nextar/domain/usecases/save_products.dart';
 import 'package:desafio_nextar/presentation/mixins/mixins.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -12,12 +14,12 @@ class GetxHomePresenter extends GetxController
     with NavigationManager, LoadingManager, UIErrorManager
     implements HomePresenter {
   final LoadProducts loadProductsData;
-  final DeleteProduct deleteProductByCode;
+  final SaveProducts saveProduct;
   final Logoff logoffSession;
   GetxHomePresenter(
       {required this.loadProductsData,
-      required this.deleteProductByCode,
-      required this.logoffSession});
+      required this.logoffSession,
+      required this.saveProduct});
 
   final _products = Rx([]);
 
@@ -51,7 +53,8 @@ class GetxHomePresenter extends GetxController
     try {
       isLoading = true;
       mainError = UIError.none;
-      await deleteProductByCode.delete(code);
+      _products.value.removeWhere((element) => element.code == code);
+      await saveProduct.save(_products.value as List<ProductEntity>);
     } on DomainError {
       mainError = UIError.unexpected;
     } finally {
