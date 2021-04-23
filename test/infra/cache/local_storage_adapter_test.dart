@@ -21,6 +21,12 @@ class LocalStorageSpy extends Mock implements LocalStorage {
       this.noSuchMethod(Invocation.method(#setItem, [key, value]),
           returnValue: Future.value(),
           returnValueForMissingStub: Future.value());
+
+  @override
+  Future<void> deleteItem(String key) =>
+      this.noSuchMethod(Invocation.method(#deleteItem, [key]),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
 }
 
 void main() {
@@ -86,6 +92,14 @@ void main() {
       final future = sut.save(key: key, value: value);
 
       expect(future, throwsA(TypeMatcher<Exception>()));
+    });
+  });
+
+  group('delete', () {
+    test('Should call delete with correct values', () async {
+      await sut.delete(key: key);
+
+      verify(storage.deleteItem(key));
     });
   });
 }
