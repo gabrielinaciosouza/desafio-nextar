@@ -49,6 +49,10 @@ void main() {
     when(storage.setItem(key, value)).thenThrow(Exception());
   }
 
+  void throwDeleteError() {
+    when(storage.deleteItem(key)).thenThrow(Exception());
+  }
+
   setUp(() {
     key = 'any_key';
     value = 'any_value';
@@ -100,6 +104,14 @@ void main() {
       await sut.delete(key: key);
 
       verify(storage.deleteItem(key));
+    });
+
+    test('Should throw if delete throws', () async {
+      throwDeleteError();
+
+      final future = sut.delete(key: key);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }
