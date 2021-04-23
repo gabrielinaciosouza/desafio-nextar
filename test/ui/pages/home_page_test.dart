@@ -179,6 +179,19 @@ void main() {
     verify(presenter.goToEditProduct(productList[0].code)).called(1);
   });
 
+  testWidgets('Should call goToNewProduct on button click',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final productList = makeProducts();
+
+    productsController.add(productList);
+    await tester.pump();
+    await tester.tap(find.text('Novo Produto'));
+
+    verify(presenter.goToNewProduct()).called(1);
+  });
+
   testWidgets('Should change page', (WidgetTester tester) async {
     await loadPage(tester);
 

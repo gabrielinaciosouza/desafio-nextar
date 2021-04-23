@@ -14,4 +14,5 @@ abstract class Translations {
   String get explore;
   String get reload;
   String get logoff;
+  String get newProduct;
 }

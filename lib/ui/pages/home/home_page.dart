@@ -47,6 +47,10 @@ class HomePage extends StatelessWidget with LoadingManager, NavigationManager {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .02,
                             ),
+                            ElevatedButton(
+                              onPressed: presenter.goToNewProduct,
+                              child: Text(R.strings.newProduct),
+                            ),
                             HomeAvatar(presenter: presenter),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .1,

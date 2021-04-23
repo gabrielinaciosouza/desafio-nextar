@@ -42,4 +42,7 @@ class PtBr implements Translations {
 
   @override
   String get logoff => 'Sair';
+
+  @override
+  String get newProduct => 'Novo Produto';
 }
