@@ -54,6 +54,13 @@ void main() {
   ProductEntity mockValidProduct() => ProductEntity(
       name: 'Product 1', code: 'any_code', creationDate: DateTime(2021, 4, 21));
 
+  PostExpectation mockSaveSecureCacheStorageCall() => when(saveCacheStorage
+      .save(key: product.code, value: json.encode(sut.toJson(product))));
+
+  mockError() {
+    mockSaveSecureCacheStorageCall().thenThrow(Exception());
+  }
+
   setUp(() {
     saveCacheStorage = SaveCacheStorageSpy();
     sut = LocalSaveProduct(saveCacheStorage: saveCacheStorage);
@@ -64,5 +71,13 @@ void main() {
 
     verify(saveCacheStorage.save(
         key: product.code, value: json.encode(sut.toJson(product))));
+  });
+
+  test('Should throw unexpected error if SaveCacheStorage thorws', () async {
+    mockError();
+
+    final future = sut.save(product);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
