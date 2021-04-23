@@ -27,6 +27,16 @@ class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {
       this.noSuchMethod(Invocation.method(#write, []),
           returnValue: Future.value(fetchedValue),
           returnValueForMissingStub: Future.value(fetchedValue));
+
+  Future<void> delete({
+    required String key,
+    IOSOptions? iOptions = IOSOptions.defaultOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) =>
+      this.noSuchMethod(Invocation.method(#delete, []),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
 }
 
 void main() {
@@ -95,6 +105,14 @@ void main() {
       final future = sut.fetchSecure(key);
 
       expect(future, throwsA(TypeMatcher<Exception>()));
+    });
+  });
+
+  group('deleteSecure', () {
+    test('Should call delete secure with correct values', () async {
+      await sut.deleteSecure(key: key);
+
+      verify(secureStorage.delete(key: key));
     });
   });
 }
