@@ -9,7 +9,12 @@ import 'components/components.dart';
 import 'product.dart';
 
 class ProductPage extends StatelessWidget
-    with KeyboardManager, CardSizeManager, LoadingManager, UIErrorManager {
+    with
+        KeyboardManager,
+        CardSizeManager,
+        LoadingManager,
+        UIErrorManager,
+        NavigationManager {
   final ProductPresenter presenter;
   ProductPage(this.presenter);
   @override
@@ -26,6 +31,7 @@ class ProductPage extends StatelessWidget
               builder: (context) {
                 handleLoading(context, presenter.isLoadingStream);
                 handleMainError(context, presenter.mainErrorStream);
+                handleNavigation(presenter.navigateToStream);
                 return Align(
                   alignment: Alignment.topCenter,
                   child: BaseWidget(builder: (context, sizingInformation) {
