@@ -1,3 +1,4 @@
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
 import 'package:desafio_nextar/presentation/mixins/mixins.dart';
 import 'package:desafio_nextar/ui/helpers/helpers.dart';
 import 'package:get/get.dart';
@@ -16,38 +17,55 @@ class ValidationSpy extends Mock implements Validation {
           returnValueForMissingStub: ValidationError.none);
 }
 
-class AuthenticationSpy extends Mock implements Authentication {
-  final AccountEntity response;
-  AuthenticationSpy({required this.response});
+class DeleteFromCacheSpy extends Mock implements DeleteFromCache {
   @override
-  Future<AccountEntity> auth(AuthenticationParams params) =>
-      super.noSuchMethod(Invocation.method(#auth, [params]),
-          returnValue: Future.value(response),
-          returnValueForMissingStub: Future.value(response));
+  Future<void> delete(String code) =>
+      this.noSuchMethod(Invocation.method(#delete, [code]),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
 }
 
-class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {
+class SaveProductSpy extends Mock implements SaveProduct {
   @override
-  Future<void> save(AccountEntity account) =>
-      super.noSuchMethod(Invocation.method(#save, []),
+  Future<void> save(ProductEntity product) =>
+      this.noSuchMethod(Invocation.method(#save, [product]),
           returnValue: Future.value(),
           returnValueForMissingStub: Future.value());
 }
 
 class GetxProductPresenter extends GetxController
-    with FormManager, ValidateFieldManager {
+    with
+        FormManager,
+        ValidateFieldManager,
+        UIErrorManager,
+        LoadingManager,
+        NavigationManager {
   final Validation validation;
+  final SaveProduct saveProduct;
+  final DeleteFromCache deleteFromCache;
 
-  GetxProductPresenter({required this.validation});
+  GetxProductPresenter(
+      {required this.validation,
+      required this.deleteFromCache,
+      required this.saveProduct});
 
   String? _name;
   String? _code;
+  String _price = '';
+  String _stock = '';
+  bool _isEditing = false;
 
   var _nameError = Rx<UIError>(UIError.none);
   var _codeError = Rx<UIError>(UIError.none);
 
   Stream<UIError?>? get nameErrorStream => _nameError.stream;
   Stream<UIError?>? get codeErrorStream => _codeError.stream;
+  String get price => _price;
+  set price(String value) => _price;
+  String get stock => _stock;
+  set stock(value) => _stock = value;
+  bool get isEditing => _isEditing;
+  set isEditing(value) => _isEditing = value;
 
   void validateName(String value) {
     _name = value;
@@ -69,12 +87,49 @@ class GetxProductPresenter extends GetxController
         _name != null &&
         _code != null;
   }
+
+  Future<void> submit({required String price, required String stock}) async {
+    try {
+      mainError = UIError.none;
+      if ((!price.isNumericOnly || !stock.isNumericOnly) &&
+          (price.isNotEmpty || stock.isNotEmpty)) {
+        mainError = UIError.numericOnly;
+        return;
+      }
+      isLoading = true;
+
+      final product = ProductEntity(
+          name: _name!,
+          code: _code!,
+          creationDate: CustomizableDateTime.current,
+          price: price.isEmpty ? null : num.parse(price),
+          stock: stock.isEmpty ? null : num.parse(stock));
+      if (isEditing) {
+        await deleteFromCache.delete(_code!);
+      }
+      await saveProduct.save(product);
+      navigateTo = '/home';
+    } on DomainError {
+      mainError = UIError.unexpected;
+    }
+    isLoading = false;
+  }
+}
+
+extension CustomizableDateTime on DateTime {
+  static DateTime customTime = DateTime.now();
+  static DateTime get current => customTime;
 }
 
 void main() {
   late GetxProductPresenter sut;
   late ValidationSpy validation;
+  late DeleteFromCacheSpy deleteFromCache;
+  late SaveProductSpy saveProduct;
   late String value;
+  late String price;
+  late String stock;
+  late ProductEntity product;
 
   void mockValidation({
     required String value,
@@ -86,8 +141,22 @@ void main() {
 
   setUp(() {
     validation = ValidationSpy();
-    sut = GetxProductPresenter(validation: validation);
+    deleteFromCache = DeleteFromCacheSpy();
+    saveProduct = SaveProductSpy();
+    sut = GetxProductPresenter(
+        validation: validation,
+        deleteFromCache: deleteFromCache,
+        saveProduct: saveProduct);
     value = 'any_value';
+    price = '10';
+    stock = '20';
+    CustomizableDateTime.customTime = DateTime.parse("1969-07-20 20:18:04");
+    product = ProductEntity(
+        name: value,
+        code: value,
+        creationDate: CustomizableDateTime.current,
+        price: price.isEmpty ? null : num.parse(price),
+        stock: stock.isEmpty ? null : num.parse(stock));
   });
   test('Should call Validation with correct value value', () {
     sut.validateName(value);
@@ -134,6 +203,12 @@ void main() {
     sut.validateName(value);
   });
 
+  test('Should call Validation with correct password', () {
+    sut.validateCode(value);
+
+    verify(validation.validate(field: 'code', value: value)).called(1);
+  });
+
   test(
       'Should emit code error if validation returns ValidationError.invalidField',
       () {
@@ -173,4 +248,93 @@ void main() {
     sut.validateCode(value);
     sut.validateCode(value);
   });
+
+  test('Should emit isFormValid true if validations succeeds', () async {
+    sut.nameErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.none)));
+    sut.codeErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.none)));
+
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+
+    sut.validateName(value);
+    await Future.delayed(Duration.zero);
+    sut.validateCode(value);
+  });
+
+  test('Should call Submit with correct values on Editing', () async {
+    sut.validateName(value);
+    sut.validateCode(value);
+    sut.isEditing = true;
+    await sut.submit(price: price, stock: stock);
+
+    verify(deleteFromCache.delete(value)).called(1);
+    verify(saveProduct.save(product)).called(1);
+  });
+
+  // test('Should emit correct events on Authentication success', () async {
+  //   sut.validateEmail(email);
+  //   sut.validatePassword(password);
+
+  //   expectLater(sut.isLoadingStream, emits(true));
+
+  //   await sut.auth();
+  // });
+
+  // test('Should emit correct events on InvalidCredentialsError', () async {
+  //   mockAuthenticationError(error: DomainError.invalidCredentials);
+
+  //   sut.validateEmail(email);
+  //   sut.validatePassword(password);
+
+  //   expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+  //   expectLater(sut.mainErrorStream,
+  //       emitsInOrder([UIError.none, UIError.invalidCredentials]));
+
+  //   await sut.auth();
+  // });
+
+  // test('Should emit correct events on UnexpectedError', () async {
+  //   mockAuthenticationError(error: DomainError.unexpected);
+
+  //   sut.validateEmail(email);
+  //   sut.validatePassword(password);
+
+  //   expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+  //   expectLater(
+  //       sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
+
+  //   await sut.auth();
+  // });
+
+  // test('Should call SaveCurrentAccount with correct values', () async {
+  //   sut.validateEmail(email);
+  //   sut.validatePassword(password);
+
+  //   await sut.auth();
+
+  //   verify(saveCurrentAccount.save(AccountEntity(token: token))).called(1);
+  // });
+
+  // test('Should emit UnexpectedError if SaveCurrentAccount fails', () async {
+  //   mockSaveCurrentAccountError();
+
+  //   sut.validateEmail(email);
+  //   sut.validatePassword(password);
+
+  //   expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+  //   expectLater(
+  //       sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
+
+  //   await sut.auth();
+  // });
+
+  // test('Should change page on success success', () async {
+  //   sut.validateEmail(email);
+  //   sut.validatePassword(password);
+
+  //   sut.navigateToStream!.listen(expectAsync1((page) => expect(page, '/home')));
+
+  //   await sut.auth();
+  // });
 }

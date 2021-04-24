@@ -5,7 +5,8 @@ enum UIError {
   invalidCredentials,
   requiredField,
   invalidField,
-  none
+  none,
+  numericOnly
 }
 
 extension UIErrorEtension on UIError {
@@ -16,6 +17,8 @@ extension UIErrorEtension on UIError {
       case UIError.requiredField:
         return R.strings.requiredField;
       case UIError.invalidField:
+        return R.strings.invalidField;
+      case UIError.numericOnly:
         return R.strings.invalidField;
       case UIError.none:
         return null;

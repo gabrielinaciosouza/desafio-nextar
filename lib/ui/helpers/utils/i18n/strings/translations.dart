@@ -3,6 +3,7 @@ abstract class Translations {
   String get invalidField;
   String get requiredField;
   String get unexpected;
+  String get numericOnly;
 
   String get addAccount;
   String get forgotPassword;

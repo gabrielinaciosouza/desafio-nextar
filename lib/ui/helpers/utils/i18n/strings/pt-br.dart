@@ -66,4 +66,7 @@ class PtBr implements Translations {
 
   @override
   String get save => 'Salvar';
+
+  @override
+  String get numericOnly => 'Os campos preço e estoque só aceitam números';
 }
