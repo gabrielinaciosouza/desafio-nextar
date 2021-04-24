@@ -61,7 +61,7 @@ class GetxProductPresenter extends GetxController
   Stream<UIError?>? get nameErrorStream => _nameError.stream;
   Stream<UIError?>? get codeErrorStream => _codeError.stream;
   String get price => _price;
-  set price(String value) => _price;
+  set price(value) => _price = value;
   String get stock => _stock;
   set stock(value) => _stock = value;
   bool get isEditing => _isEditing;
@@ -88,7 +88,7 @@ class GetxProductPresenter extends GetxController
         _code != null;
   }
 
-  Future<void> submit({required String price, required String stock}) async {
+  Future<void> submit() async {
     try {
       mainError = UIError.none;
       if ((!price.isNumericOnly || !stock.isNumericOnly) &&
@@ -163,6 +163,8 @@ void main() {
         creationDate: CustomizableDateTime.current,
         price: price.isEmpty ? null : num.parse(price),
         stock: stock.isEmpty ? null : num.parse(stock));
+    sut.price = price;
+    sut.stock = stock;
   });
   test('Should call Validation with correct value value', () {
     sut.validateName(value);
@@ -272,7 +274,7 @@ void main() {
     sut.validateName(value);
     sut.validateCode(value);
     sut.isEditing = true;
-    await sut.submit(price: price, stock: stock);
+    await sut.submit();
 
     verify(deleteFromCache.delete(value)).called(1);
     verify(saveProduct.save(product)).called(1);
@@ -282,7 +284,7 @@ void main() {
     sut.validateName(value);
     sut.validateCode(value);
     sut.isEditing = false;
-    await sut.submit(price: price, stock: stock);
+    await sut.submit();
 
     verifyNever(deleteFromCache.delete(value));
     verify(saveProduct.save(product)).called(1);
@@ -294,7 +296,7 @@ void main() {
 
     expectLater(sut.isLoadingStream, emits(true));
 
-    await sut.submit(price: price, stock: stock);
+    await sut.submit();
   });
 
   test('Should emit correct events on UnexpectedError', () async {
@@ -307,6 +309,15 @@ void main() {
     expectLater(
         sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
 
-    await sut.submit(price: price, stock: stock);
+    await sut.submit();
+  });
+
+  test('Should change page on success success', () async {
+    sut.validateName(value);
+    sut.validateCode(value);
+
+    sut.navigateToStream!.listen(expectAsync1((page) => expect(page, '/home')));
+
+    await sut.submit();
   });
 }
