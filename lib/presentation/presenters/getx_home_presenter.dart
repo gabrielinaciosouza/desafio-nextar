@@ -13,7 +13,7 @@ class GetxHomePresenter extends GetxController
     implements HomePresenter {
   final LoadProducts loadProductsData;
   final DeleteFromCache deleteProductByCode;
-  final Logoff logoffSession;
+  final DeleteFromCache logoffSession;
   GetxHomePresenter(
       {required this.loadProductsData,
       required this.deleteProductByCode,
@@ -64,7 +64,7 @@ class GetxHomePresenter extends GetxController
     try {
       isLoading = true;
       mainError = UIError.none;
-      await logoffSession.logoff();
+      await logoffSession.delete('token');
       isLoading = false;
       navigateTo = '/login';
     } on DomainError {
@@ -81,6 +81,6 @@ class GetxHomePresenter extends GetxController
 
   @override
   void goToNewProduct() {
-    navigateTo = '/new/product';
+    navigateTo = '/product/new';
   }
 }

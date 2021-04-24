@@ -23,9 +23,11 @@ class DeleteProductSpy extends Mock implements DeleteFromCache {
           returnValueForMissingStub: Future.value());
 }
 
-class LogoffSpy extends Mock implements Logoff {
-  Future<void> logoff() => this.noSuchMethod(Invocation.method(#logoff, []),
-      returnValue: Future.value(), returnValueForMissingStub: Future.value());
+class LogoffSpy extends Mock implements DeleteFromCache {
+  Future<void> delete(String key) =>
+      this.noSuchMethod(Invocation.method(#delete, []),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
 }
 
 void main() {
@@ -51,7 +53,7 @@ void main() {
 
   PostExpectation mockDeleteProductCall() => when(deleteProducts.delete(code));
 
-  PostExpectation mockLogoffCall() => when(logoff.logoff());
+  PostExpectation mockLogoffCall() => when(logoff.delete('token'));
 
   void mockLoadProducts() {
     productList = mockValidProducts();
@@ -137,7 +139,7 @@ void main() {
 
   test('Should call Logoff with correct values', () async {
     await sut.logoff();
-    verify(logoff.logoff()).called(1);
+    verify(logoff.delete('token')).called(1);
   });
 
   test('Should emit correct events on logoff success', () async {
@@ -166,7 +168,7 @@ void main() {
   });
 
   test('Should go to ProductPage on new product click', () async {
-    sut.navigateToStream!.listen((page) => expect(page, '/new/product'));
+    sut.navigateToStream!.listen((page) => expect(page, '/product/new'));
     sut.goToNewProduct();
   });
 }

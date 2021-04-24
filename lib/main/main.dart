@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import './factories/pages/pages.dart';
 
 import '../ui/components/components.dart';
-import 'factories/pages/home/home.dart';
-import 'factories/pages/splash/splash.dart';
 
 void main() {
   runApp(App());
@@ -27,6 +25,14 @@ class App extends StatelessWidget {
             name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
         GetPage(
             name: '/home', page: makeHomePage, transition: Transition.fadeIn),
+        GetPage(
+            name: '/product/:productCode/edit',
+            page: makeProductPage,
+            transition: Transition.fadeIn),
+        GetPage(
+            name: '/product/new',
+            page: makeProductPage,
+            transition: Transition.fadeIn),
       ],
     );
   }
