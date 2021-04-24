@@ -68,4 +68,12 @@ void main() {
 
     verify(local.delete(key));
   });
+
+  test('Should throw if local throws', () async {
+    throwSecureError();
+    throwLocalError();
+    final future = sut.delete(key);
+
+    expect(future, throwsA(TypeMatcher<Exception>()));
+  });
 }
