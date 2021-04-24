@@ -16,7 +16,6 @@ class LocalSaveProduct implements SaveProduct {
       await saveCacheStorage.save(
           key: product.code, value: json.encode(toJson(product)));
     } catch (error) {
-      print(error.toString());
       throw DomainError.unexpected;
     }
   }

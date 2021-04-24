@@ -16,4 +16,10 @@ abstract class Translations {
   String get logoff;
   String get newProduct;
   String get clickToAddProduct;
+  String get addPhoto;
+  String get name;
+  String get code;
+  String get price;
+  String get stock;
+  String get save;
 }

@@ -48,4 +48,22 @@ class PtBr implements Translations {
 
   @override
   String get clickToAddProduct => 'Olá! Clique para começar.';
+
+  @override
+  String get addPhoto => 'Adicione uma foto';
+
+  @override
+  String get name => 'Nome';
+
+  @override
+  String get code => 'Código';
+
+  @override
+  String get price => 'Preço';
+
+  @override
+  String get stock => 'Estoque';
+
+  @override
+  String get save => 'Salvar';
 }
