@@ -137,4 +137,37 @@ void main() {
             of: find.bySemanticsLabel('Nome'), matching: find.byType(Text)),
         findsOneWidget);
   });
+
+  testWidgets('Should present error if code is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    codeErrorController.add(UIError.invalidField);
+    await tester.pump();
+
+    expect(find.text('Campo inválido'), findsOneWidget);
+  });
+
+  testWidgets('Should present error if code is empty',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    codeErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
+  });
+
+  testWidgets('Should present no error if code is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    codeErrorController.add(null);
+    await tester.pump();
+
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel('Código'), matching: find.byType(Text)),
+        findsOneWidget);
+  });
 }
