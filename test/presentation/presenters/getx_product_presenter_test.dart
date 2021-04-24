@@ -272,6 +272,16 @@ void main() {
     verify(saveProduct.save(product)).called(1);
   });
 
+  test('Should call Submit with correct values on Saving', () async {
+    sut.validateName(value);
+    sut.validateCode(value);
+    sut.isEditing = false;
+    await sut.submit(price: price, stock: stock);
+
+    verifyNever(deleteFromCache.delete(value));
+    verify(saveProduct.save(product)).called(1);
+  });
+
   // test('Should emit correct events on Authentication success', () async {
   //   sut.validateEmail(email);
   //   sut.validatePassword(password);
