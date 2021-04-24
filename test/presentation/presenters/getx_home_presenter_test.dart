@@ -108,9 +108,7 @@ void main() {
   test('Should emit correct events on failure', () async {
     mockLoadProductsError();
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.productsStream!.listen(null,
-        onError: expectAsync1(
-            (error) => expect(error, UIError.unexpected.description)));
+    expectLater(sut.mainErrorStream, emits(UIError.unexpected));
 
     await sut.loadProducts();
   });

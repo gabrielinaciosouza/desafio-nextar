@@ -1,8 +1,10 @@
 import 'package:desafio_nextar/ui/helpers/errors/errors.dart';
 
+import 'home.dart';
+
 abstract class HomePresenter {
   Stream<bool?>? get isLoadingStream;
-  Stream<List<dynamic>?>? get productsStream;
+  Stream<List<ProductViewModel>?>? get productsStream;
   Stream<UIError?>? get mainErrorStream;
   Stream<String?>? get navigateToStream;
 

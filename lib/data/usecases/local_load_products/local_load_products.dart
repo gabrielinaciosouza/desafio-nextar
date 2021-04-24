@@ -14,7 +14,7 @@ class LocalLoadProducts implements LoadProducts {
     try {
       final data = await fetchCacheStorage.fetch('products');
       if (data?.isEmpty != false) {
-        throw Exception();
+        return [];
       }
       return data
           .map<ProductEntity>(

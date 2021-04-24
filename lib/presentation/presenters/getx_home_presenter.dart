@@ -19,9 +19,9 @@ class GetxHomePresenter extends GetxController
       required this.deleteProductByCode,
       required this.logoffSession});
 
-  final _products = Rx([]);
+  final _products = Rxn<List<ProductViewModel>>();
 
-  Stream<List<dynamic>?>? get productsStream => _products.stream;
+  Stream<List<ProductViewModel>?>? get productsStream => _products.stream;
 
   Future<void> loadProducts() async {
     try {
@@ -40,7 +40,7 @@ class GetxHomePresenter extends GetxController
           )
           .toList();
     } on DomainError {
-      _products.subject.addError(UIError.unexpected.description!);
+      mainError = UIError.unexpected;
     } finally {
       isLoading = false;
     }

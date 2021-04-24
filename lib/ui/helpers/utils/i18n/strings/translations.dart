@@ -15,4 +15,5 @@ abstract class Translations {
   String get reload;
   String get logoff;
   String get newProduct;
+  String get clickToAddProduct;
 }
