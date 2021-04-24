@@ -9,7 +9,7 @@ import 'components/components.dart';
 import 'product.dart';
 
 class ProductPage extends StatelessWidget
-    with KeyboardManager, CardSizeManager {
+    with KeyboardManager, CardSizeManager, LoadingManager {
   final ProductPresenter presenter;
   ProductPage(this.presenter);
   @override
@@ -24,6 +24,7 @@ class ProductPage extends StatelessWidget
           body: SingleChildScrollView(
             child: Builder(
               builder: (context) {
+                handleLoading(context, presenter.isLoadingStream);
                 return Align(
                   alignment: Alignment.topCenter,
                   child: BaseWidget(builder: (context, sizingInformation) {

@@ -211,4 +211,13 @@ void main() {
 
     verify(presenter.submit()).called(1);
   });
+
+  testWidgets('Should present loading', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isLoadingController.add(true);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
 }
