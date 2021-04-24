@@ -14,6 +14,9 @@ class ProductPresenterSpy extends Mock implements ProductPresenter {
       this.noSuchMethod(Invocation.method(#validateField, []),
           returnValue: Future.value(''),
           returnValueForMissingStub: Future.value(''));
+  @override
+  Future<void> submit() => this.noSuchMethod(Invocation.method(#submit, []),
+      returnValue: Future.value(), returnValueForMissingStub: Future.value());
 }
 
 void main() {
@@ -191,5 +194,21 @@ void main() {
 
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, null);
+  });
+
+  testWidgets('Should call submit on form submit', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pumpAndSettle();
+    ElevatedButton elevatedButton = find
+        .widgetWithText(ElevatedButton, 'Salvar')
+        .evaluate()
+        .first
+        .widget as ElevatedButton;
+    elevatedButton.onPressed!();
+    await tester.pump();
+
+    verify(presenter.submit()).called(1);
   });
 }
