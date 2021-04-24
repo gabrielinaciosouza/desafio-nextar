@@ -27,7 +27,11 @@ class LogoffComposite implements DeleteFromCache {
 
   @override
   Future<void> delete(String code) async {
-    await secure.delete(code);
+    try {
+      await secure.delete(code);
+    } catch (error) {
+      await local.delete(code);
+    }
   }
 }
 
@@ -44,9 +48,24 @@ void main() {
     key = 'token';
   });
 
+  void throwSecureError() {
+    when(secure.delete(key)).thenThrow(Exception());
+  }
+
+  void throwLocalError() {
+    when(local.delete(key)).thenThrow(Exception());
+  }
+
   test('Should call secure delete', () async {
     await sut.delete(key);
 
     verify(secure.delete(key));
+  });
+
+  test('Should call local delete if secure fails', () async {
+    throwSecureError();
+    await sut.delete(key);
+
+    verify(local.delete(key));
   });
 }
