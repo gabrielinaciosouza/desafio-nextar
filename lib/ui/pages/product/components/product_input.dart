@@ -43,7 +43,7 @@ class ProductInput extends StatelessWidget {
                     color: Theme.of(context).primaryColorLight,
                   ),
                 ),
-                onChanged: validate ? presenter.validateField : null,
+                onChanged: validate ? presenter.validateRequiredField : null,
               );
             },
           );
@@ -61,7 +61,7 @@ class ProductInput extends StatelessWidget {
               color: Theme.of(context).primaryColorLight,
             ),
           ),
-          onChanged: validate ? presenter.validateField : null,
+          onChanged: validate ? presenter.validateRequiredField : null,
         );
       },
     );

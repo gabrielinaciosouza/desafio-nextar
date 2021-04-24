@@ -80,7 +80,7 @@ void main() {
     sut.stock = stock;
   });
   test('Should call Validation with correct value value', () {
-    sut.validateName(value);
+    sut.validateRequiredField(value);
     verify(validation.validate(field: 'name', value: value)).called(1);
   });
 
@@ -95,8 +95,7 @@ void main() {
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateName(value);
-    sut.validateName(value);
+    sut.validateRequiredField(value);
   });
 
   test(
@@ -110,22 +109,20 @@ void main() {
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateName(value);
-    sut.validateName(value);
+    sut.validateRequiredField(value);
   });
 
   test('Should emit empty if validation succeeds', () {
     sut.nameErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.none)));
     sut.isFormValidStream!
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+        .listen(expectAsync1((isValid) => expect(isValid, true)));
 
-    sut.validateName(value);
-    sut.validateName(value);
+    sut.validateRequiredField(value);
   });
 
   test('Should call Validation with correct password', () {
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
 
     verify(validation.validate(field: 'code', value: value)).called(1);
   });
@@ -141,8 +138,7 @@ void main() {
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateCode(value);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
   });
 
   test(
@@ -156,18 +152,16 @@ void main() {
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateCode(value);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
   });
 
   test('Should emit empty if validation succeeds', () {
     sut.codeErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.none)));
     sut.isFormValidStream!
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+        .listen(expectAsync1((isValid) => expect(isValid, true)));
 
-    sut.validateCode(value);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
   });
 
   test('Should emit isFormValid true if validations succeeds', () async {
@@ -176,16 +170,13 @@ void main() {
     sut.codeErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.none)));
 
-    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+    expectLater(sut.isFormValidStream, emits(true));
 
-    sut.validateName(value);
-    await Future.delayed(Duration.zero);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
   });
 
   test('Should call Submit with correct values on Editing', () async {
-    sut.validateName(value);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
     sut.isEditing = true;
     await sut.submit();
 
@@ -194,8 +185,7 @@ void main() {
   });
 
   test('Should call Submit with correct values on Saving', () async {
-    sut.validateName(value);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
     sut.isEditing = false;
     await sut.submit();
 
@@ -204,8 +194,7 @@ void main() {
   });
 
   test('Should emit correct events on Submit success', () async {
-    sut.validateName(value);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
 
     expectLater(sut.isLoadingStream, emits(true));
 
@@ -215,8 +204,7 @@ void main() {
   test('Should emit correct events on UnexpectedError', () async {
     mockSubmitError(error: DomainError.unexpected);
 
-    sut.validateName(value);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     expectLater(
@@ -226,8 +214,7 @@ void main() {
   });
 
   test('Should change page on success success', () async {
-    sut.validateName(value);
-    sut.validateCode(value);
+    sut.validateRequiredField(value);
 
     sut.navigateToStream!.listen(expectAsync1((page) => expect(page, '/home')));
 

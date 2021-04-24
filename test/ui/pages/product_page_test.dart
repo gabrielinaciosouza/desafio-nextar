@@ -10,7 +10,7 @@ import 'package:desafio_nextar/ui/pages/pages.dart';
 
 class ProductPresenterSpy extends Mock implements ProductPresenter {
   @override
-  Future<void> validateField(String field) =>
+  Future<void> validateRequiredField(String field) =>
       this.noSuchMethod(Invocation.method(#validateField, []),
           returnValue: Future.value(''),
           returnValueForMissingStub: Future.value(''));
@@ -46,10 +46,6 @@ void main() {
         .thenAnswer((_) => nameErrorController.stream);
     when(presenter.codeErrorStream)
         .thenAnswer((_) => codeErrorController.stream);
-    when(presenter.priceErrorStream)
-        .thenAnswer((_) => priceErrorController.stream);
-    when(presenter.stockErrorStream)
-        .thenAnswer((_) => stockErrorController.stream);
     when(presenter.isFormValidStream)
         .thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream)
@@ -101,11 +97,11 @@ void main() {
 
     final name = 'any_name';
     await tester.enterText(find.bySemanticsLabel('Nome'), name);
-    verify(presenter.validateField(name));
+    verify(presenter.validateRequiredField(name));
 
     final code = 'any_code';
     await tester.enterText(find.bySemanticsLabel('Código'), code);
-    verify(presenter.validateField(code));
+    verify(presenter.validateRequiredField(code));
   });
 
   testWidgets('Should present error if name is invalid',

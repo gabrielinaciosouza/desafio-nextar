@@ -8,3 +8,4 @@ export './local_delete_product_factory.dart';
 export './local_load_products_factory.dart';
 export './local_logoff_factory.dart';
 export './local_secure_logoff_factory.dart';
+export './local_save_product_factory.dart';

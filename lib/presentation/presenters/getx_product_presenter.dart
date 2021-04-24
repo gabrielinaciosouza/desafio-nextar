@@ -1,3 +1,4 @@
+import 'package:desafio_nextar/ui/pages/pages.dart';
 import 'package:get/get.dart';
 
 import '../../domain/entities/entities.dart';
@@ -15,7 +16,8 @@ class GetxProductPresenter extends GetxController
         ValidateFieldManager,
         UIErrorManager,
         LoadingManager,
-        NavigationManager {
+        NavigationManager
+    implements ProductPresenter {
   final Validation validation;
   final SaveProduct saveProduct;
   final DeleteFromCache deleteFromCache;
@@ -43,14 +45,10 @@ class GetxProductPresenter extends GetxController
   bool get isEditing => _isEditing;
   set isEditing(value) => _isEditing = value;
 
-  void validateName(String value) {
+  void validateRequiredField(String value) {
     _name = value;
     _nameError.value =
         validateField(field: 'name', value: value, validation: validation);
-    _validateForm();
-  }
-
-  void validateCode(String value) {
     _code = value;
     _codeError.value =
         validateField(field: 'code', value: value, validation: validation);
