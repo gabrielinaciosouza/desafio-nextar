@@ -41,18 +41,33 @@ class GetxProductPresenter extends GetxController
   GetxProductPresenter({required this.validation});
 
   String? _name;
-  var _nameError = Rx<UIError>(UIError.none);
-  Stream<UIError?>? get nameErrorStream => _nameError.stream;
+  String? _code;
 
-  void validateFields(String value) {
+  var _nameError = Rx<UIError>(UIError.none);
+  var _codeError = Rx<UIError>(UIError.none);
+
+  Stream<UIError?>? get nameErrorStream => _nameError.stream;
+  Stream<UIError?>? get codeErrorStream => _codeError.stream;
+
+  void validateName(String value) {
     _name = value;
     _nameError.value =
-        validateField(field: 'any_field', value: value, validation: validation);
+        validateField(field: 'name', value: value, validation: validation);
+    _validateForm();
+  }
+
+  void validateCode(String value) {
+    _code = value;
+    _codeError.value =
+        validateField(field: 'code', value: value, validation: validation);
     _validateForm();
   }
 
   _validateForm() {
-    isFormValid = _nameError.value == UIError.none;
+    isFormValid = _nameError.value == UIError.none &&
+        _codeError.value == UIError.none &&
+        _name != null &&
+        _code != null;
   }
 }
 
@@ -60,7 +75,6 @@ void main() {
   late GetxProductPresenter sut;
   late ValidationSpy validation;
   late String value;
-  late String field;
 
   void mockValidation({
     required String value,
@@ -74,40 +88,89 @@ void main() {
     validation = ValidationSpy();
     sut = GetxProductPresenter(validation: validation);
     value = 'any_value';
-    field = 'any_field';
   });
   test('Should call Validation with correct value value', () {
-    sut.validateFields(value);
-    verify(validation.validate(field: field, value: value)).called(1);
+    sut.validateName(value);
+    verify(validation.validate(field: 'name', value: value)).called(1);
   });
 
   test(
       'Should emit name error if validation returns ValidationError.invalidField',
       () {
     mockValidation(
-        field: field, value: value, error: ValidationError.invalidField);
+        field: 'name', value: value, error: ValidationError.invalidField);
 
     sut.nameErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateFields(value);
-    sut.validateFields(value);
+    sut.validateName(value);
+    sut.validateName(value);
   });
 
   test(
       'Should emit name error if validation return ValidationError.requiredField',
       () {
     mockValidation(
-        field: field, value: value, error: ValidationError.requiredField);
+        field: 'name', value: value, error: ValidationError.requiredField);
 
     sut.nameErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateFields(value);
-    sut.validateFields(value);
+    sut.validateName(value);
+    sut.validateName(value);
+  });
+
+  test('Should emit empty if validation succeeds', () {
+    sut.nameErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.none)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateName(value);
+    sut.validateName(value);
+  });
+
+  test(
+      'Should emit code error if validation returns ValidationError.invalidField',
+      () {
+    mockValidation(
+        field: 'code', value: value, error: ValidationError.invalidField);
+
+    sut.codeErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateCode(value);
+    sut.validateCode(value);
+  });
+
+  test(
+      'Should emit code error if validation return ValidationError.requiredField',
+      () {
+    mockValidation(
+        field: 'code', value: value, error: ValidationError.requiredField);
+
+    sut.codeErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateCode(value);
+    sut.validateCode(value);
+  });
+
+  test('Should emit empty if validation succeeds', () {
+    sut.codeErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.none)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateCode(value);
+    sut.validateCode(value);
   });
 }
