@@ -282,14 +282,14 @@ void main() {
     verify(saveProduct.save(product)).called(1);
   });
 
-  // test('Should emit correct events on Authentication success', () async {
-  //   sut.validateEmail(email);
-  //   sut.validatePassword(password);
+  test('Should emit correct events on Submit success', () async {
+    sut.validateName(value);
+    sut.validateCode(value);
 
-  //   expectLater(sut.isLoadingStream, emits(true));
+    expectLater(sut.isLoadingStream, emits(true));
 
-  //   await sut.auth();
-  // });
+    await sut.submit(price: price, stock: stock);
+  });
 
   // test('Should emit correct events on InvalidCredentialsError', () async {
   //   mockAuthenticationError(error: DomainError.invalidCredentials);
