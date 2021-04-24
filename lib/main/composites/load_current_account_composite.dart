@@ -1,10 +1,9 @@
-import '../../data/usecases/load_current_account/load_current_account.dart';
 import '../../domain/entities/entities.dart';
 import '../../domain/usecases/usecases.dart';
 
 class LoadCurrentAccountComposite implements LoadCurrentAccount {
-  final SecureLocalLoadCurrentAccount secure;
-  final LocalLoadCurrentAccount local;
+  final LoadCurrentAccount secure;
+  final LoadCurrentAccount local;
 
   LoadCurrentAccountComposite({
     required this.secure,

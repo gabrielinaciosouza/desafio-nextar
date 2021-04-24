@@ -1,5 +1,7 @@
+import 'package:desafio_nextar/main/factories/usecases/usecases.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../presentation/presenters/presenters.dart';
 import '../../../../ui/helpers/helpers.dart';
 import '../../../../ui/pages/home/home.dart';
 
@@ -8,6 +10,12 @@ Widget makeHomePage() {
     presenter: FakePresenter(),
   );
 }
+
+// HomePresenter makeHomePresenter() => GetxHomePresenter(
+//   deleteProductByCode: makeLocalDeleteProduct(),
+//   loadProductsData: makeLocalLoadProducts(),
+//   logoffSession:
+// );
 
 class FakePresenter implements HomePresenter {
   //just for compile
