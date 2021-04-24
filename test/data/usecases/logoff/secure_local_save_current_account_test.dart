@@ -1,9 +1,9 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:desafio_nextar/data/usecases/logoff/local_logoff.dart';
 import 'package:desafio_nextar/data/cache/cache.dart';
 import 'package:desafio_nextar/domain/helpers/helpers.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
 
 class LogoffCacheStorageSpy extends Mock implements DeleteCacheStorage {
   @override
@@ -15,21 +15,6 @@ class LogoffCacheStorageSpy extends Mock implements DeleteCacheStorage {
         ),
         returnValue: Future.value(),
         returnValueForMissingStub: Future.value());
-  }
-}
-
-class LocalLogoff implements DeleteFromCache {
-  final DeleteCacheStorage deleteCacheStorage;
-
-  LocalLogoff({required this.deleteCacheStorage});
-
-  @override
-  Future<void> delete(String key) async {
-    try {
-      await deleteCacheStorage.delete(key: key);
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
   }
 }
 
