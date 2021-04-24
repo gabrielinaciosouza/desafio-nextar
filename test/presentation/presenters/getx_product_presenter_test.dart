@@ -139,6 +139,12 @@ void main() {
     when(validation.validate(field: field, value: value)).thenReturn(error);
   }
 
+  PostExpectation submitCall() => when(saveProduct.save(product));
+
+  void mockSubmitError({required DomainError error}) {
+    submitCall().thenThrow(error);
+  }
+
   setUp(() {
     validation = ValidationSpy();
     deleteFromCache = DeleteFromCacheSpy();
@@ -291,60 +297,16 @@ void main() {
     await sut.submit(price: price, stock: stock);
   });
 
-  // test('Should emit correct events on InvalidCredentialsError', () async {
-  //   mockAuthenticationError(error: DomainError.invalidCredentials);
+  test('Should emit correct events on UnexpectedError', () async {
+    mockSubmitError(error: DomainError.unexpected);
 
-  //   sut.validateEmail(email);
-  //   sut.validatePassword(password);
+    sut.validateName(value);
+    sut.validateCode(value);
 
-  //   expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-  //   expectLater(sut.mainErrorStream,
-  //       emitsInOrder([UIError.none, UIError.invalidCredentials]));
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(
+        sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
 
-  //   await sut.auth();
-  // });
-
-  // test('Should emit correct events on UnexpectedError', () async {
-  //   mockAuthenticationError(error: DomainError.unexpected);
-
-  //   sut.validateEmail(email);
-  //   sut.validatePassword(password);
-
-  //   expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-  //   expectLater(
-  //       sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
-
-  //   await sut.auth();
-  // });
-
-  // test('Should call SaveCurrentAccount with correct values', () async {
-  //   sut.validateEmail(email);
-  //   sut.validatePassword(password);
-
-  //   await sut.auth();
-
-  //   verify(saveCurrentAccount.save(AccountEntity(token: token))).called(1);
-  // });
-
-  // test('Should emit UnexpectedError if SaveCurrentAccount fails', () async {
-  //   mockSaveCurrentAccountError();
-
-  //   sut.validateEmail(email);
-  //   sut.validatePassword(password);
-
-  //   expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-  //   expectLater(
-  //       sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
-
-  //   await sut.auth();
-  // });
-
-  // test('Should change page on success success', () async {
-  //   sut.validateEmail(email);
-  //   sut.validatePassword(password);
-
-  //   sut.navigateToStream!.listen(expectAsync1((page) => expect(page, '/home')));
-
-  //   await sut.auth();
-  // });
+    await sut.submit(price: price, stock: stock);
+  });
 }
