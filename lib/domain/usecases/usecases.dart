@@ -4,4 +4,4 @@ export './load_current_account.dart';
 export './load_products.dart';
 export 'logoff.dart';
 export './save_products.dart';
-export './delete_product.dart';
+export 'delete.dart';

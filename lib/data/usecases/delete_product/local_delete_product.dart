@@ -3,7 +3,7 @@ import '../../cache/cache.dart';
 import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/usecases.dart';
 
-class LocalDeleteProduct implements DeleteProduct {
+class LocalDeleteProduct implements DeleteFromCache {
   final DeleteCacheStorage deleteCacheStorage;
   LocalDeleteProduct({required this.deleteCacheStorage});
 

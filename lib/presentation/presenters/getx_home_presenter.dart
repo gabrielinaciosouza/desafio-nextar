@@ -12,7 +12,7 @@ class GetxHomePresenter extends GetxController
     with NavigationManager, LoadingManager, UIErrorManager
     implements HomePresenter {
   final LoadProducts loadProductsData;
-  final DeleteProduct deleteProductByCode;
+  final DeleteFromCache deleteProductByCode;
   final Logoff logoffSession;
   GetxHomePresenter(
       {required this.loadProductsData,

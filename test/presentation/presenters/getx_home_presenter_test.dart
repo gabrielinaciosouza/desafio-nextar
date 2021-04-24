@@ -16,7 +16,7 @@ class LoadProductsSpy extends Mock implements LoadProducts {
           returnValueForMissingStub: Future.value(_list));
 }
 
-class DeleteProductSpy extends Mock implements DeleteProduct {
+class DeleteProductSpy extends Mock implements DeleteFromCache {
   Future<void> delete(String code) =>
       this.noSuchMethod(Invocation.method(#delete, []),
           returnValue: Future.value(),

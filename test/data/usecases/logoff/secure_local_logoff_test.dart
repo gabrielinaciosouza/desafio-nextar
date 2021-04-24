@@ -18,9 +18,9 @@ class LogoffSecureCacheStorageSpy extends Mock
   }
 }
 
-class LocalSecureDeleteProduct implements DeleteProduct {
+class LocalSecureLogoff implements DeleteFromCache {
   final DeleteSecureCacheStorage deleteSecureCacheStorage;
-  LocalSecureDeleteProduct({required this.deleteSecureCacheStorage});
+  LocalSecureLogoff({required this.deleteSecureCacheStorage});
 
   @override
   Future<void> delete(String code) async {
@@ -34,7 +34,7 @@ class LocalSecureDeleteProduct implements DeleteProduct {
 
 void main() {
   late LogoffSecureCacheStorageSpy logoffSecureCacheStorage;
-  late LocalSecureDeleteProduct sut;
+  late LocalSecureLogoff sut;
   late String key;
 
   PostExpectation mockSaveSecureCacheStorageCall() =>
@@ -47,8 +47,7 @@ void main() {
   setUp(() {
     key = 'token';
     logoffSecureCacheStorage = LogoffSecureCacheStorageSpy();
-    sut = LocalSecureDeleteProduct(
-        deleteSecureCacheStorage: logoffSecureCacheStorage);
+    sut = LocalSecureLogoff(deleteSecureCacheStorage: logoffSecureCacheStorage);
   });
 
   test('Should call SaveSecureCacheStorage with correct values', () async {
