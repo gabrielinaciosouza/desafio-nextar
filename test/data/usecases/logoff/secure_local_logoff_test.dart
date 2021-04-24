@@ -1,8 +1,10 @@
-import 'package:desafio_nextar/data/cache/cache.dart';
-import 'package:desafio_nextar/domain/helpers/helpers.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+
+import 'package:desafio_nextar/data/cache/cache.dart';
+import 'package:desafio_nextar/data/usecases/logoff/logoff.dart';
+
+import 'package:desafio_nextar/domain/helpers/helpers.dart';
 
 class LogoffSecureCacheStorageSpy extends Mock
     implements DeleteSecureCacheStorage {
@@ -15,20 +17,6 @@ class LogoffSecureCacheStorageSpy extends Mock
         ),
         returnValue: Future.value(),
         returnValueForMissingStub: Future.value());
-  }
-}
-
-class LocalSecureLogoff implements DeleteFromCache {
-  final DeleteSecureCacheStorage deleteSecureCacheStorage;
-  LocalSecureLogoff({required this.deleteSecureCacheStorage});
-
-  @override
-  Future<void> delete(String code) async {
-    try {
-      return await deleteSecureCacheStorage.deleteSecure(key: code);
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
   }
 }
 
