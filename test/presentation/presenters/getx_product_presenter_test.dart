@@ -95,4 +95,19 @@ void main() {
     sut.validateFields(value);
     sut.validateFields(value);
   });
+
+  test(
+      'Should emit name error if validation return ValidationError.requiredField',
+      () {
+    mockValidation(
+        field: field, value: value, error: ValidationError.requiredField);
+
+    sut.nameErrorStream!
+        .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream!
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateFields(value);
+    sut.validateFields(value);
+  });
 }
