@@ -104,4 +104,14 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Código'), code);
     verify(presenter.validateField(code));
   });
+
+  testWidgets('Should present error if name is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    nameErrorController.add(UIError.invalidField);
+    await tester.pump();
+
+    expect(find.text('Campo inválido'), findsOneWidget);
+  });
 }

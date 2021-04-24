@@ -59,6 +59,8 @@ class ProductPage extends StatelessWidget
                             ProductInput(
                               icon: Icons.check_circle,
                               labelText: R.strings.name,
+                              validate: true,
+                              stream: presenter.nameErrorStream,
                             ),
                             SizedBox(
                               height: height * .02,
@@ -66,6 +68,8 @@ class ProductPage extends StatelessWidget
                             ProductInput(
                               icon: Icons.code,
                               labelText: R.strings.code,
+                              validate: true,
+                              stream: presenter.codeErrorStream,
                             ),
                             SizedBox(
                               height: height * .02,
