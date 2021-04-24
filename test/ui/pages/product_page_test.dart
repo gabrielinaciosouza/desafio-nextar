@@ -170,4 +170,15 @@ void main() {
             of: find.bySemanticsLabel('Código'), matching: find.byType(Text)),
         findsOneWidget);
   });
+
+  testWidgets('Should enable button if form is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pump();
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, isNotNull);
+  });
 }
