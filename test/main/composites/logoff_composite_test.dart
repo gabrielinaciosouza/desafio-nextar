@@ -1,7 +1,8 @@
-import 'package:desafio_nextar/data/usecases/usecases.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+
+import 'package:desafio_nextar/data/usecases/usecases.dart';
+import 'package:desafio_nextar/main/composites/composites.dart';
 
 class LocalSecureLogoffSpy extends Mock implements LocalSecureLogoff {
   @override
@@ -17,22 +18,6 @@ class LocalLogoffSpy extends Mock implements LocalLogoff {
       this.noSuchMethod(Invocation.method(#delete, [key]),
           returnValue: Future.value(),
           returnValueForMissingStub: Future.value());
-}
-
-class LogoffComposite implements DeleteFromCache {
-  DeleteFromCache secure;
-  DeleteFromCache local;
-
-  LogoffComposite({required this.local, required this.secure});
-
-  @override
-  Future<void> delete(String code) async {
-    try {
-      await secure.delete(code);
-    } catch (error) {
-      await local.delete(code);
-    }
-  }
 }
 
 void main() {
