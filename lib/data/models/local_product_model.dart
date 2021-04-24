@@ -22,8 +22,8 @@ class LocalProductModel {
         name: json['name'],
         code: json['code'],
         creationDate: DateTime.parse(json['creationDate']),
-        price: num.parse(json['price']),
-        stock: num.parse(json['stock']));
+        price: json['price'] != 'null' ? num.parse(json['price']) : null,
+        stock: json['stock'] != 'null' ? num.parse(json['stock']) : null);
   }
 
   ProductEntity toEntity() => ProductEntity(

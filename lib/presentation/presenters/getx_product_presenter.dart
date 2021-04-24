@@ -82,7 +82,8 @@ class GetxProductPresenter extends GetxController
         await deleteFromCache.delete(_code!);
       }
       await saveProduct.save(product);
-      navigateTo = '/home';
+      isLoading = false;
+      Get.back();
     } on DomainError {
       mainError = UIError.unexpected;
     }
