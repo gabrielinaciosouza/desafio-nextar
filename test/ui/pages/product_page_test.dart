@@ -114,4 +114,14 @@ void main() {
 
     expect(find.text('Campo inválido'), findsOneWidget);
   });
+
+  testWidgets('Should present error if name is empty',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    nameErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
+  });
 }
