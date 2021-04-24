@@ -8,7 +8,12 @@ import '../../ui/helpers/helpers.dart';
 import '../protocols/protocols.dart';
 
 class GetxLoginPresenter extends GetxController
-    with LoadingManager, FormManager, UIErrorManager, NavigationManager
+    with
+        LoadingManager,
+        FormManager,
+        UIErrorManager,
+        NavigationManager,
+        ValidateFieldManager
     implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
@@ -30,13 +35,15 @@ class GetxLoginPresenter extends GetxController
 
   void validateEmail(String email) {
     _email = email;
-    _emailError.value = _validateField(field: 'email', value: email);
+    _emailError.value =
+        validateField(field: 'email', value: email, validation: validation);
     _validateForm();
   }
 
   void validatePassword(String password) {
     _password = password;
-    _passwordError.value = _validateField(field: 'password', value: password);
+    _passwordError.value = validateField(
+        field: 'password', value: password, validation: validation);
     _validateForm();
   }
 
@@ -45,20 +52,6 @@ class GetxLoginPresenter extends GetxController
         _passwordError.value == UIError.none &&
         _email != null &&
         _password != null;
-  }
-
-  UIError _validateField({String? field, String? value}) {
-    final error = validation.validate(field: field, value: value);
-    switch (error) {
-      case ValidationError.invalidField:
-        return UIError.invalidField;
-      case ValidationError.requiredField:
-        return UIError.requiredField;
-      case ValidationError.none:
-        return UIError.none;
-      default:
-        return UIError.none;
-    }
   }
 
   Future<void> auth() async {
