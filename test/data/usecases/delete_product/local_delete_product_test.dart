@@ -18,8 +18,32 @@ class DeleteCacheStorageSpy extends Mock implements DeleteCacheStorage {
   }
 }
 
+class SaveCacheStorageSpy extends Mock implements SaveCacheStorage {
+  @override
+  Future<void> save({required String key, required String value}) {
+    return this.noSuchMethod(
+        Invocation.method(
+          #save,
+          [key, value],
+        ),
+        returnValue: Future.value(),
+        returnValueForMissingStub: Future.value());
+  }
+}
+
+class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
+  @override
+  Future<String> fetch(String key) => this.noSuchMethod(
+        Invocation.method(#fetch, [key]),
+        returnValue: Future.value(''),
+        returnValueForMissingStub: Future.value(''),
+      );
+}
+
 void main() {
   late DeleteCacheStorageSpy deleteCacheStorage;
+  late FetchCacheStorageSpy fetchCacheStorage;
+  late SaveCacheStorageSpy saveCacheStorage;
   late LocalDeleteProduct sut;
   late String key;
 
@@ -32,13 +56,32 @@ void main() {
 
   setUp(() {
     deleteCacheStorage = DeleteCacheStorageSpy();
-    sut = LocalDeleteProduct(deleteCacheStorage: deleteCacheStorage);
+    fetchCacheStorage = FetchCacheStorageSpy();
+    saveCacheStorage = SaveCacheStorageSpy();
+    sut = LocalDeleteProduct(
+        deleteCacheStorage: deleteCacheStorage,
+        fetchCacheStorage: fetchCacheStorage,
+        saveCacheStorage: saveCacheStorage);
     key = 'any_key';
   });
   test('Should call DeleteCacheStorage with correct values', () async {
     await sut.delete(key);
 
     verify(deleteCacheStorage.delete(key: key));
+  });
+
+  test('Should call FetchCacheStorage with correct values', () async {
+    await sut.delete(key);
+
+    verify(fetchCacheStorage.fetch('products'));
+  });
+
+  test('Should save correct product list', () async {
+    when(fetchCacheStorage.fetch('products'))
+        .thenAnswer((_) async => '123,1234,12345,any_key');
+    await sut.delete(key);
+
+    verify(saveCacheStorage.save(key: 'products', value: '123,1234,12345'));
   });
 
   test('Should throw unexpected error if DeleteCacheStorage thorws', () async {

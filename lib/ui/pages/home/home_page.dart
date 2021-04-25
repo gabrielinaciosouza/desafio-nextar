@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'home.dart';
 import 'home_presenter.dart';
 import '../../helpers/helpers.dart';
+import '../../components/components.dart';
 import '../../mixins/mixins.dart';
 import '../../pages/home/components/components.dart';
 
@@ -15,12 +16,23 @@ class HomePage extends StatelessWidget with LoadingManager, NavigationManager {
   Widget build(BuildContext context) {
     presenter.loadProducts();
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          GestureDetector(
+            onTap: presenter.logoff,
+            child: ResponsiveHeadline6(
+              color: Theme.of(context).accentColor,
+              text: R.strings.logoff,
+            ),
+          ),
+        ],
+      ),
       body: InheritedProvider(
         create: (context) => presenter,
         child: Builder(
           builder: (context) {
             handleLoading(context, presenter.isLoadingStream);
-            handleNavigation(presenter.navigateToStream);
+            handleNavigation(presenter.navigateToStream, clear: true);
             return StreamBuilder<List<ProductViewModel>?>(
               stream: presenter.productsStream,
               builder: (context, snapshot) {
@@ -40,10 +52,6 @@ class HomePage extends StatelessWidget with LoadingManager, NavigationManager {
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * .02,
-                                ),
-                                ElevatedButton(
-                                  onPressed: presenter.goToNewProduct,
-                                  child: Text(R.strings.newProduct),
                                 ),
                                 HomeAvatar(presenter: presenter),
                                 SizedBox(

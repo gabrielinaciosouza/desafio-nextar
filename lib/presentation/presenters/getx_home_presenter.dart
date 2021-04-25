@@ -52,6 +52,7 @@ class GetxHomePresenter extends GetxController
       isLoading = true;
       mainError = UIError.none;
       await deleteProductByCode.delete(code);
+      await loadProducts();
     } on DomainError {
       mainError = UIError.unexpected;
     } finally {

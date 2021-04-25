@@ -15,7 +15,10 @@ abstract class ProductPresenter {
   bool get isEditing;
   set isEditing(value);
 
-  void validateRequiredField(String value);
+  void validateName(String value);
+  void validateCode(String value);
+
+  void goToHomePage();
 
   Future<void> submit();
 }

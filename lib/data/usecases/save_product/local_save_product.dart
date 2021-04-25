@@ -8,11 +8,25 @@ import '../../../domain/usecases/usecases.dart';
 
 class LocalSaveProduct implements SaveProduct {
   final SaveCacheStorage saveCacheStorage;
+  final FetchCacheStorage fetchCacheStorage;
 
-  LocalSaveProduct({required this.saveCacheStorage});
+  LocalSaveProduct(
+      {required this.saveCacheStorage, required this.fetchCacheStorage});
   @override
   Future<void> save(ProductEntity product) async {
     try {
+      final products = await fetchCacheStorage.fetch('products');
+      String result = product.code;
+      if (products != null && products.isNotEmpty) {
+        List<String> productsList = products.split(',');
+        if (productsList.contains(product.code)) {
+          throw DomainError.duplicatedCode;
+        }
+        if (productsList.length != 0) {
+          result = '$products,${product.code}';
+        }
+      }
+      await saveCacheStorage.save(key: 'products', value: result);
       await saveCacheStorage.save(
           key: product.code, value: json.encode(toJson(product)));
     } catch (error) {

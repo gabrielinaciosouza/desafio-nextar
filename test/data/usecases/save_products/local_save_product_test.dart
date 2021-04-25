@@ -15,13 +15,23 @@ class SaveCacheStorageSpy extends Mock implements SaveCacheStorage {
           #save,
           [key, value],
         ),
-        returnValue: Future.value(),
-        returnValueForMissingStub: Future.value());
+        returnValue: Future.value(''),
+        returnValueForMissingStub: Future.value(''));
   }
+}
+
+class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
+  @override
+  Future<String> fetch(String key) => this.noSuchMethod(
+        Invocation.method(#fetch, [key]),
+        returnValue: Future.value(''),
+        returnValueForMissingStub: Future.value(''),
+      );
 }
 
 void main() {
   late SaveCacheStorageSpy saveCacheStorage;
+  late FetchCacheStorageSpy fetchCacheStorage;
   late LocalSaveProduct sut;
   late ProductEntity product;
 
@@ -37,7 +47,10 @@ void main() {
 
   setUp(() {
     saveCacheStorage = SaveCacheStorageSpy();
-    sut = LocalSaveProduct(saveCacheStorage: saveCacheStorage);
+    fetchCacheStorage = FetchCacheStorageSpy();
+    sut = LocalSaveProduct(
+        saveCacheStorage: saveCacheStorage,
+        fetchCacheStorage: fetchCacheStorage);
     product = mockValidProduct();
   });
   test('Should call SaveCacheStorage with correct values', () async {
@@ -45,6 +58,27 @@ void main() {
 
     verify(saveCacheStorage.save(
         key: product.code, value: json.encode(sut.toJson(product))));
+  });
+
+  test('Should call FetchCacheStorage with correct values', () async {
+    await sut.save(product);
+
+    verify(fetchCacheStorage.fetch('products'));
+  });
+
+  test('Should save correct product list values', () async {
+    await sut.save(product);
+
+    verify(saveCacheStorage.save(key: 'products', value: product.code));
+  });
+
+  test('Should save correct product list values when has data in memory',
+      () async {
+    when(fetchCacheStorage.fetch('products'))
+        .thenAnswer((_) async => '123,1234');
+    await sut.save(product);
+
+    verify(saveCacheStorage.save(key: 'products', value: '123,1234,any_code'));
   });
 
   test('Should throw unexpected error if SaveCacheStorage thorws', () async {

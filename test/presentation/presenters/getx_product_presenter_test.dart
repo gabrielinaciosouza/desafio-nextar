@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -39,7 +40,8 @@ void main() {
   late ValidationSpy validation;
   late DeleteFromCacheSpy deleteFromCache;
   late SaveProductSpy saveProduct;
-  late String value;
+  late String code;
+  late String name;
   late String price;
   late String stock;
   late ProductEntity product;
@@ -59,6 +61,7 @@ void main() {
   }
 
   setUp(() {
+    Get.testMode = true;
     validation = ValidationSpy();
     deleteFromCache = DeleteFromCacheSpy();
     saveProduct = SaveProductSpy();
@@ -66,102 +69,113 @@ void main() {
         validation: validation,
         deleteFromCache: deleteFromCache,
         saveProduct: saveProduct);
-    value = 'any_value';
+    code = 'any_value';
+    name = 'any_name';
     price = '10';
     stock = '20';
     CustomizableDateTime.customTime = DateTime.parse("1969-07-20 20:18:04");
     product = ProductEntity(
-        name: value,
-        code: value,
+        name: name,
+        code: code,
         creationDate: CustomizableDateTime.current,
         price: price.isEmpty ? null : num.parse(price),
         stock: stock.isEmpty ? null : num.parse(stock));
     sut.price = price;
     sut.stock = stock;
   });
-  test('Should call Validation with correct value value', () {
-    sut.validateRequiredField(value);
-    verify(validation.validate(field: 'name', value: value)).called(1);
+  test('Should call Validation code with correct value value', () {
+    sut.validateCode(code);
+    verify(validation.validate(field: 'code', value: code)).called(1);
+  });
+
+  test('Should call Validation name with correct value value', () {
+    sut.validateCode(code);
+    verify(validation.validate(field: 'code', value: code)).called(1);
   });
 
   test(
       'Should emit name error if validation returns ValidationError.invalidField',
       () {
     mockValidation(
-        field: 'name', value: value, error: ValidationError.invalidField);
+        field: 'name', value: name, error: ValidationError.invalidField);
 
     sut.nameErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateRequiredField(value);
+    sut.validateName(name);
   });
 
   test(
       'Should emit name error if validation return ValidationError.requiredField',
       () {
     mockValidation(
-        field: 'name', value: value, error: ValidationError.requiredField);
+        field: 'name', value: name, error: ValidationError.requiredField);
 
     sut.nameErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateRequiredField(value);
+    sut.validateName(name);
   });
 
   test('Should emit empty if validation succeeds', () {
     sut.nameErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.none)));
     sut.isFormValidStream!
-        .listen(expectAsync1((isValid) => expect(isValid, true)));
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateRequiredField(value);
+    sut.validateName(name);
+    sut.validateName(name);
   });
 
   test('Should call Validation with correct password', () {
-    sut.validateRequiredField(value);
+    sut.validateCode(code);
+    sut.validateName(name);
 
-    verify(validation.validate(field: 'code', value: value)).called(1);
+    verify(validation.validate(field: 'code', value: code)).called(1);
   });
 
   test(
       'Should emit code error if validation returns ValidationError.invalidField',
       () {
     mockValidation(
-        field: 'code', value: value, error: ValidationError.invalidField);
+        field: 'code', value: code, error: ValidationError.invalidField);
 
     sut.codeErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateRequiredField(value);
+    sut.validateCode(code);
+    sut.validateName(name);
   });
 
   test(
       'Should emit code error if validation return ValidationError.requiredField',
       () {
     mockValidation(
-        field: 'code', value: value, error: ValidationError.requiredField);
+        field: 'code', value: code, error: ValidationError.requiredField);
 
     sut.codeErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.requiredField)));
     sut.isFormValidStream!
         .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateRequiredField(value);
+    sut.validateCode(code);
+    sut.validateName(name);
   });
 
   test('Should emit empty if validation succeeds', () {
     sut.codeErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.none)));
     sut.isFormValidStream!
-        .listen(expectAsync1((isValid) => expect(isValid, true)));
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateRequiredField(value);
+    sut.validateCode(code);
+    sut.validateCode(code);
   });
 
   test('Should emit isFormValid true if validations succeeds', () async {
@@ -170,31 +184,36 @@ void main() {
     sut.codeErrorStream!
         .listen(expectAsync1((error) => expect(error, UIError.none)));
 
-    expectLater(sut.isFormValidStream, emits(true));
+    expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
-    sut.validateRequiredField(value);
+    sut.validateName(name);
+    await Future.delayed(Duration.zero);
+    sut.validateCode(code);
   });
 
   test('Should call Submit with correct values on Editing', () async {
-    sut.validateRequiredField(value);
+    sut.validateName(name);
+    sut.validateCode(code);
     sut.isEditing = true;
     await sut.submit();
 
-    verify(deleteFromCache.delete(value)).called(1);
-    verify(saveProduct.save(product)).called(1);
+    verify(deleteFromCache.delete(code)).called(1);
+    verify(saveProduct.save(product));
   });
 
   test('Should call Submit with correct values on Saving', () async {
-    sut.validateRequiredField(value);
+    sut.validateCode(code);
+    sut.validateName(name);
     sut.isEditing = false;
     await sut.submit();
 
-    verifyNever(deleteFromCache.delete(value));
+    verifyNever(deleteFromCache.delete(code));
     verify(saveProduct.save(product)).called(1);
   });
 
   test('Should emit correct events on Submit success', () async {
-    sut.validateRequiredField(value);
+    sut.validateCode(code);
+    sut.validateName(name);
 
     expectLater(sut.isLoadingStream, emits(true));
 
@@ -204,7 +223,8 @@ void main() {
   test('Should emit correct events on UnexpectedError', () async {
     mockSubmitError(error: DomainError.unexpected);
 
-    sut.validateRequiredField(value);
+    sut.validateCode(code);
+    sut.validateName(name);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     expectLater(
@@ -213,8 +233,9 @@ void main() {
     await sut.submit();
   });
 
-  test('Should change page on success success', () async {
-    sut.validateRequiredField(value);
+  test('Should return on success', () async {
+    sut.validateCode(code);
+    sut.validateName(name);
 
     sut.navigateToStream!.listen(expectAsync1((page) => expect(page, '/home')));
 

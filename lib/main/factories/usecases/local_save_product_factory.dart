@@ -4,5 +4,7 @@ import '../../../domain/usecases/usecases.dart';
 import '../factories.dart';
 
 SaveProduct makeLocalSaveProduct() {
-  return LocalSaveProduct(saveCacheStorage: makeLocalStorageAdapter());
+  return LocalSaveProduct(
+      saveCacheStorage: makeLocalStorageAdapter(),
+      fetchCacheStorage: makeLocalStorageAdapter());
 }

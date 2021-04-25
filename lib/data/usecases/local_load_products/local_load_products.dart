@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../../domain/helpers/helpers.dart';
 import '../../../domain/entities/entities.dart';
 
@@ -16,11 +18,20 @@ class LocalLoadProducts implements LoadProducts {
       if (data?.isEmpty != false) {
         return [];
       }
-      return data
-          .map<ProductEntity>(
-              (json) => LocalProductModel.fromJson(json).toEntity())
-          .toList();
+      final productList = data.split(',');
+
+      List<ProductEntity> productEntityList = [];
+      for (String product in productList) {
+        final res = await fetchCacheStorage.fetch(product);
+
+        if (res != null) {
+          productEntityList
+              .add(LocalProductModel.fromJson(json.decode(res)).toEntity());
+        }
+      }
+      return productEntityList;
     } catch (error) {
+      print(error.toString());
       throw DomainError.unexpected;
     }
   }

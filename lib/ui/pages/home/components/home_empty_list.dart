@@ -11,37 +11,23 @@ class HomeEmptyList extends StatelessWidget {
     final presenter = Provider.of<HomePresenter>(context);
     return Container(
       padding: EdgeInsets.all(20),
-      child: Stack(
-        children: [
-          GestureDetector(
-            onTap: presenter.logoff,
-            child: Align(
-              alignment: Alignment.topRight,
-              child: ResponsiveHeadline6(
-                color: Theme.of(context).accentColor,
-                text: R.strings.logoff,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ResponsiveHeadline6(
+              color: Theme.of(context).accentColor,
+              text: R.strings.clickToAddProduct,
+            ),
+            ElevatedButton(
+              onPressed: presenter.goToNewProduct,
+              child: Text(
+                R.strings.newProduct,
               ),
             ),
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ResponsiveHeadline6(
-                  color: Theme.of(context).accentColor,
-                  text: R.strings.clickToAddProduct,
-                ),
-                ElevatedButton(
-                  onPressed: presenter.goToNewProduct,
-                  child: Text(
-                    R.strings.newProduct,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

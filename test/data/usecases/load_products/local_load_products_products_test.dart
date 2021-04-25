@@ -9,37 +9,24 @@ import 'package:desafio_nextar/domain/helpers/domain_error.dart';
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
   Future<void> fetch(String key) =>
       this.noSuchMethod(Invocation.method(#fetch, [key]),
-          returnValue: Future.value(),
-          returnValueForMissingStub: Future.value());
+          returnValue: Future.value('123'),
+          returnValueForMissingStub: Future.value('123'));
 }
 
 void main() {
   late FetchCacheStorageSpy fetchCacheStorage;
   late LocalLoadProducts sut;
-  List<Map>? data;
-
-  List<Map> mockValidData() => [
-        {
-          'name': 'any_name',
-          'price': '20',
-          'stock': '10',
-          'code': 'any_code',
-          'creationDate': '2021-04-20T00:00:00Z',
-        },
-        {
-          'name': 'any_name2',
-          'price': '30',
-          'stock': '15',
-          'code': 'any_code2',
-          'creationDate': '2021-04-21T00:00:00Z',
-        }
-      ];
 
   PostExpectation mockFetchCall() => when(fetchCacheStorage.fetch('products'));
 
-  void mockFetch(List<Map>? list) {
-    data = list;
-    mockFetchCall().thenAnswer((_) async => list);
+  PostExpectation mockFetchCall2() => when(fetchCacheStorage.fetch('any_code'));
+
+  void mockFetch(String? value) {
+    mockFetchCall().thenAnswer((_) async => value);
+  }
+
+  void mockFetch2(String? value) {
+    mockFetchCall2().thenAnswer((_) async => value);
   }
 
   void mockFetchError() => mockFetchCall().thenThrow(Exception());
@@ -47,7 +34,9 @@ void main() {
   setUp(() {
     fetchCacheStorage = FetchCacheStorageSpy();
     sut = LocalLoadProducts(fetchCacheStorage: fetchCacheStorage);
-    mockFetch(mockValidData());
+    mockFetch('any_code');
+    mockFetch2(
+        '{"name":"123","code":"1234","creationDate":"2021-04-25T17:27:28.933953","price":"12345","stock":"123456"}');
   });
 
   test('Should call FetchCacheStorage with correct key', () async {
@@ -61,22 +50,16 @@ void main() {
 
     expect(products, [
       ProductEntity(
-          name: data![0]['name'],
-          code: data![0]['code'],
-          creationDate: DateTime.parse(data![0]['creationDate']!),
-          price: num.parse(data![0]['price']!),
-          stock: num.parse(data![0]['stock']!)),
-      ProductEntity(
-          name: data![1]['name'],
-          code: data![1]['code'],
-          creationDate: DateTime.parse(data![1]['creationDate']!),
-          price: num.parse(data![1]['price']!),
-          stock: num.parse(data![1]['stock']!))
+          name: '123',
+          code: '1234',
+          creationDate: DateTime.parse('2021-04-25T17:27:28.933953'),
+          price: num.parse('12345'),
+          stock: num.parse('123456'))
     ]);
   });
 
   test('Should return empty list if cache is empty', () async {
-    mockFetch([]);
+    mockFetch('');
     final emptyList = await sut.load();
 
     expect(emptyList, []);
@@ -90,27 +73,14 @@ void main() {
   });
 
   test('Should throw UnexpectedError if cache is invalid', () async {
-    mockFetch([
-      {
-        'name': 'any_name',
-        'price': 'invalid_price',
-        'stock': 'invalid_stock',
-        'code': 'any_code',
-        'creationDate': 'invalid_date',
-      }
-    ]);
+    mockFetch2('{"invalid": "20"}');
     final future = sut.load();
 
     expect(future, throwsA(DomainError.unexpected));
   });
 
   test('Should throw UnexpectedError if cache is incomplete', () async {
-    mockFetch([
-      {
-        'price': '20',
-        'stock': '10',
-      }
-    ]);
+    mockFetch('{"price": "20"}');
     final future = sut.load();
 
     expect(future, throwsA(DomainError.unexpected));

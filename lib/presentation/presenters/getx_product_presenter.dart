@@ -45,10 +45,15 @@ class GetxProductPresenter extends GetxController
   bool get isEditing => _isEditing;
   set isEditing(value) => _isEditing = value;
 
-  void validateRequiredField(String value) {
+  void validateName(String value) {
     _name = value;
     _nameError.value =
         validateField(field: 'name', value: value, validation: validation);
+
+    _validateForm();
+  }
+
+  void validateCode(String value) {
     _code = value;
     _codeError.value =
         validateField(field: 'code', value: value, validation: validation);
@@ -81,13 +86,19 @@ class GetxProductPresenter extends GetxController
       if (isEditing) {
         await deleteFromCache.delete(_code!);
       }
+      print(product.toString());
       await saveProduct.save(product);
       isLoading = false;
-      Get.back();
+      navigateTo = '/home';
     } on DomainError {
       mainError = UIError.unexpected;
     }
     isLoading = false;
+  }
+
+  @override
+  void goToHomePage() {
+    navigateTo = '/home';
   }
 }
 

@@ -13,17 +13,25 @@ class HomeAvatar extends StatelessWidget {
         alignment: Alignment.topRight,
         child: Column(
           children: [
-            CircleAvatar(
-              radius: 30,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.asset(
-                  'lib/ui/assets/avatar.png',
-                  fit: BoxFit.cover,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: presenter.goToNewProduct,
+                  child: Text(R.strings.newProduct),
                 ),
-              ),
+                CircleAvatar(
+                  radius: 30,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.asset(
+                      'lib/ui/assets/avatar.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Text(R.strings.logoff)
           ],
         ),
       ),

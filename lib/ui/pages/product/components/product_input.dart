@@ -43,13 +43,20 @@ class ProductInput extends StatelessWidget {
                     color: Theme.of(context).primaryColorLight,
                   ),
                 ),
-                onChanged: validate ? presenter.validateRequiredField : null,
+                onChanged: validate
+                    ? labelText == R.strings.code
+                        ? presenter.validateCode
+                        : presenter.validateName
+                    : null,
               );
             },
           );
         }
         return TextFormField(
           keyboardType: keyboardType,
+          onChanged: labelText == R.strings.price
+              ? (value) => presenter.price = value
+              : (value) => presenter.stock = value,
           style:
               theme.textTheme.bodyText2!.apply(color: theme.primaryColorLight),
           decoration: InputDecoration(
@@ -61,7 +68,6 @@ class ProductInput extends StatelessWidget {
               color: Theme.of(context).primaryColorLight,
             ),
           ),
-          onChanged: validate ? presenter.validateRequiredField : null,
         );
       },
     );

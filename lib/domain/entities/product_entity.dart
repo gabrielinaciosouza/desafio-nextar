@@ -15,5 +15,5 @@ class ProductEntity extends Equatable {
       required this.creationDate});
 
   @override
-  List<Object?> get props => [name, price, stock, code, creationDate];
+  List get props => [name, price, stock, code, creationDate];
 }

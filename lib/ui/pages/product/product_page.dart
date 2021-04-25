@@ -26,12 +26,19 @@ class ProductPage extends StatelessWidget
       child: InheritedProvider(
         create: (context) => presenter,
         child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back,
+                  color: Theme.of(context).primaryColorLight),
+              onPressed: () => presenter.goToHomePage(),
+            ),
+          ),
           body: SingleChildScrollView(
             child: Builder(
               builder: (context) {
                 handleLoading(context, presenter.isLoadingStream);
                 handleMainError(context, presenter.mainErrorStream);
-                handleNavigation(presenter.navigateToStream);
+                handleNavigation(presenter.navigateToStream, clear: true);
                 return Align(
                   alignment: Alignment.topCenter,
                   child: BaseWidget(builder: (context, sizingInformation) {
@@ -43,7 +50,7 @@ class ProductPage extends StatelessWidget
                         child: Column(
                           children: [
                             SizedBox(
-                              height: height * .15,
+                              height: height * .01,
                             ),
                             ResponsiveHeadline6(
                               color: Theme.of(context).primaryColorLight,
