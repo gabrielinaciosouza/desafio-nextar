@@ -216,6 +216,7 @@ void main() {
     sut.validateName(name);
     sut.validateCode(code);
     sut.isEditing = true;
+    sut.productCode = product.code;
     await sut.submit();
 
     verify(deleteFromCache.delete(code)).called(1);

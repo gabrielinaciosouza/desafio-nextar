@@ -91,7 +91,7 @@ class GetxProductPresenter extends GetxController
           price: price.isEmpty ? null : num.parse(price),
           stock: stock.isEmpty ? null : num.parse(stock));
       if (isEditing) {
-        await deleteFromCache.delete(_code!);
+        await deleteFromCache.delete(productCode!);
       }
       await saveProduct.save(product);
       isLoading = false;
@@ -112,9 +112,15 @@ class GetxProductPresenter extends GetxController
     try {
       isLoading = true;
       mainError = UIError.none;
+
       if (productCode != null && productCode != '') {
         isEditing = true;
         product = await loadProductByCode.load(productCode!);
+        _code = product!.code;
+        _name = product!.name;
+        price = product!.price.toString();
+        stock = product!.stock.toString();
+        isFormValid = true;
       }
     } catch (error) {
       mainError = UIError.unexpected;

@@ -41,14 +41,14 @@ void main() {
   late StreamController<bool> isLoadingController;
 
   void initStreams() {
-    nameErrorController = StreamController<UIError?>();
-    codeErrorController = StreamController<UIError?>();
-    priceErrorController = StreamController<UIError?>();
-    stockErrorController = StreamController<UIError?>();
-    mainErrorController = StreamController<UIError>();
-    navigateToController = StreamController<String>();
-    isFormValidController = StreamController<bool>();
-    isLoadingController = StreamController<bool>();
+    nameErrorController = StreamController<UIError?>.broadcast();
+    codeErrorController = StreamController<UIError?>.broadcast();
+    priceErrorController = StreamController<UIError?>.broadcast();
+    stockErrorController = StreamController<UIError?>.broadcast();
+    mainErrorController = StreamController<UIError>.broadcast();
+    navigateToController = StreamController<String>.broadcast();
+    isFormValidController = StreamController<bool>.broadcast();
+    isLoadingController = StreamController<bool>.broadcast();
   }
 
   void mockStreams() {

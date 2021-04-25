@@ -8,15 +8,29 @@ import '../../mixins/mixins.dart';
 import 'components/components.dart';
 import 'product.dart';
 
-class ProductPage extends StatelessWidget
+class ProductPage extends StatefulWidget {
+  final ProductPresenter presenter;
+  ProductPage(this.presenter);
+
+  @override
+  _ProductPageState createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage>
     with
         KeyboardManager,
         CardSizeManager,
         LoadingManager,
         UIErrorManager,
         NavigationManager {
-  final ProductPresenter presenter;
-  ProductPage(this.presenter);
+  @override
+  void initState() {
+    widget.presenter.loadProduct().then((value) {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -24,22 +38,22 @@ class ProductPage extends StatelessWidget
     return GestureDetector(
       onTap: () => hideKeyboard(context),
       child: InheritedProvider(
-        create: (context) => presenter,
+        create: (context) => widget.presenter,
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back,
                   color: Theme.of(context).primaryColorLight),
-              onPressed: () => presenter.goToHomePage(),
+              onPressed: () => widget.presenter.goToHomePage(),
             ),
           ),
           body: SingleChildScrollView(
             child: Builder(
               builder: (context) {
-                presenter.loadProduct();
-                handleLoading(context, presenter.isLoadingStream);
-                handleMainError(context, presenter.mainErrorStream);
-                handleNavigation(presenter.navigateToStream, clear: true);
+                handleLoading(context, widget.presenter.isLoadingStream);
+                handleMainError(context, widget.presenter.mainErrorStream);
+                handleNavigation(widget.presenter.navigateToStream,
+                    clear: true);
                 return Align(
                   alignment: Alignment.topCenter,
                   child: BaseWidget(builder: (context, sizingInformation) {
@@ -72,37 +86,19 @@ class ProductPage extends StatelessWidget
                             SizedBox(
                               height: height * .07,
                             ),
-                            ProductInput(
-                              icon: Icons.check_circle,
-                              labelText: R.strings.name,
-                              validate: true,
-                              stream: presenter.nameErrorStream,
-                            ),
+                            ProductNameInput(),
                             SizedBox(
                               height: height * .02,
                             ),
-                            ProductInput(
-                              icon: Icons.code,
-                              labelText: R.strings.code,
-                              validate: true,
-                              stream: presenter.codeErrorStream,
-                            ),
+                            ProductCodeInput(),
                             SizedBox(
                               height: height * .02,
                             ),
-                            ProductInput(
-                              icon: Icons.attach_money,
-                              labelText: R.strings.price,
-                              keyboardType: TextInputType.number,
-                            ),
+                            ProductPriceInput(),
                             SizedBox(
                               height: height * .02,
                             ),
-                            ProductInput(
-                              icon: Icons.archive,
-                              labelText: R.strings.stock,
-                              keyboardType: TextInputType.number,
-                            ),
+                            ProductStockInput(),
                             SizedBox(
                               height: height * .07,
                             ),
