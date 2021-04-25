@@ -263,9 +263,15 @@ void main() {
     await sut.submit();
   });
 
-  test('Should call LoadProduct code with correct value value', () {
+  test('Should call LoadProduct code with correct value value', () async {
     sut.productCode = product.code;
-    sut.loadProduct();
+    await sut.loadProduct();
     verify(loadProduct.load(product.code));
+  });
+
+  test('Should return ProductEntity on success', () async {
+    sut.productCode = product.code;
+    await sut.loadProduct();
+    expect(sut.product, product);
   });
 }

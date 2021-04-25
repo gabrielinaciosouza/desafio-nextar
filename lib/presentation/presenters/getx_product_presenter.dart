@@ -39,6 +39,7 @@ class GetxProductPresenter extends GetxController
 
   var _nameError = Rx<UIError>(UIError.none);
   var _codeError = Rx<UIError>(UIError.none);
+  ProductEntity? _product;
 
   Stream<UIError?>? get nameErrorStream => _nameError.stream;
   Stream<UIError?>? get codeErrorStream => _codeError.stream;
@@ -48,6 +49,8 @@ class GetxProductPresenter extends GetxController
   set stock(value) => _stock = value;
   bool get isEditing => _isEditing;
   set isEditing(value) => _isEditing = value;
+  ProductEntity? get product => _product;
+  set product(value) => _product = value;
 
   void validateName(String value) {
     _name = value;
@@ -105,8 +108,8 @@ class GetxProductPresenter extends GetxController
   }
 
   @override
-  void loadProduct() {
-    loadProductByCode.load(productCode!);
+  Future<void> loadProduct() async {
+    product = await loadProductByCode.load(productCode!);
   }
 }
 

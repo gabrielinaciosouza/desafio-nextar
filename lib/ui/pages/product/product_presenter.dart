@@ -1,3 +1,5 @@
+import '../../../domain/entities/entities.dart';
+
 import '../../helpers/helpers.dart';
 
 abstract class ProductPresenter {
@@ -15,11 +17,14 @@ abstract class ProductPresenter {
   bool get isEditing;
   set isEditing(value);
 
+  ProductEntity? get product;
+  set product(value);
+
   void validateName(String value);
   void validateCode(String value);
 
   void goToHomePage();
-  void loadProduct();
+  Future<void> loadProduct();
 
   Future<void> submit();
 }
