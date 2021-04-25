@@ -280,4 +280,10 @@ void main() {
     await sut.loadProduct();
     verifyNever(loadProduct.load(''));
   });
+
+  test('Should turn isEditing to true if productCode is not empty', () async {
+    sut.productCode = product.code;
+    await sut.loadProduct();
+    expect(sut.isEditing, true);
+  });
 }
