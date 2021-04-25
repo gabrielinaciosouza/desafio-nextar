@@ -19,6 +19,7 @@ abstract class ProductPresenter {
   void validateCode(String value);
 
   void goToHomePage();
+  void loadProduct();
 
   Future<void> submit();
 }

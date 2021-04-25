@@ -35,9 +35,18 @@ class SaveProductSpy extends Mock implements SaveProduct {
           returnValueForMissingStub: Future.value());
 }
 
+class LoadProductSpy extends Mock implements LoadProduct {
+  @override
+  Future<ProductEntity> load(String productCode) =>
+      this.noSuchMethod(Invocation.method(#save, [productCode]),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
+}
+
 void main() {
   late GetxProductPresenter sut;
   late ValidationSpy validation;
+  late LoadProductSpy loadProduct;
   late DeleteFromCacheSpy deleteFromCache;
   late SaveProductSpy saveProduct;
   late String code;
@@ -55,6 +64,11 @@ void main() {
   }
 
   PostExpectation submitCall() => when(saveProduct.save(product));
+  PostExpectation loadProductCall() => when(loadProduct.load(product.code));
+
+  void mockLoadProduct() {
+    loadProductCall().thenAnswer((realInvocation) async => product);
+  }
 
   void mockSubmitError({required DomainError error}) {
     submitCall().thenThrow(error);
@@ -65,10 +79,13 @@ void main() {
     validation = ValidationSpy();
     deleteFromCache = DeleteFromCacheSpy();
     saveProduct = SaveProductSpy();
+    loadProduct = LoadProductSpy();
     sut = GetxProductPresenter(
         validation: validation,
         deleteFromCache: deleteFromCache,
-        saveProduct: saveProduct);
+        saveProduct: saveProduct,
+        loadProductByCode: loadProduct,
+        productCode: null);
     code = 'any_value';
     name = 'any_name';
     price = '10';
@@ -82,6 +99,7 @@ void main() {
         stock: stock.isEmpty ? null : num.parse(stock));
     sut.price = price;
     sut.stock = stock;
+    mockLoadProduct();
   });
   test('Should call Validation code with correct value value', () {
     sut.validateCode(code);
@@ -240,5 +258,10 @@ void main() {
     sut.navigateToStream!.listen(expectAsync1((page) => expect(page, '/home')));
 
     await sut.submit();
+  });
+
+  test('Should call LoadProduct code with correct value value', () {
+    sut.productCode = product.code;
+    verify(loadProduct.load(product.code)).called(1);
   });
 }

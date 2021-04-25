@@ -21,11 +21,15 @@ class GetxProductPresenter extends GetxController
   final Validation validation;
   final SaveProduct saveProduct;
   final DeleteFromCache deleteFromCache;
+  final LoadProduct loadProductByCode;
+  String? productCode;
 
   GetxProductPresenter(
       {required this.validation,
       required this.deleteFromCache,
-      required this.saveProduct});
+      required this.saveProduct,
+      required this.loadProductByCode,
+      required this.productCode});
 
   String? _name;
   String? _code;
@@ -99,6 +103,11 @@ class GetxProductPresenter extends GetxController
   @override
   void goToHomePage() {
     navigateTo = '/home';
+  }
+
+  @override
+  void loadProduct() {
+    loadProductByCode.load(productCode!);
   }
 }
 
