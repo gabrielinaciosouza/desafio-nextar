@@ -36,6 +36,7 @@ class ProductPage extends StatelessWidget
           body: SingleChildScrollView(
             child: Builder(
               builder: (context) {
+                presenter.loadProduct();
                 handleLoading(context, presenter.isLoadingStream);
                 handleMainError(context, presenter.mainErrorStream);
                 handleNavigation(presenter.navigateToStream, clear: true);

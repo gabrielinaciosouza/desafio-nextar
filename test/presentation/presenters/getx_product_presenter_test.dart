@@ -286,4 +286,15 @@ void main() {
     await sut.loadProduct();
     expect(sut.isEditing, true);
   });
+
+  test('Should present error if loadProduct fails', () {
+    loadProductCall().thenThrow(Exception());
+    sut.productCode = product.code;
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(
+        sut.mainErrorStream, emitsInOrder([UIError.none, UIError.unexpected]));
+
+    sut.loadProduct();
+  });
 }

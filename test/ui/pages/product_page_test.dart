@@ -22,6 +22,11 @@ class ProductPresenterSpy extends Mock implements ProductPresenter {
   @override
   Future<void> submit() => this.noSuchMethod(Invocation.method(#submit, []),
       returnValue: Future.value(), returnValueForMissingStub: Future.value());
+  @override
+  Future<void> loadProduct() =>
+      this.noSuchMethod(Invocation.method(#loadProduct, []),
+          returnValue: Future.value(),
+          returnValueForMissingStub: Future.value());
 }
 
 void main() {
@@ -107,6 +112,8 @@ void main() {
     final code = 'any_code';
     await tester.enterText(find.bySemanticsLabel('Código'), code);
     verify(presenter.validateCode(code));
+
+    verify(presenter.loadProduct());
   });
 
   testWidgets('Should present error if name is invalid',
