@@ -274,4 +274,10 @@ void main() {
     await sut.loadProduct();
     expect(sut.product, product);
   });
+
+  test('Should never call LoadProduct if productCode is empty', () async {
+    sut.productCode = '';
+    await sut.loadProduct();
+    verifyNever(loadProduct.load(''));
+  });
 }

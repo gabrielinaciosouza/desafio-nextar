@@ -109,7 +109,9 @@ class GetxProductPresenter extends GetxController
 
   @override
   Future<void> loadProduct() async {
-    product = await loadProductByCode.load(productCode!);
+    if (productCode != null && productCode != '') {
+      product = await loadProductByCode.load(productCode!);
+    }
   }
 }
 
