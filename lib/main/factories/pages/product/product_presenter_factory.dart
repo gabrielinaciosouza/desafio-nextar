@@ -3,9 +3,11 @@ import '../../factories.dart';
 import '../../../../presentation/presenters/presenters.dart';
 import '../../../../ui/pages/pages.dart';
 
-ProductPresenter makeGetxProductPresenter() {
+ProductPresenter makeGetxProductPresenter(String? productCode) {
   return GetxProductPresenter(
       validation: makeProductValidation(),
       deleteFromCache: makeLocalDeleteProduct(),
-      saveProduct: makeLocalSaveProduct());
+      saveProduct: makeLocalSaveProduct(),
+      loadProductByCode: makeLocalLoadProduct(),
+      productCode: productCode);
 }

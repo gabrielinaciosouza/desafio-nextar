@@ -26,7 +26,7 @@ class App extends StatelessWidget {
         GetPage(
             name: '/home', page: makeHomePage, transition: Transition.fadeIn),
         GetPage(
-            name: '/product/:productCode/edit',
+            name: '/product/:product_code/edit',
             page: makeProductPage,
             transition: Transition.fadeIn),
         GetPage(

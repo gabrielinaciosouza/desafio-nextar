@@ -1,12 +1,9 @@
-import 'dart:convert';
-
-import 'package:desafio_nextar/data/models/models.dart';
-import 'package:desafio_nextar/data/usecases/local_load_products/local_load_products.dart';
-import 'package:desafio_nextar/domain/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'package:desafio_nextar/data/cache/cache.dart';
+import 'package:desafio_nextar/data/usecases/usecases.dart';
+
 import 'package:desafio_nextar/domain/entities/entities.dart';
 import 'package:desafio_nextar/domain/helpers/domain_error.dart';
 
@@ -15,24 +12,6 @@ class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {
       this.noSuchMethod(Invocation.method(#fetch, [key]),
           returnValue: Future.value('123'),
           returnValueForMissingStub: Future.value('123'));
-}
-
-class LocalLoadProduct implements LoadProduct {
-  final FetchCacheStorage fetchCacheStorage;
-
-  LocalLoadProduct({required this.fetchCacheStorage});
-  @override
-  Future<ProductEntity?> load(String code) async {
-    try {
-      final String product = await fetchCacheStorage.fetch(code) ?? '';
-
-      if (product.isNotEmpty) {
-        return LocalProductModel.fromJson(json.decode(product)).toEntity();
-      }
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
 }
 
 void main() {
