@@ -31,7 +31,6 @@ class LocalLoadProducts implements LoadProducts {
       }
       return productEntityList;
     } catch (error) {
-      print(error.toString());
       throw DomainError.unexpected;
     }
   }

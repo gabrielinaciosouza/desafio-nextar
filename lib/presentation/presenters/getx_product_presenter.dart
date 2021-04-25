@@ -90,7 +90,6 @@ class GetxProductPresenter extends GetxController
       if (isEditing) {
         await deleteFromCache.delete(_code!);
       }
-      print(product.toString());
       await saveProduct.save(product);
       isLoading = false;
       navigateTo = '/home';

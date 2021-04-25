@@ -36,11 +36,13 @@ class SaveProductSpy extends Mock implements SaveProduct {
 }
 
 class LoadProductSpy extends Mock implements LoadProduct {
+  final ProductEntity productEntity;
+  LoadProductSpy({required this.productEntity});
   @override
   Future<ProductEntity> load(String productCode) =>
       this.noSuchMethod(Invocation.method(#save, [productCode]),
-          returnValue: Future.value(),
-          returnValueForMissingStub: Future.value());
+          returnValue: Future.value(productEntity),
+          returnValueForMissingStub: Future.value(productEntity));
 }
 
 void main() {
@@ -76,16 +78,6 @@ void main() {
 
   setUp(() {
     Get.testMode = true;
-    validation = ValidationSpy();
-    deleteFromCache = DeleteFromCacheSpy();
-    saveProduct = SaveProductSpy();
-    loadProduct = LoadProductSpy();
-    sut = GetxProductPresenter(
-        validation: validation,
-        deleteFromCache: deleteFromCache,
-        saveProduct: saveProduct,
-        loadProductByCode: loadProduct,
-        productCode: null);
     code = 'any_value';
     name = 'any_name';
     price = '10';
@@ -97,6 +89,17 @@ void main() {
         creationDate: CustomizableDateTime.current,
         price: price.isEmpty ? null : num.parse(price),
         stock: stock.isEmpty ? null : num.parse(stock));
+    validation = ValidationSpy();
+    deleteFromCache = DeleteFromCacheSpy();
+    saveProduct = SaveProductSpy();
+    loadProduct = LoadProductSpy(productEntity: product);
+    sut = GetxProductPresenter(
+        validation: validation,
+        deleteFromCache: deleteFromCache,
+        saveProduct: saveProduct,
+        loadProductByCode: loadProduct,
+        productCode: null);
+
     sut.price = price;
     sut.stock = stock;
     mockLoadProduct();
@@ -262,6 +265,7 @@ void main() {
 
   test('Should call LoadProduct code with correct value value', () {
     sut.productCode = product.code;
-    verify(loadProduct.load(product.code)).called(1);
+    sut.loadProduct();
+    verify(loadProduct.load(product.code));
   });
 }
