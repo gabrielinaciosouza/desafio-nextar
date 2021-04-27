@@ -1,6 +1,6 @@
 import 'dart:io';
 
-abstract class PickImage {
+abstract class LocalPickImage {
   Future<File?> pickFromCamera();
   Future<File?> pickFromDevice();
 }

@@ -9,7 +9,7 @@ class LocalImagePicker implements PickImage {
 
   LocalImagePicker({required this.localPickImage});
   @override
-  Future<File> pickFromCamera() async {
+  Future<File?> pickFromCamera() async {
     try {
       return await localPickImage.pickFromCamera();
     } catch (error) {
@@ -18,7 +18,7 @@ class LocalImagePicker implements PickImage {
   }
 
   @override
-  Future<File> pickFromDevice() async {
+  Future<File?> pickFromDevice() async {
     try {
       return await localPickImage.pickFromDevice();
     } catch (error) {
