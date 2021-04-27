@@ -1,10 +1,9 @@
 import 'dart:io';
-
-import 'package:image_picker/image_picker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/data/image/image.dart';
+import 'package:desafio_nextar/infra/image/image.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ImagePickerSpy extends Mock implements ImagePicker {
   final PickedFile pickedFile;
@@ -27,30 +26,6 @@ class ImagePickerSpy extends Mock implements ImagePicker {
           ]),
           returnValue: Future.value(pickedFile),
           returnValueForMissingStub: Future.value(pickedFile));
-}
-
-class ImagePickerAdapter implements LocalPickImage {
-  final ImagePicker picker;
-
-  ImagePickerAdapter({required this.picker});
-
-  @override
-  Future<File?> pickFromCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      return File(pickedFile.path);
-    }
-    return Future.value();
-  }
-
-  @override
-  Future<File?> pickFromDevice() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      return File(pickedFile.path);
-    }
-    return Future.value();
-  }
 }
 
 void main() {
