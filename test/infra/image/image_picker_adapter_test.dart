@@ -59,7 +59,7 @@ void main() {
   late PickedFile pickedFile;
 
   setUp(() {
-    pickedFile = PickedFile('');
+    pickedFile = PickedFile('any_path');
     imagePicker = ImagePickerSpy(pickedFile: pickedFile);
     sut = ImagePickerAdapter(picker: imagePicker);
   });
@@ -70,6 +70,20 @@ void main() {
 
     verify(imagePicker.getImage(source: ImageSource.gallery));
     verify(imagePicker.getImage(source: ImageSource.camera));
+  });
+
+  test('Should return a file on success', () async {
+    final file = await sut.pickFromCamera();
+
+    expect(file, TypeMatcher<File>());
+    expect('any_path', file!.path);
+  });
+
+  test('Should return a file on success', () async {
+    final file = await sut.pickFromDevice();
+
+    expect(file, TypeMatcher<File>());
+    expect('any_path', file!.path);
   });
 
   test('Should throw if ImagePicker throws', () async {
