@@ -1,28 +1,11 @@
 import 'dart:io';
-
-import 'package:desafio_nextar/domain/usecases/pick_image.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-abstract class LocalPickImage {
-  Future<File> pickFromCamera();
-  Future<File> pickFromDevice();
-}
+import 'package:desafio_nextar/data/cache/cache.dart';
+import 'package:desafio_nextar/data/usecases/usecases.dart';
 
-class LocalImagePicker implements PickImage {
-  LocalPickImage localPickImage;
-
-  LocalImagePicker({required this.localPickImage});
-  @override
-  Future<File> pickFromCamera() async {
-    return await localPickImage.pickFromCamera();
-  }
-
-  @override
-  Future<File> pickFromDevice() async {
-    return await localPickImage.pickFromDevice();
-  }
-}
+import 'package:desafio_nextar/domain/helpers/domain_error.dart';
 
 class LocalPickImageSpy extends Mock implements LocalPickImage {
   final File file;
@@ -63,5 +46,19 @@ void main() {
 
     expect(returnedFile, file);
     expect(returnedFile2, file);
+  });
+
+  test('Should throw unexpected if LocalPickImage fails camera', () async {
+    when(localPickImage.pickFromCamera()).thenThrow(Exception());
+    final future = sut.pickFromCamera();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw unexpected if LocalPickImage fails device', () async {
+    when(localPickImage.pickFromDevice()).thenThrow(Exception());
+    final future = sut.pickFromDevice();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
