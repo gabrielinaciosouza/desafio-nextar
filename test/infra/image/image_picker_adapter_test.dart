@@ -30,7 +30,6 @@ class ImagePickerSpy extends Mock implements ImagePicker {
 }
 
 class ImagePickerAdapter implements LocalPickImage {
-  late File _image;
   final ImagePicker picker;
 
   ImagePickerAdapter({required this.picker});
@@ -39,7 +38,7 @@ class ImagePickerAdapter implements LocalPickImage {
   Future<File?> pickFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      _image = File(pickedFile.path);
+      return File(pickedFile.path);
     }
     return Future.value();
   }
@@ -48,7 +47,7 @@ class ImagePickerAdapter implements LocalPickImage {
   Future<File?> pickFromDevice() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      _image = File(pickedFile.path);
+      return File(pickedFile.path);
     }
     return Future.value();
   }
@@ -71,5 +70,23 @@ void main() {
 
     verify(imagePicker.getImage(source: ImageSource.gallery));
     verify(imagePicker.getImage(source: ImageSource.camera));
+  });
+
+  test('Should throw if ImagePicker throws', () async {
+    when(imagePicker.getImage(source: ImageSource.gallery))
+        .thenThrow(Exception());
+
+    final future = sut.pickFromDevice();
+
+    expect(future, throwsA(TypeMatcher<Exception>()));
+  });
+
+  test('Should throw if ImagePicker throws', () async {
+    when(imagePicker.getImage(source: ImageSource.camera))
+        .thenThrow(Exception());
+
+    final future = sut.pickFromCamera();
+
+    expect(future, throwsA(TypeMatcher<Exception>()));
   });
 }
