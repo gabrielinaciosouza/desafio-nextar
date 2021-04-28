@@ -7,12 +7,12 @@ import 'splash_presenter.dart';
 class SplashPage extends StatelessWidget with NavigationManager {
   final SplashPresenter presenter;
 
-  SplashPage({required this.presenter});
+  SplashPage({required this.presenter}) {
+    presenter.checkAccount();
+  }
 
   @override
   Widget build(BuildContext context) {
-    presenter.checkAccount();
-
     return Scaffold(
       body: Builder(builder: (context) {
         handleNavigation(presenter.navigateToStream, clear: true);

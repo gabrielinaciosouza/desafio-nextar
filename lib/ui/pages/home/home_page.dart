@@ -11,10 +11,11 @@ import '../../pages/home/components/components.dart';
 class HomePage extends StatelessWidget with LoadingManager, NavigationManager {
   final HomePresenter presenter;
 
-  HomePage({required this.presenter});
+  HomePage({required this.presenter}) {
+    presenter.loadProducts();
+  }
   @override
   Widget build(BuildContext context) {
-    presenter.loadProducts();
     return Scaffold(
       appBar: AppBar(
         actions: [

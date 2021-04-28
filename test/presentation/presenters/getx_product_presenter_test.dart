@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -27,6 +29,20 @@ class DeleteFromCacheSpy extends Mock implements DeleteFromCache {
           returnValueForMissingStub: Future.value());
 }
 
+class PickImageSpy extends Mock implements PickImage {
+  @override
+  Future<File?> pickFromCamera() =>
+      this.noSuchMethod(Invocation.method(#pickFromCamera, []),
+          returnValue: Future.value(File('any_path')),
+          returnValueForMissingStub: Future.value(File('any_path')));
+
+  @override
+  Future<File?> pickFromDevice() =>
+      this.noSuchMethod(Invocation.method(#pickFromDevice, []),
+          returnValue: Future.value(File('any_path')),
+          returnValueForMissingStub: Future.value(File('any_path')));
+}
+
 class SaveProductSpy extends Mock implements SaveProduct {
   @override
   Future<void> save(ProductEntity product) =>
@@ -47,6 +63,7 @@ class LoadProductSpy extends Mock implements LoadProduct {
 
 void main() {
   late GetxProductPresenter sut;
+  late PickImageSpy pickImage;
   late ValidationSpy validation;
   late LoadProductSpy loadProduct;
   late DeleteFromCacheSpy deleteFromCache;
@@ -93,12 +110,14 @@ void main() {
     deleteFromCache = DeleteFromCacheSpy();
     saveProduct = SaveProductSpy();
     loadProduct = LoadProductSpy(productEntity: product);
+    pickImage = PickImageSpy();
     sut = GetxProductPresenter(
         validation: validation,
         deleteFromCache: deleteFromCache,
         saveProduct: saveProduct,
         loadProductByCode: loadProduct,
-        productCode: null);
+        productCode: null,
+        pickImage: pickImage);
 
     sut.price = price;
     sut.stock = stock;

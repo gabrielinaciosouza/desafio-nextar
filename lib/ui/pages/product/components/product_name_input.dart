@@ -18,28 +18,34 @@ class ProductNameInput extends StatelessWidget {
           TextPosition(offset: _controller.text.length));
     }
 
-    return Builder(builder: (contextt) {
-      return StreamBuilder<UIError?>(
-        stream: presenter.nameErrorStream,
-        builder: (context, snapshot) {
-          return TextFormField(
-            controller: presenter.product != null ? _controller : null,
-            style: theme.textTheme.bodyText2!
-                .apply(color: theme.primaryColorLight),
-            decoration: InputDecoration(
-              labelText: 'Nome',
-              errorText: snapshot.hasData ? snapshot.data!.description : null,
-              labelStyle:
-                  theme.textTheme.bodyText2!.apply(color: theme.accentColor),
-              icon: Icon(
-                Icons.check_circle,
-                color: Theme.of(context).primaryColorLight,
-              ),
-            ),
-            onChanged: presenter.validateName,
+    return StreamBuilder<String?>(
+        stream: presenter.nameStream,
+        builder: (context, snapshotName) {
+          _controller.text = snapshotName.data ?? '';
+          _controller.selection = TextSelection.fromPosition(
+              TextPosition(offset: _controller.text.length));
+          return StreamBuilder<UIError?>(
+            stream: presenter.nameErrorStream,
+            builder: (context, snapshot) {
+              return TextFormField(
+                controller: _controller,
+                style: theme.textTheme.bodyText2!
+                    .apply(color: theme.primaryColorLight),
+                decoration: InputDecoration(
+                  labelText: 'Nome',
+                  errorText:
+                      snapshot.hasData ? snapshot.data!.description : null,
+                  labelStyle: theme.textTheme.bodyText2!
+                      .apply(color: theme.accentColor),
+                  icon: Icon(
+                    Icons.check_circle,
+                    color: Theme.of(context).primaryColorLight,
+                  ),
+                ),
+                onChanged: presenter.validateName,
+              );
+            },
           );
-        },
-      );
-    });
+        });
   }
 }

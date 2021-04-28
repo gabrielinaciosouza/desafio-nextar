@@ -9,5 +9,6 @@ ProductPresenter makeGetxProductPresenter(String? productCode) {
       deleteFromCache: makeLocalDeleteProduct(),
       saveProduct: makeLocalSaveProduct(),
       loadProductByCode: makeLocalLoadProduct(),
-      productCode: productCode);
+      productCode: productCode,
+      pickImage: makeLocalPickImage());
 }

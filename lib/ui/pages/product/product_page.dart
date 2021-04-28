@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,27 +10,16 @@ import '../../mixins/mixins.dart';
 import 'components/components.dart';
 import 'product.dart';
 
-class ProductPage extends StatefulWidget {
-  final ProductPresenter presenter;
-  ProductPage(this.presenter);
-
-  @override
-  _ProductPageState createState() => _ProductPageState();
-}
-
-class _ProductPageState extends State<ProductPage>
+class ProductPage extends StatelessWidget
     with
         KeyboardManager,
         CardSizeManager,
         LoadingManager,
         UIErrorManager,
         NavigationManager {
-  @override
-  void initState() {
-    widget.presenter.loadProduct().then((value) {
-      setState(() {});
-    });
-    super.initState();
+  final ProductPresenter presenter;
+  ProductPage(this.presenter) {
+    presenter.loadProduct();
   }
 
   @override
@@ -38,22 +29,22 @@ class _ProductPageState extends State<ProductPage>
     return GestureDetector(
       onTap: () => hideKeyboard(context),
       child: InheritedProvider(
-        create: (context) => widget.presenter,
+        create: (context) => presenter,
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back,
                   color: Theme.of(context).primaryColorLight),
-              onPressed: () => widget.presenter.goToHomePage(),
+              onPressed: () => presenter.goToHomePage(),
             ),
           ),
           body: SingleChildScrollView(
             child: Builder(
               builder: (context) {
-                handleLoading(context, widget.presenter.isLoadingStream);
-                handleMainError(context, widget.presenter.mainErrorStream);
-                handleNavigation(widget.presenter.navigateToStream,
-                    clear: true);
+                handleLoading(context, presenter.isLoadingStream);
+                handleMainError(context, presenter.mainErrorStream);
+                handleNavigation(presenter.navigateToStream, clear: true);
+
                 return Align(
                   alignment: Alignment.topCenter,
                   child: BaseWidget(builder: (context, sizingInformation) {
@@ -67,16 +58,63 @@ class _ProductPageState extends State<ProductPage>
                             SizedBox(
                               height: height * .01,
                             ),
-                            ResponsiveHeadline6(
-                              color: Theme.of(context).primaryColorLight,
-                              text: R.strings.addPhoto,
-                            ),
+                            StreamBuilder<File?>(
+                                stream: presenter.fileStream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return AspectRatio(
+                                        aspectRatio: 2,
+                                        child: Image.file(snapshot.data!));
+                                  }
+                                  return ResponsiveHeadline6(
+                                    color: Theme.of(context).primaryColorLight,
+                                    text: R.strings.addPhoto,
+                                  );
+                                }),
                             SizedBox(
                               height: height * .07,
                             ),
                             IconButton(
                               padding: EdgeInsets.all(0),
-                              onPressed: () {},
+                              onPressed: () async {
+                                final _platform = CheckPlatform.check();
+                                if (_platform.currentPlatform ==
+                                    CurrentPlatform.isWeb) {
+                                  return await presenter.pickFromDevice();
+                                }
+                                showModalBottomSheet(
+                                    context: context,
+                                    isDismissible: true,
+                                    builder: (context) {
+                                      return Container(
+                                        height: height * .15,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ListTile(
+                                              leading: Icon(Icons.photo_camera),
+                                              title: Text('Câmera'),
+                                              onTap: () async => await presenter
+                                                  .pickFromCamera()
+                                                  .then((value) =>
+                                                      Navigator.of(context)
+                                                          .pop()),
+                                            ),
+                                            ListTile(
+                                              leading: Icon(Icons.photo_album),
+                                              title: Text('Galeria'),
+                                              onTap: () async => await presenter
+                                                  .pickFromDevice()
+                                                  .then((value) =>
+                                                      Navigator.of(context)
+                                                          .pop()),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              },
                               icon: Icon(
                                 Icons.photo_camera,
                                 size: 42,
