@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../../components/components.dart';
@@ -37,10 +39,12 @@ class HomeProductList extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20)),
-                    child: Image.asset(
-                      'lib/ui/assets/iphone.jpg',
-                      fit: BoxFit.cover,
-                    ),
+                    child: productViewModel![index].imagePath!.isEmpty
+                        ? Image.asset(
+                            'lib/ui/assets/iphone.jpg',
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(File(productViewModel![index].imagePath!)),
                   ),
                 ),
                 LayoutBuilder(builder: (context, constraints) {

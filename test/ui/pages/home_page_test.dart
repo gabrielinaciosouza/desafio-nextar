@@ -70,10 +70,12 @@ void main() {
             name: 'Product 1',
             price: 30,
             stock: 10,
+            imagePath: 'any_path',
             code: 'any_code',
             creationDate: 'any_date'),
         ProductViewModel(
             name: 'Product 2',
+            imagePath: 'any_path',
             price: 20,
             stock: 15,
             code: 'any_code2',

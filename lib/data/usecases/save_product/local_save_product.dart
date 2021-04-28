@@ -27,6 +27,7 @@ class LocalSaveProduct implements SaveProduct {
         }
       }
       await saveCacheStorage.save(key: 'products', value: result);
+      print(product.toString());
       await saveCacheStorage.save(
           key: product.code, value: json.encode(toJson(product)));
     } catch (error) {
@@ -38,6 +39,7 @@ class LocalSaveProduct implements SaveProduct {
     final Map<String, String> data = new Map<String, String>();
     data['name'] = product.name;
     data['code'] = product.code;
+    data['imagePath'] = product.imagePath.toString();
     data['creationDate'] = product.creationDate.toIso8601String();
     data['price'] = product.price.toString();
     data['stock'] = product.stock.toString();

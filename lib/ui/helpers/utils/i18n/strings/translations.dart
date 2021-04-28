@@ -4,6 +4,7 @@ abstract class Translations {
   String get requiredField;
   String get unexpected;
   String get numericOnly;
+  String get duplicatedCode;
 
   String get addAccount;
   String get forgotPassword;

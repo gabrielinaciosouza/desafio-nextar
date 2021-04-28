@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:desafio_nextar/ui/helpers/errors/errors.dart';
 
 import 'home.dart';

@@ -93,10 +93,16 @@ void main() {
               price: productList[0].price,
               stock: productList[0].stock,
               code: productList[0].code,
+              imagePath: productList[0].imagePath == null
+                  ? ''
+                  : productList[0].imagePath,
               creationDate: '21-04-2021'),
           ProductViewModel(
               name: productList[1].name,
               price: productList[1].price,
+              imagePath: productList[1].imagePath == null
+                  ? ''
+                  : productList[0].imagePath,
               stock: productList[1].stock,
               code: productList[1].code,
               creationDate: '20-04-2021')

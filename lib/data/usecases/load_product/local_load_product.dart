@@ -17,6 +17,7 @@ class LocalLoadProduct implements LoadProduct {
       final String product = await fetchCacheStorage.fetch(code) ?? '';
 
       if (product.isNotEmpty) {
+        print(product.toString());
         return LocalProductModel.fromJson(json.decode(product)).toEntity();
       }
     } catch (error) {

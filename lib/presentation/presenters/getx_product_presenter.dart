@@ -101,6 +101,7 @@ class GetxProductPresenter extends GetxController
       final product = ProductEntity(
           name: _name.value,
           code: _code.value,
+          imagePath: _file.value != null ? _file.value!.path : '',
           creationDate: CustomizableDateTime.current,
           price: _price.value.isEmpty ? null : num.parse(_price.value),
           stock: _stock.value.isEmpty ? null : num.parse(_stock.value));
@@ -110,8 +111,10 @@ class GetxProductPresenter extends GetxController
       await saveProduct.save(product);
       isLoading = false;
       navigateTo = '/home';
-    } on DomainError {
-      mainError = UIError.unexpected;
+    } on DomainError catch (error) {
+      mainError = error == DomainError.duplicatedCode
+          ? UIError.duplicatedCode
+          : UIError.unexpected;
     }
     isLoading = false;
   }
@@ -130,9 +133,12 @@ class GetxProductPresenter extends GetxController
       if (productCode != null && productCode != '') {
         isEditing = true;
         product = await loadProductByCode.load(productCode!);
-        print(product.toString());
+        print(product!.imagePath.toString());
         _code.value = product!.code;
         _name.value = product!.name;
+        _file.value = product!.imagePath == null || product!.imagePath == ''
+            ? null
+            : File(product!.imagePath ?? '');
         _price.value = product!.price.toString();
         _stock.value = product!.stock.toString();
         isFormValid = true;
@@ -146,12 +152,20 @@ class GetxProductPresenter extends GetxController
 
   @override
   Future<void> pickFromCamera() async {
-    _file.value = await pickImage.pickFromCamera();
+    var result = await pickImage.pickFromCamera();
+    _file.value = result;
+    if (result == null) {
+      mainError = UIError.unexpected;
+    }
   }
 
   @override
   Future<void> pickFromDevice() async {
-    _file.value = await pickImage.pickFromDevice();
+    var result = await pickImage.pickFromDevice();
+    _file.value = result;
+    if (result == null) {
+      mainError = UIError.unexpected;
+    }
   }
 }
 

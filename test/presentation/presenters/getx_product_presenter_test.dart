@@ -103,6 +103,7 @@ void main() {
     product = ProductEntity(
         name: name,
         code: code,
+        imagePath: '',
         creationDate: CustomizableDateTime.current,
         price: price.isEmpty ? null : num.parse(price),
         stock: stock.isEmpty ? null : num.parse(stock));

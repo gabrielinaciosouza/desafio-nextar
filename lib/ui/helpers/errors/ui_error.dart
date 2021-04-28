@@ -6,7 +6,8 @@ enum UIError {
   requiredField,
   invalidField,
   none,
-  numericOnly
+  numericOnly,
+  duplicatedCode
 }
 
 extension UIErrorEtension on UIError {
@@ -20,6 +21,8 @@ extension UIErrorEtension on UIError {
         return R.strings.invalidField;
       case UIError.numericOnly:
         return R.strings.invalidField;
+      case UIError.duplicatedCode:
+        return R.strings.duplicatedCode;
       case UIError.none:
         return null;
       default:

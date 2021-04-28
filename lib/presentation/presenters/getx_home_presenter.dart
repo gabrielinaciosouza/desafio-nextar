@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:desafio_nextar/presentation/mixins/mixins.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +36,10 @@ class GetxHomePresenter extends GetxController
               price: product.price,
               stock: product.stock,
               code: product.code,
+              imagePath:
+                  product.imagePath == 'null' || product.imagePath == null
+                      ? ''
+                      : product.imagePath,
               creationDate:
                   DateFormat('dd-MM-yyyy').format(product.creationDate),
             ),
