@@ -23,5 +23,14 @@ abstract class Translations {
   String get code;
   String get price;
   String get stock;
+  String get alphabetic;
   String get save;
+  String get date;
+  String get increasing;
+  String get decreasing;
+  String get atention;
+  String get yes;
+  String get no;
+  String get questionLogoff;
+  String get questionDelete;
 }

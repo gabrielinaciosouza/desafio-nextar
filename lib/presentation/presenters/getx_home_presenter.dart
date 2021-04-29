@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:desafio_nextar/presentation/mixins/mixins.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +21,8 @@ class GetxHomePresenter extends GetxController
 
   final _products = Rxn<List<ProductViewModel>>();
 
-  Stream<List<ProductViewModel>?>? get productsStream => _products.stream;
+  Stream<List<ProductViewModel>?>? get productsStream =>
+      _products.stream.asBroadcastStream();
 
   Future<void> loadProducts() async {
     try {
@@ -63,6 +62,7 @@ class GetxHomePresenter extends GetxController
       mainError = UIError.unexpected;
     } finally {
       isLoading = false;
+      Get.back();
     }
   }
 
@@ -89,5 +89,44 @@ class GetxHomePresenter extends GetxController
   @override
   void goToNewProduct() {
     navigateTo = '/product/new';
+  }
+
+  @override
+  void alphabeticFilter({required bool increasing}) {
+    if (increasing) {
+      _products.value!.sort((a, b) => a.name.compareTo(b.name));
+    } else {
+      _products.value!.sort((a, b) => b.name.compareTo(a.name));
+    }
+    _products.refresh();
+    Get.back();
+  }
+
+  @override
+  void dateFilter({required bool increasing}) {
+    if (increasing) {
+      _products.value!.sort((a, b) => DateFormat('dd-MM-yyyy')
+          .parse(a.creationDate)
+          .compareTo(DateFormat('dd-MM-yyyy').parse(b.creationDate)));
+    } else {
+      _products.value!.sort((a, b) => DateFormat('dd-MM-yyyy')
+          .parse(b.creationDate)
+          .compareTo(DateFormat('dd-MM-yyyy').parse(a.creationDate)));
+    }
+
+    _products.refresh();
+    Get.back();
+  }
+
+  @override
+  void priceFilter({required bool increasing}) {
+    if (increasing) {
+      _products.value!.sort((a, b) => a.price!.compareTo(b.price!));
+    } else {
+      _products.value!.sort((a, b) => b.price!.compareTo(a.price!));
+    }
+
+    _products.refresh();
+    Get.back();
   }
 }

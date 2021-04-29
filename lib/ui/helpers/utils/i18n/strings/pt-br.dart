@@ -47,7 +47,8 @@ class PtBr implements Translations {
   String get newProduct => 'Novo Produto';
 
   @override
-  String get clickToAddProduct => 'Olá! Clique para começar.';
+  String get clickToAddProduct =>
+      'Ops! Ainda não há produtos adicionados. Clique em "Novo Produto"';
 
   @override
   String get addPhoto => 'Adicione uma foto';
@@ -72,4 +73,31 @@ class PtBr implements Translations {
 
   @override
   String get duplicatedCode => 'Código duplicado';
+
+  @override
+  String get date => 'Data';
+
+  @override
+  String get decreasing => 'Decrescente';
+
+  @override
+  String get increasing => 'Crescente';
+
+  @override
+  String get alphabetic => 'Ordem alfabética';
+
+  @override
+  String get atention => 'Atenção!';
+
+  @override
+  String get no => 'Não';
+
+  @override
+  String get yes => 'Sim';
+
+  @override
+  String get questionLogoff => 'Deseja sair?';
+
+  @override
+  String get questionDelete => 'Deseja deletar o produto?';
 }

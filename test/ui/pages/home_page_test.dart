@@ -115,7 +115,6 @@ void main() {
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
         findsOneWidget);
-    expect(find.text('Recarregar'), findsOneWidget);
     expect(find.text('Product 1'), findsNothing);
   });
 
@@ -153,6 +152,8 @@ void main() {
     productsController.add(makeProducts());
     await tester.pump();
     await tester.longPress(find.text('Product 1'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sim'));
 
     verify(presenter.deleteProduct('any_code')).called(1);
   });
@@ -164,6 +165,8 @@ void main() {
     productsController.add(makeProducts());
     await tester.pump();
     await tester.tap(find.text('Sair'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sim'));
 
     verify(presenter.logoff()).called(1);
   });

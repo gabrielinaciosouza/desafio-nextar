@@ -20,7 +20,43 @@ class HomePage extends StatelessWidget with LoadingManager, NavigationManager {
       appBar: AppBar(
         actions: [
           GestureDetector(
-            onTap: presenter.logoff,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Theme.of(context).primaryColorDark,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ResponsiveHeadline6(
+                        color: Theme.of(context).primaryColor,
+                        text: R.strings.atention,
+                      ),
+                      IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: () => Navigator.of(context).pop())
+                    ],
+                  ),
+                  content: ResponsiveHeadline6(
+                    color: Theme.of(context).primaryColorLight,
+                    text: R.strings.questionLogoff,
+                  ),
+                  actions: [
+                    ElevatedButton(
+                      onPressed: presenter.logoff,
+                      child: ResponsiveHeadline6(
+                        color: Theme.of(context).primaryColorLight,
+                        text: R.strings.yes,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
             child: ResponsiveHeadline6(
               color: Theme.of(context).accentColor,
               text: R.strings.logoff,
@@ -34,51 +70,33 @@ class HomePage extends StatelessWidget with LoadingManager, NavigationManager {
           builder: (context) {
             handleLoading(context, presenter.isLoadingStream);
             handleNavigation(presenter.navigateToStream, clear: true);
-            return StreamBuilder<List<ProductViewModel>?>(
-              stream: presenter.productsStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.isEmpty) {
-                    return HomeEmptyList();
-                  } else {
-                    return SingleChildScrollView(
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: 1200),
-                          child: Container(
-                            padding: EdgeInsets.all(20),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * .02,
-                                ),
-                                HomeAvatar(presenter: presenter),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * .1,
-                                ),
-                                HomeTitle(),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * .08,
-                                ),
-                                HomeProductList(
-                                  productViewModel:
-                                      snapshot.data as List<ProductViewModel>,
-                                  presenter: presenter,
-                                )
-                              ],
-                            ),
-                          ),
+
+            return SingleChildScrollView(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 1200),
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .02,
                         ),
-                      ),
-                    );
-                  }
-                }
-                return HomeErrorWidget();
-              },
+                        HomeAvatar(presenter: presenter),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .1,
+                        ),
+                        HomeTitle(),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .08,
+                        ),
+                        HomeProductList()
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             );
           },
         ),

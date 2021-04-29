@@ -4,10 +4,12 @@ class ResponsiveHeadline6 extends StatelessWidget {
   final String text;
   final Color color;
   final FontWeight fontWeight;
+  final TextAlign textAlign;
 
   const ResponsiveHeadline6(
       {required this.text,
       required this.color,
+      this.textAlign = TextAlign.start,
       this.fontWeight = FontWeight.bold});
 
   double fontSize({required double maxWidth, required BuildContext context}) {
@@ -31,7 +33,7 @@ class ResponsiveHeadline6 extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     return Text(
       text,
-      textAlign: TextAlign.start,
+      textAlign: textAlign,
       style: TextStyle(
           fontSize: fontSize(maxWidth: screenWidth, context: context),
           fontWeight: fontWeight,

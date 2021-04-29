@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../components/components.dart';
 import '../../../helpers/helpers.dart';
-import '../../../pages/pages.dart';
 
 class HomeEmptyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<HomePresenter>(context);
     return Container(
       padding: EdgeInsets.all(20),
       child: Center(
@@ -19,12 +16,7 @@ class HomeEmptyList extends StatelessWidget {
             ResponsiveHeadline6(
               color: Theme.of(context).accentColor,
               text: R.strings.clickToAddProduct,
-            ),
-            ElevatedButton(
-              onPressed: presenter.goToNewProduct,
-              child: Text(
-                R.strings.newProduct,
-              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

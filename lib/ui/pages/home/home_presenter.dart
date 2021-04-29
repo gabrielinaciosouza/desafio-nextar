@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:desafio_nextar/ui/helpers/errors/errors.dart';
 
 import 'home.dart';
@@ -13,6 +11,10 @@ abstract class HomePresenter {
   Future<void> loadProducts();
   Future<void> deleteProduct(String code);
   Future<void> logoff();
+
   void goToEditProduct(String productCode);
   void goToNewProduct();
+  void dateFilter({required bool increasing});
+  void priceFilter({required bool increasing});
+  void alphabeticFilter({required bool increasing});
 }

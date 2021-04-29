@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -69,6 +70,7 @@ void main() {
   void mockLogoffError() => mockLogoffCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
+    Get.testMode = true;
     loadProducts = LoadProductsSpy();
     deleteProducts = DeleteProductSpy();
     logoff = LogoffSpy();
