@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/data/usecases/local_load_products/local_load_products.dart';
+import 'package:desafio_nextar/data/usecases/usecases.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

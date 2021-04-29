@@ -1,7 +1,7 @@
-import 'package:desafio_nextar/ui/mixins/mixins.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../mixins/mixins.dart';
 import 'splash_presenter.dart';
 
 class SplashPage extends StatelessWidget with NavigationManager {

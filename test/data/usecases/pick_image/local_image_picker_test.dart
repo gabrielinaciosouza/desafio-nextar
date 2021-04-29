@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:desafio_nextar/data/image/image.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:desafio_nextar/data/cache/cache.dart';
 import 'package:desafio_nextar/data/usecases/usecases.dart';
 
 import 'package:desafio_nextar/domain/helpers/domain_error.dart';

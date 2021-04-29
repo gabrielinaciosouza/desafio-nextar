@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/main/builders/builders.dart';
+import '../../../builders/builders.dart';
 
 import '../../../../presentation/protocols/protocols.dart';
 import '../../../../validation/validators/validators.dart';

@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/presentation/protocols/protocols.dart';
+import '../../presentation/protocols/protocols.dart';
 
 class PasswordValidation implements FieldValidation {
   final String field;

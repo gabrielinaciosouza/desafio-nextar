@@ -1,11 +1,12 @@
-import 'package:desafio_nextar/presentation/mixins/mixins.dart';
 import 'package:desafio_nextar/ui/pages/login/login.dart';
 import 'package:get/get.dart';
 
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/helpers.dart';
+
 import '../protocols/protocols.dart';
+import '../mixins/mixins.dart';
 
 class GetxLoginPresenter extends GetxController
     with

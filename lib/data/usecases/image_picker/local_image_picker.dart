@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import '../../cache/cache.dart';
+import '../../image/image.dart';
+
 import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/pick_image.dart';
 

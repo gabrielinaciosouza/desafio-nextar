@@ -1,6 +1,7 @@
-import 'package:desafio_nextar/ui/helpers/helpers.dart';
-import 'package:desafio_nextar/ui/pages/home/home.dart';
 import 'package:flutter/material.dart';
+
+import '../../../helpers/helpers.dart';
+import '../../../pages/home/home.dart';
 
 class HomeAvatar extends StatelessWidget {
   final HomePresenter presenter;

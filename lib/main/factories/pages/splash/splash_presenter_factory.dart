@@ -1,4 +1,4 @@
-import 'package:desafio_nextar/main/factories/composites/composites.dart';
+import '../../../factories/composites/composites.dart';
 
 import '../../../../ui/pages/splash/splash.dart';
 

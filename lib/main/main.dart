@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import './factories/pages/pages.dart';
+import './factories/factories.dart';
 
 import '../ui/components/components.dart';
 

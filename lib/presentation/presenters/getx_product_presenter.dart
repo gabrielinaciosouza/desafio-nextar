@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:desafio_nextar/domain/usecases/pick_image.dart';
-import 'package:desafio_nextar/ui/pages/pages.dart';
 import 'package:get/get.dart';
 
+import '../../domain/usecases/pick_image.dart';
 import '../../domain/entities/entities.dart';
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 
+import '../../ui/pages/pages.dart';
 import '../../ui/helpers/helpers.dart';
 
 import '../mixins/mixins.dart';

@@ -1,4 +1,3 @@
-import 'package:desafio_nextar/presentation/mixins/mixins.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -7,6 +6,8 @@ import '../../domain/usecases/usecases.dart';
 
 import '../../ui/helpers/helpers.dart';
 import '../../ui/pages/pages.dart';
+
+import '../mixins/mixins.dart';
 
 class GetxHomePresenter extends GetxController
     with NavigationManager, LoadingManager, UIErrorManager
