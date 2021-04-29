@@ -87,7 +87,7 @@ class ProductPage extends StatelessWidget
                                     isDismissible: true,
                                     builder: (context) {
                                       return Container(
-                                        height: height * .15,
+                                        height: height * .2,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,

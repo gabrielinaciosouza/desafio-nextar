@@ -154,18 +154,12 @@ class GetxProductPresenter extends GetxController
   Future<void> pickFromCamera() async {
     var result = await pickImage.pickFromCamera();
     _file.value = result;
-    if (result == null) {
-      mainError = UIError.unexpected;
-    }
   }
 
   @override
   Future<void> pickFromDevice() async {
     var result = await pickImage.pickFromDevice();
     _file.value = result;
-    if (result == null) {
-      mainError = UIError.unexpected;
-    }
   }
 }
 
