@@ -1,6 +1,6 @@
 # DESAFIO NEXTAR
 
-![Desafio Nextar](./lib/ui/assets/logo.png)
+![Desafio Nextar](./lib/ui/assets/logo2.png)
 
 ## Sobre o app
 
