@@ -1,0 +1,7 @@
+- Feature: Product Page
+- Como um cliente
+- Quero adicionar produtos a lista de produtos
+- Quero incluir uma foto de produto
+- Quero que os campos Código e Nome sejam obrigatórios
+- Quero ser notificado caso algum erro ocorra
+- Quero poder voltar para a página anterior sem alterar os dados
