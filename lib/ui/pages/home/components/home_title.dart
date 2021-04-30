@@ -5,6 +5,7 @@ import '../../../components/components.dart';
 import '../../../helpers/helpers.dart';
 import '../home.dart';
 import 'filter_dialog.dart';
+import 'filter_dialog_mobile.dart';
 
 class HomeTitle extends StatelessWidget {
   @override
@@ -14,13 +15,21 @@ class HomeTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ResponsiveHeadline1(text: R.strings.explore, color: Colors.white),
-        IconButton(
-          onPressed: () => filterDialog(context: context, presenter: presenter),
-          icon: Icon(
-            Icons.filter_alt,
-            size: 40,
-          ),
-          color: Theme.of(context).primaryColor,
+        BaseWidget(
+          builder: (context, sizingInformation) {
+            return IconButton(
+              onPressed: () => sizingInformation.deviceType ==
+                          DeviceScreenType.MOBILE ||
+                      sizingInformation.deviceType == DeviceScreenType.TABLET
+                  ? filterDialogMobile(context: context, presenter: presenter)
+                  : filterDialog(context: context, presenter: presenter),
+              icon: Icon(
+                Icons.filter_alt,
+                size: 40,
+              ),
+              color: Theme.of(context).primaryColor,
+            );
+          },
         ),
       ],
     );
