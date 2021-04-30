@@ -59,6 +59,7 @@ Para rodar o app, favor assegurar de:
 - O app está pronto para rodar nas plataformas web, android e IOS
 - Para testes de responsividade, rodar em ambiente web
 - Para rodar os testes unitários, pode ser feito pela IDE ou pelo comando "flutter test"
+- Conta de teste: EMAIL: test@test.com SENHA: 123456
 
 ## Observações pessoais
 
