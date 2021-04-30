@@ -66,7 +66,7 @@ Para rodar o app, favor assegurar de:
 
 - Durante o desenvolvimento notei que não há plugins para salvamento seguro de cache para web. Não me empenhei em resolver este problema criptografando os dados pois acredito que não é esse o objetivo deste desafio. Portanto encontrei um solução bem legal, utilizando o design patterns do composite para fazer as chamadas entre o cache seguro e o cache, também poderia ter utilizado o strategy, mas acredito que o composite resolveu muito bem.
 
-- Adicionei novas features ao escopo inicial, como por exemplo um esquema de logoff. Deixei pronto um padrão que eu gosto muito separação de strings da UI e internacionalização, porém utilizei somente em poruguês. Porém, da forma que está, é muito simples de traduzir o app para novas linguas, sendo necessário apenas implementar a classe "Translations" e adicionar uma forma de escolher a linguagem através da UI.
+- Adicionei novas features ao escopo inicial, como por exemplo um esquema de logoff. Deixei pronto um padrão que eu gosto muito, o de "separação" de strings da UI e internacionalização, porém utilizei somente em poruguês. Da forma que está, é muito simples de traduzir o app para novas línguas, sendo necessário apenas implementar a classe "Translations" e adicionar uma forma de escolher a linguagem através da UI.
 
 - Os testes em Dart e Flutter tem uma documentação muito simples. O conteúdo é díficil de achar, principalmente agora com o null-safety, porém apesar de ter dado muito trabalho, consegui superar e realizar testes importantes para o desafio.
 
