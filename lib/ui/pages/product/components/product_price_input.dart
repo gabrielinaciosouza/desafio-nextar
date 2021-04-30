@@ -1,3 +1,4 @@
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +7,9 @@ import '../../pages.dart';
 class ProductPriceInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    TextEditingController _controller = TextEditingController();
+    final _controller = MoneyMaskedTextController(
+      leftSymbol: 'R\$',
+    );
 
     final theme = Theme.of(context);
     final presenter = Provider.of<ProductPresenter>(context);

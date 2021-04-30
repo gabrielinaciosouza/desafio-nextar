@@ -91,6 +91,7 @@ class GetxProductPresenter extends GetxController
   Future<void> submit() async {
     try {
       mainError = UIError.none;
+      _price.value = _price.value.replaceAll(new RegExp(r'[^0-9]'), '');
       if ((!_price.value.isNumericOnly || !_stock.value.isNumericOnly) &&
           (_price.value.isNotEmpty || _stock.value.isNotEmpty)) {
         mainError = UIError.numericOnly;

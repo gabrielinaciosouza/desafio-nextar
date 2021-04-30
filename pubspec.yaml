@@ -21,6 +21,7 @@ dependencies:
   localstorage:
   intl:
   image_picker:
+  extended_masked_text:
 
 dev_dependencies:
   flutter_test:

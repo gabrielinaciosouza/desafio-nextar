@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../pages/home/components/components.dart';
@@ -11,6 +12,7 @@ import 'delete_modal.dart';
 class HomeProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final mask = NumberFormat.simpleCurrency(locale: 'pt_br', decimalDigits: 2);
     final presenter = Provider.of<HomePresenter>(context);
     return StreamBuilder<List<ProductViewModel>?>(
         stream: presenter.productsStream,
@@ -87,7 +89,7 @@ class HomeProductList extends StatelessWidget {
                                   ResponsiveHeadline6(
                                     text: snapshot.data![index].price == null
                                         ? 'Produto sem preço!'
-                                        : 'R\$ ${snapshot.data![index].price!.toStringAsFixed(2)}',
+                                        : '${mask.format(snapshot.data![index].price! / 100)}',
                                     color: Theme.of(context).primaryColor,
                                   ),
                                 ],
