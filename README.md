@@ -1,6 +1,5 @@
 # DESAFIO NEXTAR
 
-Um projeto em Flutter 2
 ![Desafio Nextar](./lib/ui/assets/logo.png)
 
 ## Sobre o app
