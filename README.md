@@ -3,6 +3,7 @@
 ## Sobre o app
 
 O app é uma representação de um cadastro de produtos.
+![LINK PARA O SITE DE TESTE](https://gabrielinaciosouza.github.io/#/)
 
 ## Casos de uso
 
