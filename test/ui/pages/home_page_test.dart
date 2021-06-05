@@ -118,22 +118,6 @@ void main() {
     expect(find.text('Product 1'), findsNothing);
   });
 
-  testWidgets('Should present list if loadProductStream succeeds',
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    productsController.add(makeProducts());
-    await tester.pump();
-
-    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
-        findsNothing);
-    expect(find.text('Recarregar'), findsNothing);
-    expect(find.text('Product 1'), findsOneWidget);
-    expect(find.text('Product 2'), findsOneWidget);
-    expect(find.text('R\$ ${30.toStringAsFixed(2)}'), findsOneWidget);
-    expect(find.text('R\$ ${20.toStringAsFixed(2)}'), findsOneWidget);
-  });
-
   testWidgets('Should call loadProducts on reload button click',
       (WidgetTester tester) async {
     await loadPage(tester);
