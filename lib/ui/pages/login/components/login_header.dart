@@ -18,7 +18,7 @@ class LoginHeader extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: AspectRatio(
-            aspectRatio: 6,
+            aspectRatio: 5,
             child: Image(
               fit: BoxFit.contain,
               image: AssetImage('lib/ui/assets/logo2.png'),

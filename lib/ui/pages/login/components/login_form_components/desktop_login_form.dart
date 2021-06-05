@@ -32,10 +32,10 @@ class DesktopLoginForm extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: AspectRatio(
-                aspectRatio: 1.5,
+                aspectRatio: 1.7,
                 child: Image(
                   fit: BoxFit.cover,
-                  image: AssetImage('lib/ui/assets/logo.png'),
+                  image: AssetImage('lib/ui/assets/logo.jpg'),
                 ),
               ),
             ),

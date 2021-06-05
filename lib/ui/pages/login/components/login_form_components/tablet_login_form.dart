@@ -35,10 +35,10 @@ class TabletLoginForm extends StatelessWidget {
               height: constraints.maxHeight * .03,
             ),
             AspectRatio(
-              aspectRatio: 2,
+              aspectRatio: 1.7,
               child: Image(
                 fit: BoxFit.cover,
-                image: AssetImage('lib/ui/assets/logo.png'),
+                image: AssetImage('lib/ui/assets/logo.jpg'),
               ),
             ),
             LoginFormFields(
